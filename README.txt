@@ -1,0 +1,1 @@
+Kaixo, 5. taldea gara eta hau da gure erronka.
