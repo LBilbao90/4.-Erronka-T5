@@ -51,8 +51,6 @@ class TransferentziaTest {
 		t1.setKotzeptua("proba2");
 		t1.setJasotzailea("ES1245784512346751247816");
 		
-		
-		// Getters
 		assertEquals(2, t1.getIdTransferentzia());
 		assertEquals(10, t1.getKantitatea(), 0.01);
 		assertEquals(transferentziaData, t1.getTransferentziaData());

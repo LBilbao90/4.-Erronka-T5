@@ -2,6 +2,7 @@ package model;
 
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.Objects;
 
 public class KontuBankarioa {
 	private String iban;
@@ -24,9 +25,9 @@ public class KontuBankarioa {
 		this.hilekoLimitea = hilekoLimitea;
 		this.sorreraData = sorreraData;
 		this.egoera = egoera;
-		this.diruSarrerak = new ArrayList<DiruSarrera>();
-		this.transferentziak = new ArrayList<Transferentzia>();
-		this.hipotekak = new ArrayList<Hipoteka>();
+		this.diruSarrerak = diruSarrerak;
+		this.transferentziak = transferentziak;
+		this.hipotekak = hipotekak;
 	}
 	
 	// Getters and Setters
@@ -78,5 +79,24 @@ public class KontuBankarioa {
 	public void setHipotekak(ArrayList<Hipoteka> hipotekak) {
 		this.hipotekak = hipotekak;
 	}
+
+	// ToString
+	@Override
+	public String toString() {
+		return "KontuBankarioa iban=" + iban + ", saldoa=" + saldoa + ", hilekoLimitea=" + hilekoLimitea
+				+ ", sorreraData=" + sorreraData + ", egoera=" + egoera + ", diruSarrerak=" + diruSarrerak
+				+ ", transferentziak=" + transferentziak + ", hipotekak=" + hipotekak;
+	}
+
+	// Equals
+	@Override
+	public boolean equals(Object obj) {
+		if (obj == null)
+			return false;
+		KontuBankarioa other = (KontuBankarioa) obj;
+		return Objects.equals(iban, other.iban);
+	}
+	
+	
 	
 }

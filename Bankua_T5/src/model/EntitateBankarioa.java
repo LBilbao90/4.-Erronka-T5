@@ -13,7 +13,7 @@ public class EntitateBankarioa {
 		this.izena = izena;
 		this.idEntitatea = idEntitatea;
 		this.entitateZbk = entitateZbk;
-		this.sukurtzalak = new ArrayList<Sukurtsala>();
+		this.sukurtzalak = sukurtzalak;
 	}
 
 	// Getters and Setters
@@ -40,6 +40,22 @@ public class EntitateBankarioa {
 	}
 	public void setSukurtzalak(ArrayList<Sukurtsala> sukurtzalak) {
 		this.sukurtzalak = sukurtzalak;
+	}
+
+	// ToString
+	@Override
+	public String toString() {
+		return "EntitateBankarioa izena=" + izena + ", idEntitatea=" + idEntitatea + ", entitateZbk=" + entitateZbk
+				+ ", sukurtzalak=" + sukurtzalak;
+	}
+	
+	// Equals
+	@Override
+	public boolean equals(Object obj) {
+		if (obj == null)
+			return false;
+		EntitateBankarioa other = (EntitateBankarioa) obj;
+		return entitateZbk == other.entitateZbk;
 	}
 	
 }

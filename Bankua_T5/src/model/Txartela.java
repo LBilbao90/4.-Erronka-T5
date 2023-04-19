@@ -1,6 +1,7 @@
 package model;
 
 import java.util.ArrayList;
+import java.util.Objects;
 
 public class Txartela {
 	private String idTxartela;
@@ -14,13 +15,13 @@ public class Txartela {
 	}
 
 	// Constructors
-	public Txartela(String idTxartela, int segurtasunKodea, Mota mota, ArrayList<KontuBankarioa> kontuBankarioak) {
+	public Txartela(String idTxartela, int segurtasunKodea, Mota mota, ArrayList<KontuBankarioa> kontuBankarioak, ArrayList<Pertsona> pertsonak) {
 		super();
 		this.idTxartela = idTxartela;
 		this.segurtasunKodea = segurtasunKodea;
 		this.mota = mota;
-		this.kontuBankarioak = new ArrayList<KontuBankarioa>();
-		this.pertsonak = new ArrayList<Pertsona>();
+		this.kontuBankarioak = kontuBankarioak;
+		this.pertsonak = pertsonak;
 	}
 
 	// Getters and Setters
@@ -53,5 +54,21 @@ public class Txartela {
 	}
 	public void setPertsonak(ArrayList<Pertsona> pertsonak) {
 		this.pertsonak = pertsonak;
+	}
+
+	// ToString
+	@Override
+	public String toString() {
+		return "Txartela idTxartela=" + idTxartela + ", segurtasunKodea=" + segurtasunKodea + ", mota=" + mota
+				+ ", kontuBankarioak=" + kontuBankarioak + ", pertsonak=" + pertsonak;
+	}
+
+	// Equals
+	@Override
+	public boolean equals(Object obj) {
+		if (obj == null)
+			return false;
+		Txartela other = (Txartela) obj;
+		return Objects.equals(idTxartela, other.idTxartela);
 	}
 }

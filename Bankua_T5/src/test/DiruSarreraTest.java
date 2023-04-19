@@ -75,7 +75,7 @@ public class DiruSarreraTest {
 		cal2.set(Calendar.YEAR, 2023);
 		sarreraData = cal2.getTime();
 		
-		// Setters
+		// ToString
 		assertEquals("DiruSarrera idSarrera=" + ds1.getIdSarrera() + ", kantitatea=" + ds1.getKantitatea() + ", sarreraData=" + ds1.getSarreraData()
 				+ ", kontzeptua=" + ds1.getKontzeptua() + ", igortzailea=" + ds1.getIgortzailea(), ds1.toString());
 	}

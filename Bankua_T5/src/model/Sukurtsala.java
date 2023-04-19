@@ -1,6 +1,7 @@
 package model;
 
 import java.util.ArrayList;
+import java.util.Objects;
 
 public class Sukurtsala {
 	private int idSukurtsala;
@@ -13,7 +14,7 @@ public class Sukurtsala {
 		this.idSukurtsala = idSukurtsala;
 		this.kokalekua = kokalekua;
 		this.postaKodea = postaKodea;
-		this.kontuBankarioak = new ArrayList<KontuBankarioa>();
+		this.kontuBankarioak = kontuBankarioak;
 	}
 	
 	// Getters and Setters
@@ -40,5 +41,21 @@ public class Sukurtsala {
 	}
 	public void setKontuBankarioak(ArrayList<KontuBankarioa> kontuBankarioak) {
 		this.kontuBankarioak = kontuBankarioak;
+	}
+
+	// ToString
+	@Override
+	public String toString() {
+		return "Sukurtsala idSukurtsala=" + idSukurtsala + ", kokalekua=" + kokalekua + ", postaKodea=" + postaKodea
+				+ ", kontuBankarioak=" + kontuBankarioak;
+	}
+	
+	// Equals
+	@Override
+	public boolean equals(Object obj) {
+		if (obj == null)
+			return false;
+		Sukurtsala other = (Sukurtsala) obj;
+		return idSukurtsala == other.idSukurtsala;
 	}
 }

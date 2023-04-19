@@ -56,7 +56,6 @@ class PertsonaTest {
 		p1.setTelefonoa("444555666");
 		p1.setPasahitza("87654321");
 		
-		// Getters
 		assertEquals("12345678B",p1.getNan());
 		assertEquals("Laura",p1.getIzena());
 		assertEquals("Sanchez",p1.getAbizena());
@@ -93,7 +92,4 @@ class PertsonaTest {
 		// Equals
 		assertTrue(p1.equals(p2));
 	}
-	
-	// Methods
-	
 }
