@@ -74,7 +74,7 @@ public class Pertsona {
 	// ToString
 	@Override
 	public String toString() {
-		return " asdasdPertsona nan=" + nan + ", izena=" + izena + ", abizena=" + abizena + ", jaiotzeData=" + jaiotzeData
+		return "Pertsona nan=" + nan + ", izena=" + izena + ", abizena=" + abizena + ", jaiotzeData=" + jaiotzeData
 				+ ", sexua=" + sexua + ", telefonoa=" + telefonoa + ", pasahitza=" + pasahitza;
 	}
 	

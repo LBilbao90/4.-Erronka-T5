@@ -9,6 +9,11 @@ public class Hipoteka implements Komisioa{
 	private final double komisioa;
 	private Date hasieraData;
 	private Date amaieraData;
+	private Egoera egoera;
+	
+	public enum Egoera{
+		eskatuta, onartuta, itxita, errefusatuta;
+	}
 	
 	
 	public Hipoteka(int idHipoteka, double kantitatea, double ordaindutakoa, double komisioa, Date hasieraData, Date amaieraData) {
@@ -54,7 +59,29 @@ public class Hipoteka implements Komisioa{
 	public void setAmaieraData(Date amaieraData) {
 		this.amaieraData = amaieraData;
 	}
-
+	public Egoera getEgoera() {
+		return egoera;
+	}
+	public void setEgoera(Egoera egoera) {
+		this.egoera = egoera;
+	}
+	
+	// ToString
+	@Override
+	public String toString() {
+		return "Hipoteka idHipoteka=" + idHipoteka + ", kantitatea=" + kantitatea + ", ordaindutakoa=" + ordaindutakoa
+				+ ", komisioa=" + komisioa + ", hasieraData=" + hasieraData + ", amaieraData=" + amaieraData
+				+ ", egoera=" + egoera;
+	}
+	
+	// Equals
+	@Override
+	public boolean equals(Object obj) {
+		if (obj == null)
+			return false;
+		Hipoteka other = (Hipoteka) obj;
+		return idHipoteka == other.idHipoteka;
+	}
 
 	@Override
 	public double kalkulatuPrezioa() {

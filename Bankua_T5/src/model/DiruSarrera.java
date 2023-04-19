@@ -1,6 +1,7 @@
 package model;
 
 import java.util.Date;
+import java.util.Objects;
 
 public class DiruSarrera {
 	private int idSarrera;
@@ -48,5 +49,21 @@ public class DiruSarrera {
 	}
 	public void setIgortzailea(String igortzailea) {
 		this.igortzailea = igortzailea;
+	}
+	
+	// ToString
+	@Override
+	public String toString() {
+		return "DiruSarrera idSarrera=" + idSarrera + ", kantitatea=" + kantitatea + ", sarreraData=" + sarreraData
+				+ ", kontzeptua=" + kontzeptua + ", igortzailea=" + igortzailea;
+	}
+	
+	// Equals
+	@Override
+	public boolean equals(Object obj) {
+		if (obj == null)
+			return false;
+		DiruSarrera other = (DiruSarrera) obj;
+		return idSarrera == other.idSarrera;
 	}
 }

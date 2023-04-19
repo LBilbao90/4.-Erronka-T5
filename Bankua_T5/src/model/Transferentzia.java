@@ -54,6 +54,22 @@ public class Transferentzia implements Komisioa{
 	public double getKomisioa() {
 		return komisioa;
 	}
+	
+	// ToString
+	@Override
+	public String toString() {
+		return "Transferentzia idTransferentzia=" + idTransferentzia + ", kantitatea=" + kantitatea
+				+ ", transferentziaData=" + transferentziaData + ", kotzeptua=" + kotzeptua + ", jasotzailea="
+				+ jasotzailea + ", komisioa=" + komisioa;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (obj == null)
+			return false;
+		Transferentzia other = (Transferentzia) obj;
+		return idTransferentzia == other.idTransferentzia;
+	}
 
 	// Methods
 	@Override
