@@ -70,10 +70,11 @@ public class SukurtsalaTest {
 		ArrayList<KontuBankarioa> KontuBankarioak = new ArrayList<KontuBankarioa>();
 		KontuBankarioak.add(kb1);
 		
-		Sukurtsala s1 = new Sukurtsala(1, "Gallarraga kalea", 48830, KontuBankarioak);
+		Sukurtsala s1 = new Sukurtsala(1, 13,"Gallarraga kalea", 48830, KontuBankarioak);
 		
 		// Getters
 		assertEquals(1,s1.getIdSukurtsala());
+		assertEquals(13, s1.getKodSukurtsala());
 		assertEquals("Gallarraga kalea",s1.getKokalekua());
 		assertEquals(48830,s1.getPostaKodea());
 		assertEquals("ES1576197348527531954865", s1.getKontuBankarioak().get(0).getIban());
@@ -153,7 +154,7 @@ public class SukurtsalaTest {
 		ArrayList<KontuBankarioa> KontuBankarioak = new ArrayList<KontuBankarioa>();
 		KontuBankarioak.add(kb1);
 		
-		Sukurtsala s1 = new Sukurtsala(1, "Gallarraga kalea", 48830, KontuBankarioak);
+		Sukurtsala s1 = new Sukurtsala(1, 13,"Gallarraga kalea", 48830, KontuBankarioak);
 		
 		cal1.set(Calendar.DAY_OF_MONTH, 22);
 		cal1.set(Calendar.MONTH, 8);
@@ -202,11 +203,13 @@ public class SukurtsalaTest {
 		
 		// Setters
 		s1.setIdSukurtsala(2);
+		s1.setKodSukurtsala(11);
 		s1.setKokalekua("Autonomia kalea");
 		s1.setPostaKodea(48001);
 		s1.setKontuBankarioak(KontuBankarioak2);
 		
 		assertEquals(2,s1.getIdSukurtsala());
+		assertEquals(11, s1.getKodSukurtsala());
 		assertEquals("Autonomia kalea",s1.getKokalekua());
 		assertEquals(48001,s1.getPostaKodea());
 		assertEquals("ES1576197348527531958261", s1.getKontuBankarioak().get(0).getIban());
@@ -286,11 +289,11 @@ public class SukurtsalaTest {
 		ArrayList<KontuBankarioa> KontuBankarioak = new ArrayList<KontuBankarioa>();
 		KontuBankarioak.add(kb1);
 		
-		Sukurtsala s1 = new Sukurtsala(1, "Gallarraga kalea", 48830, KontuBankarioak);
+		Sukurtsala s1 = new Sukurtsala(1, 13,"Gallarraga kalea", 48830, KontuBankarioak);
 		
 		// ToString
-		assertEquals("Sukurtsala idSukurtsala=" + s1.getIdSukurtsala() + ", kokalekua=" + s1.getKokalekua() + ", postaKodea=" + s1.getPostaKodea()
-				+ ", kontuBankarioak=" + s1.getKontuBankarioak(), s1.toString());
+		assertEquals("Sukurtsala idSukurtsala=" + s1.getIdSukurtsala() + ", kodSukurtsala=" + s1.getKodSukurtsala() + ", kokalekua="
+				+ s1.getKokalekua() + ", postaKodea=" + s1.getPostaKodea() + ", kontuBankarioak=" + s1.getKontuBankarioak(), s1.toString());
 	}
 	
 	@Test
@@ -346,8 +349,8 @@ public class SukurtsalaTest {
 		ArrayList<KontuBankarioa> KontuBankarioak = new ArrayList<KontuBankarioa>();
 		KontuBankarioak.add(kb1);
 		
-		Sukurtsala s1 = new Sukurtsala(1, "Gallarraga kalea", 48830, KontuBankarioak);
-		Sukurtsala s2 = new Sukurtsala(1, "Gallarraga kalea", 48830, KontuBankarioak);
+		Sukurtsala s1 = new Sukurtsala(1, 13, "Gallarraga kalea", 48830, KontuBankarioak);
+		Sukurtsala s2 = new Sukurtsala(1, 13, "Gallarraga kalea", 48830, KontuBankarioak);
 		
 		// Equals
 		assertTrue(s1.equals(s2));
