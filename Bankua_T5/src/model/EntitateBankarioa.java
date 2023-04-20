@@ -6,14 +6,14 @@ public class EntitateBankarioa {
 	private String izena;
 	private int idEntitatea;
 	private int entitateZbk;
-	private ArrayList<Sukurtsala> sukurtzalak;
+	private ArrayList<Sukurtsala> sukurtsalak;
 	
 	// Constructors
-	public EntitateBankarioa(String izena, int idEntitatea, int entitateZbk, ArrayList<Sukurtsala> sukurtzalak) {
+	public EntitateBankarioa(String izena, int idEntitatea, int entitateZbk, ArrayList<Sukurtsala> sukurtsalak) {
 		this.izena = izena;
 		this.idEntitatea = idEntitatea;
 		this.entitateZbk = entitateZbk;
-		this.sukurtzalak = sukurtzalak;
+		this.sukurtsalak = sukurtsalak;
 	}
 
 	// Getters and Setters
@@ -35,18 +35,18 @@ public class EntitateBankarioa {
 	public void setEntitateZbk(int entitateZbk) {
 		this.entitateZbk = entitateZbk;
 	}
-	public ArrayList<Sukurtsala> getSukurtzalak() {
-		return sukurtzalak;
+	public ArrayList<Sukurtsala> getSukurtsalak() {
+		return sukurtsalak;
 	}
-	public void setSukurtzalak(ArrayList<Sukurtsala> sukurtzalak) {
-		this.sukurtzalak = sukurtzalak;
+	public void setSukurtsalak(ArrayList<Sukurtsala> sukurtzalak) {
+		this.sukurtsalak = sukurtzalak;
 	}
 
 	// ToString
 	@Override
 	public String toString() {
 		return "EntitateBankarioa izena=" + izena + ", idEntitatea=" + idEntitatea + ", entitateZbk=" + entitateZbk
-				+ ", sukurtzalak=" + sukurtzalak;
+				+ ", sukurtsalak=" + sukurtsalak;
 	}
 	
 	// Equals
