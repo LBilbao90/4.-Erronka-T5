@@ -8,6 +8,7 @@ import java.util.Calendar;
 
 import org.junit.Test;
 
+import model.Bezeroa;
 import model.DiruSarrera;
 import model.Hipoteka;
 import model.KontuBankarioa;
@@ -21,13 +22,13 @@ import model.Txartela.Mota;
 public class TxartelaTest {
 
 	@Test
-	void testTxartelaConsGet() {
+	public void testTxartelaConsGet() {
 		Calendar cal = Calendar.getInstance();
 		cal.set(Calendar.DAY_OF_MONTH, 20);
 		cal.set(Calendar.MONTH, 0);
 		cal.set(Calendar.YEAR, 1999);
 		Date jaiotzeData = cal.getTime();
-		Pertsona p1 = new Pertsona ("12345678A", "Juan", "Perez", jaiotzeData,Generoa.gizona, "111222333", "12345678");
+		Bezeroa p1 = new Bezeroa ("12345678A", "Juan", "Perez", jaiotzeData,Generoa.gizona, "111222333", "12345678");
 		
 		ArrayList<Pertsona> pertsonak= new ArrayList<Pertsona>();
 		pertsonak.add(p1);
@@ -121,13 +122,13 @@ public class TxartelaTest {
 	}
 	
 	@Test
-	void testTxartelaSet() {
+	public void testTxartelaSet() {
 		Calendar cal = Calendar.getInstance();
 		cal.set(Calendar.DAY_OF_MONTH, 20);
 		cal.set(Calendar.MONTH, 0);
 		cal.set(Calendar.YEAR, 1999);
 		Date jaiotzeData = cal.getTime();
-		Pertsona p1 = new Pertsona ("12345678A", "Juan", "Perez", jaiotzeData,Generoa.gizona, "111222333", "12345678");
+		Bezeroa p1 = new Bezeroa ("12345678A", "Juan", "Perez", jaiotzeData,Generoa.gizona, "111222333", "12345678");
 		
 		ArrayList<Pertsona> pertsonak= new ArrayList<Pertsona>();
 		pertsonak.add(p1);
@@ -190,7 +191,7 @@ public class TxartelaTest {
 		cal.set(Calendar.YEAR, 2001);
 		jaiotzeData = cal.getTime();
 		
-		Pertsona p2 = new Pertsona ("12345678B", "Laura", "Sanchez", jaiotzeData,Generoa.emakumea, "444555666", "87654321");
+		Bezeroa p2 = new Bezeroa ("12345678B", "Laura", "Sanchez", jaiotzeData,Generoa.emakumea, "444555666", "87654321");
 		
 		ArrayList<Pertsona> pertsonak2 = new ArrayList<Pertsona>();
 		pertsonak2.add(p2);
@@ -283,13 +284,13 @@ public class TxartelaTest {
 	}
 	
 	@Test
-	void testTxartelaToString() {
+	public void testTxartelaToString() {
 		Calendar cal = Calendar.getInstance();
 		cal.set(Calendar.DAY_OF_MONTH, 20);
 		cal.set(Calendar.MONTH, 0);
 		cal.set(Calendar.YEAR, 1999);
 		Date jaiotzeData = cal.getTime();
-		Pertsona p1 = new Pertsona ("12345678A", "Juan", "Perez", jaiotzeData,Generoa.gizona, "111222333", "12345678");
+		Bezeroa p1 = new Bezeroa ("12345678A", "Juan", "Perez", jaiotzeData,Generoa.gizona, "111222333", "12345678");
 		
 		ArrayList<Pertsona> pertsonak= new ArrayList<Pertsona>();
 		pertsonak.add(p1);
@@ -353,13 +354,13 @@ public class TxartelaTest {
 	}
 	
 	@Test
-	void testTxartelaEquals() {
+	public void testTxartelaEquals() {
 		Calendar cal = Calendar.getInstance();
 		cal.set(Calendar.DAY_OF_MONTH, 20);
 		cal.set(Calendar.MONTH, 0);
 		cal.set(Calendar.YEAR, 1999);
 		Date jaiotzeData = cal.getTime();
-		Pertsona p1 = new Pertsona ("12345678A", "Juan", "Perez", jaiotzeData,Generoa.gizona, "111222333", "12345678");
+		Bezeroa p1 = new Bezeroa ("12345678A", "Juan", "Perez", jaiotzeData,Generoa.gizona, "111222333", "12345678");
 		
 		ArrayList<Pertsona> pertsonak= new ArrayList<Pertsona>();
 		pertsonak.add(p1);

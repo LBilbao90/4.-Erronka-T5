@@ -1,4 +1,4 @@
-package controlagailua;
+package controlador;
 
 import java.sql.DriverManager;
 import java.sql.ResultSet;

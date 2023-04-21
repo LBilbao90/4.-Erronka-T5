@@ -3,7 +3,7 @@ package model;
 import java.util.Date;
 import java.util.Objects;
 
-public class Pertsona {
+public abstract class Pertsona {
 	protected String nan;
 	protected String izena;
 	protected String abizena;

@@ -2,7 +2,7 @@ package model;
 
 import java.util.Date;
 
-public class Langilea extends Pertsona{
+public abstract class Langilea extends Pertsona{
 	protected String sukurtsala;
 	
 	// Constructors
@@ -22,9 +22,9 @@ public class Langilea extends Pertsona{
 	// ToString
 	@Override
 	public String toString() {
-		return super.toString() +" Sukurtzala=" + sukurtsala;
+		return super.toString() + " Sukurtzala=" + sukurtsala;
 	}
 	
 	// Methods
-	public void ikusiEntitateOsoa() {}
+	public void ikusiEntitateKontua() {}
 }

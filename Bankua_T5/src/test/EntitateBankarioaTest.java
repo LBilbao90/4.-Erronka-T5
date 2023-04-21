@@ -78,10 +78,15 @@ public class EntitateBankarioaTest {
 		
 		EntitateBankarioa eb1 = new EntitateBankarioa ("BBK", 1, "ES25", sukurtzalak);
 		
+		eb1.setBounds("0, 0, 932, 130");
+		eb1.setUrl("src/res/bbk_logo.png");
+		
 		// Getters
 		assertEquals("BBK", eb1.getIzena());
 		assertEquals(1,eb1.getIdEntitatea());
 		assertEquals("ES25", eb1.getEntitateZbk());
+		assertEquals("0, 0, 932, 130", eb1.getBounds());
+		assertEquals("src/res/bbk_logo.png", eb1.getUrl());
 		assertEquals(1, eb1.getSukurtsalak().get(0).getIdSukurtsala());
 		assertEquals(13, eb1.getSukurtsalak().get(0).getKodSukurtsala());
 		assertEquals("Gallarraga kalea", eb1.getSukurtsalak().get(0).getKokalekua());
@@ -225,10 +230,14 @@ public class EntitateBankarioaTest {
 		eb1.setIdEntitatea(2);
 		eb1.setEntitateZbk("ES36");
 		eb1.setSukurtsalak(sukurtzalak2);
+		eb1.setBounds("0, 0, 932, 130");
+		eb1.setUrl("src/res/bbk_logo.png");
 		
 		assertEquals("BBVA", eb1.getIzena());
 		assertEquals(2,eb1.getIdEntitatea());
 		assertEquals("ES36", eb1.getEntitateZbk());
+		assertEquals("0, 0, 932, 130", eb1.getBounds());
+		assertEquals("src/res/bbk_logo.png", eb1.getUrl());
 		assertEquals(2, eb1.getSukurtsalak().get(0).getIdSukurtsala());
 		assertEquals(14, eb1.getSukurtsalak().get(0).getKodSukurtsala());
 		assertEquals("Autonomia kalea", eb1.getSukurtsalak().get(0).getKokalekua());
@@ -381,7 +390,7 @@ public class EntitateBankarioaTest {
 		sukurtzalak.add(s1);
 		
 		EntitateBankarioa eb1 = new EntitateBankarioa ("BBK", 1, "ES25", sukurtzalak);
-		EntitateBankarioa eb2 = new EntitateBankarioa ("BBK", 1, "Es25", sukurtzalak);
+		EntitateBankarioa eb2 = new EntitateBankarioa ("BBK", 1, "ES25", sukurtzalak);
 		
 		// Equals
 		assertTrue(eb1.equals(eb2));
