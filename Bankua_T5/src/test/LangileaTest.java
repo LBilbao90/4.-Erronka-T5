@@ -1,17 +1,17 @@
 package test;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.Assert.*;
 
 import java.util.Calendar;
 import java.util.Date;
 
-import org.junit.jupiter.api.Test;
+import org.junit.Test;
 
 import model.Langilea;
 import model.Pertsona.Generoa;
 
-class LangileaTest {
-	
+public class LangileaTest {
+
 	@Test
 	void testLangileaConsGet() {
 		Calendar cal = Calendar.getInstance();

@@ -5,16 +5,20 @@ import java.util.ArrayList;
 public class EntitateBankarioa {
 	private String izena;
 	private int idEntitatea;
-	private int entitateZbk;
+	private String entitateZbk;
 	private ArrayList<Sukurtsala> sukurtsalak;
+	private String url;
+	private String bounds;
 	
 	// Constructors
-	public EntitateBankarioa(String izena, int idEntitatea, int entitateZbk, ArrayList<Sukurtsala> sukurtsalak) {
+	public EntitateBankarioa(String izena, int idEntitatea, String entitateZbk, ArrayList<Sukurtsala> sukurtsalak) {
 		this.izena = izena;
 		this.idEntitatea = idEntitatea;
 		this.entitateZbk = entitateZbk;
 		this.sukurtsalak = sukurtsalak;
 	}
+	
+	public EntitateBankarioa() {}
 
 	// Getters and Setters
 	public String getIzena() {
@@ -29,10 +33,10 @@ public class EntitateBankarioa {
 	public void setIdEntitatea(int idEntitatea) {
 		this.idEntitatea = idEntitatea;
 	}
-	public int getEntitateZbk() {
+	public String getEntitateZbk() {
 		return entitateZbk;
 	}
-	public void setEntitateZbk(int entitateZbk) {
+	public void setEntitateZbk(String entitateZbk) {
 		this.entitateZbk = entitateZbk;
 	}
 	public ArrayList<Sukurtsala> getSukurtsalak() {
@@ -41,7 +45,20 @@ public class EntitateBankarioa {
 	public void setSukurtsalak(ArrayList<Sukurtsala> sukurtzalak) {
 		this.sukurtsalak = sukurtzalak;
 	}
+	
 
+	public String getUrl() {
+		return url;
+	}
+	public String getBounds() {
+		return bounds;
+	}
+	public void setUrl(String url) {
+		this.url = url;
+	}
+	public void setBounds(String bounds) {
+		this.bounds = bounds;
+	}
 	// ToString
 	@Override
 	public String toString() {

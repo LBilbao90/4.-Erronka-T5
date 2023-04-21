@@ -1,25 +1,24 @@
 package test;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.*;
 
+import java.util.Date;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Date;
 
-import org.junit.jupiter.api.Test;
+import org.junit.Test;
 
 import model.DiruSarrera;
 import model.Hipoteka;
 import model.KontuBankarioa;
+import model.KontuBankarioa.Egoera;
 import model.Pertsona;
+import model.Pertsona.Generoa;
 import model.Transferentzia;
 import model.Txartela;
-import model.KontuBankarioa.Egoera;
-import model.Pertsona.Generoa;
 import model.Txartela.Mota;
 
-class TxartelaTest {
+public class TxartelaTest {
 
 	@Test
 	void testTxartelaConsGet() {
@@ -422,4 +421,5 @@ class TxartelaTest {
 		// Equals
 		assertTrue(txartela.equals(txartela2));
 	}
+
 }

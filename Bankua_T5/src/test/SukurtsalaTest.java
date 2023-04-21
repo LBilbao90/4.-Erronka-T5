@@ -1,19 +1,19 @@
 package test;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.Assert.*;
 
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 
-import org.junit.jupiter.api.Test;
+import org.junit.Test;
 
 import model.DiruSarrera;
 import model.Hipoteka;
 import model.KontuBankarioa;
+import model.KontuBankarioa.Egoera;
 import model.Sukurtsala;
 import model.Transferentzia;
-import model.KontuBankarioa.Egoera;
 
 public class SukurtsalaTest {
 
@@ -78,25 +78,25 @@ public class SukurtsalaTest {
 		assertEquals("Gallarraga kalea",s1.getKokalekua());
 		assertEquals(48830,s1.getPostaKodea());
 		assertEquals("ES1576197348527531954865", s1.getKontuBankarioak().get(0).getIban());
-		assertEquals(2000, s1.getKontuBankarioak().get(0).getSaldoa());
-		assertEquals(100, s1.getKontuBankarioak().get(0).getHilekoLimitea());
+		assertEquals(2000, s1.getKontuBankarioak().get(0).getSaldoa(), 0.01);
+		assertEquals(100, s1.getKontuBankarioak().get(0).getHilekoLimitea(), 0.01);
 		assertEquals(sorreraData, s1.getKontuBankarioak().get(0).getSorreraData());
 		assertEquals(Egoera.aktiboa, s1.getKontuBankarioak().get(0).getEgoera());
 		assertEquals(1, s1.getKontuBankarioak().get(0).getDiruSarrerak().get(0).getIdSarrera());
-		assertEquals(100, s1.getKontuBankarioak().get(0).getDiruSarrerak().get(0).getKantitatea());
+		assertEquals(100, s1.getKontuBankarioak().get(0).getDiruSarrerak().get(0).getKantitatea(), 0.01);
 		assertEquals(sarreraData, s1.getKontuBankarioak().get(0).getDiruSarrerak().get(0).getSarreraData());
 		assertEquals("sarrera", s1.getKontuBankarioak().get(0).getDiruSarrerak().get(0).getKontzeptua());
 		assertEquals("ES1245784512346751245124", s1.getKontuBankarioak().get(0).getDiruSarrerak().get(0).getIgortzailea());
 		assertEquals(1, s1.getKontuBankarioak().get(0).getTransferentziak().get(0).getIdTransferentzia());
-		assertEquals(100, s1.getKontuBankarioak().get(0).getTransferentziak().get(0).getKantitatea());
+		assertEquals(100, s1.getKontuBankarioak().get(0).getTransferentziak().get(0).getKantitatea(), 0.01);
 		assertEquals(transferentziaData, s1.getKontuBankarioak().get(0).getTransferentziak().get(0).getTransferentziaData());
 		assertEquals("proba", s1.getKontuBankarioak().get(0).getTransferentziak().get(0).getKotzeptua());
 		assertEquals("ES1245784512346751245124", s1.getKontuBankarioak().get(0).getTransferentziak().get(0).getJasotzailea());
-		assertEquals(10, s1.getKontuBankarioak().get(0).getTransferentziak().get(0).getKomisioa());
+		assertEquals(10, s1.getKontuBankarioak().get(0).getTransferentziak().get(0).getKomisioa(), 0.01);
 		assertEquals(1, s1.getKontuBankarioak().get(0).getHipotekak().get(0).getIdHipoteka());
-		assertEquals(100000, s1.getKontuBankarioak().get(0).getHipotekak().get(0).getKantitatea());
-		assertEquals(50000, s1.getKontuBankarioak().get(0).getHipotekak().get(0).getOrdaindutakoa());
-		assertEquals(10, s1.getKontuBankarioak().get(0).getHipotekak().get(0).getKomisioa());
+		assertEquals(100000, s1.getKontuBankarioak().get(0).getHipotekak().get(0).getKantitatea(), 0.01);
+		assertEquals(50000, s1.getKontuBankarioak().get(0).getHipotekak().get(0).getOrdaindutakoa(), 0.01);
+		assertEquals(10, s1.getKontuBankarioak().get(0).getHipotekak().get(0).getKomisioa(), 0.01);
 		assertEquals(hasieraData, s1.getKontuBankarioak().get(0).getHipotekak().get(0).getHasieraData());
 		assertEquals(amaieraData, s1.getKontuBankarioak().get(0).getHipotekak().get(0).getAmaieraData());
 	}
@@ -213,25 +213,25 @@ public class SukurtsalaTest {
 		assertEquals("Autonomia kalea",s1.getKokalekua());
 		assertEquals(48001,s1.getPostaKodea());
 		assertEquals("ES1576197348527531958261", s1.getKontuBankarioak().get(0).getIban());
-		assertEquals(3000, s1.getKontuBankarioak().get(0).getSaldoa());
-		assertEquals(200, s1.getKontuBankarioak().get(0).getHilekoLimitea());
+		assertEquals(3000, s1.getKontuBankarioak().get(0).getSaldoa(), 0.01);
+		assertEquals(200, s1.getKontuBankarioak().get(0).getHilekoLimitea(), 0.01);
 		assertEquals(sorreraData, s1.getKontuBankarioak().get(0).getSorreraData());
 		assertEquals(Egoera.izoztuta, s1.getKontuBankarioak().get(0).getEgoera());
 		assertEquals(2, s1.getKontuBankarioak().get(0).getDiruSarrerak().get(0).getIdSarrera());
-		assertEquals(200, s1.getKontuBankarioak().get(0).getDiruSarrerak().get(0).getKantitatea());
+		assertEquals(200, s1.getKontuBankarioak().get(0).getDiruSarrerak().get(0).getKantitatea(), 0.01);
 		assertEquals(sarreraData, s1.getKontuBankarioak().get(0).getDiruSarrerak().get(0).getSarreraData());
 		assertEquals("sarrera2", s1.getKontuBankarioak().get(0).getDiruSarrerak().get(0).getKontzeptua());
 		assertEquals("ES1297514512626751245124", s1.getKontuBankarioak().get(0).getDiruSarrerak().get(0).getIgortzailea());
 		assertEquals(3, s1.getKontuBankarioak().get(0).getTransferentziak().get(0).getIdTransferentzia());
-		assertEquals(300, s1.getKontuBankarioak().get(0).getTransferentziak().get(0).getKantitatea());
+		assertEquals(300, s1.getKontuBankarioak().get(0).getTransferentziak().get(0).getKantitatea(), 0.01);
 		assertEquals(transferentziaData, s1.getKontuBankarioak().get(0).getTransferentziak().get(0).getTransferentziaData());
 		assertEquals("proba2", s1.getKontuBankarioak().get(0).getTransferentziak().get(0).getKotzeptua());
 		assertEquals("ES1245709142346751245124", s1.getKontuBankarioak().get(0).getTransferentziak().get(0).getJasotzailea());
-		assertEquals(10, s1.getKontuBankarioak().get(0).getTransferentziak().get(0).getKomisioa());
+		assertEquals(10, s1.getKontuBankarioak().get(0).getTransferentziak().get(0).getKomisioa(), 0.01);
 		assertEquals(2, s1.getKontuBankarioak().get(0).getHipotekak().get(0).getIdHipoteka());
-		assertEquals(200000, s1.getKontuBankarioak().get(0).getHipotekak().get(0).getKantitatea());
-		assertEquals(70000, s1.getKontuBankarioak().get(0).getHipotekak().get(0).getOrdaindutakoa());
-		assertEquals(10, s1.getKontuBankarioak().get(0).getHipotekak().get(0).getKomisioa());
+		assertEquals(200000, s1.getKontuBankarioak().get(0).getHipotekak().get(0).getKantitatea(), 0.01);
+		assertEquals(70000, s1.getKontuBankarioak().get(0).getHipotekak().get(0).getOrdaindutakoa(), 0.01);
+		assertEquals(10, s1.getKontuBankarioak().get(0).getHipotekak().get(0).getKomisioa(), 0.01);
 		assertEquals(hasieraData, s1.getKontuBankarioak().get(0).getHipotekak().get(0).getHasieraData());
 		assertEquals(amaieraData, s1.getKontuBankarioak().get(0).getHipotekak().get(0).getAmaieraData());
 	}

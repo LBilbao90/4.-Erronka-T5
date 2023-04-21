@@ -1,15 +1,15 @@
 package test;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.Assert.*;
 
 import java.util.Calendar;
 import java.util.Date;
 
-import org.junit.jupiter.api.Test;
+import org.junit.Test;
 
 import model.Transferentzia;
 
-class TransferentziaTest {
+public class TransferentziaTest {
 
 	@Test
 	public void testTransferentziaConsGet() {
@@ -87,5 +87,5 @@ class TransferentziaTest {
 		// Equals
 		assertTrue(t1.equals(t2));
 	}
-}
 
+}

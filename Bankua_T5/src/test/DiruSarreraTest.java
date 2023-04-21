@@ -1,11 +1,11 @@
 package test;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.Assert.*;
 
 import java.util.Calendar;
 import java.util.Date;
 
-import org.junit.jupiter.api.Test;
+import org.junit.Test;
 
 import model.DiruSarrera;
 
@@ -23,7 +23,7 @@ public class DiruSarreraTest {
 		
 		// Getters
 		assertEquals(1, ds1.getIdSarrera());
-		assertEquals(100, ds1.getKantitatea());
+		assertEquals(100, ds1.getKantitatea(), 0.01);
 		assertEquals(sarreraData, ds1.getSarreraData());
 		assertEquals("sarrera", ds1.getKontzeptua());
 		assertEquals("ES1245784512346751245124", ds1.getIgortzailea());
@@ -53,7 +53,7 @@ public class DiruSarreraTest {
 		ds1.setIgortzailea("ES1245784764913671245124");
 		
 		assertEquals(2, ds1.getIdSarrera());
-		assertEquals(10, ds1.getKantitatea());
+		assertEquals(10, ds1.getKantitatea(), 0.01);
 		assertEquals(sarreraData, ds1.getSarreraData());
 		assertEquals("proba", ds1.getKontzeptua());
 		assertEquals("ES1245784764913671245124", ds1.getIgortzailea());
@@ -100,5 +100,5 @@ public class DiruSarreraTest {
 		// Equals
 		assertTrue(ds1.equals(ds2));
 	}
-	
+
 }

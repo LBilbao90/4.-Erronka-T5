@@ -1,20 +1,20 @@
 package test;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.Assert.*;
 
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 
-import org.junit.jupiter.api.Test;
+import org.junit.Test;
 
 import model.DiruSarrera;
 import model.EntitateBankarioa;
 import model.Hipoteka;
 import model.KontuBankarioa;
+import model.KontuBankarioa.Egoera;
 import model.Sukurtsala;
 import model.Transferentzia;
-import model.KontuBankarioa.Egoera;
 
 public class EntitateBankarioaTest {
 
@@ -76,36 +76,36 @@ public class EntitateBankarioaTest {
 		ArrayList<Sukurtsala> sukurtzalak = new ArrayList<Sukurtsala>();
 		sukurtzalak.add(s1);
 		
-		EntitateBankarioa eb1 = new EntitateBankarioa ("BBK", 1, 18, sukurtzalak);
+		EntitateBankarioa eb1 = new EntitateBankarioa ("BBK", 1, "ES25", sukurtzalak);
 		
 		// Getters
 		assertEquals("BBK", eb1.getIzena());
 		assertEquals(1,eb1.getIdEntitatea());
-		assertEquals(18, eb1.getEntitateZbk());
+		assertEquals("ES25", eb1.getEntitateZbk());
 		assertEquals(1, eb1.getSukurtsalak().get(0).getIdSukurtsala());
 		assertEquals(13, eb1.getSukurtsalak().get(0).getKodSukurtsala());
 		assertEquals("Gallarraga kalea", eb1.getSukurtsalak().get(0).getKokalekua());
 		assertEquals(48830, eb1.getSukurtsalak().get(0).getPostaKodea());
 		assertEquals("ES1576197348527531954865", eb1.getSukurtsalak().get(0).getKontuBankarioak().get(0).getIban());
-		assertEquals(2000, eb1.getSukurtsalak().get(0).getKontuBankarioak().get(0).getSaldoa());
-		assertEquals(100, eb1.getSukurtsalak().get(0).getKontuBankarioak().get(0).getHilekoLimitea());
+		assertEquals(2000, eb1.getSukurtsalak().get(0).getKontuBankarioak().get(0).getSaldoa(), 0.01);
+		assertEquals(100, eb1.getSukurtsalak().get(0).getKontuBankarioak().get(0).getHilekoLimitea(), 0.01);
 		assertEquals(sorreraData, eb1.getSukurtsalak().get(0).getKontuBankarioak().get(0).getSorreraData());
 		assertEquals(Egoera.aktiboa, eb1.getSukurtsalak().get(0).getKontuBankarioak().get(0).getEgoera());
 		assertEquals(1, eb1.getSukurtsalak().get(0).getKontuBankarioak().get(0).getDiruSarrerak().get(0).getIdSarrera());
-		assertEquals(100, eb1.getSukurtsalak().get(0).getKontuBankarioak().get(0).getDiruSarrerak().get(0).getKantitatea());
+		assertEquals(100, eb1.getSukurtsalak().get(0).getKontuBankarioak().get(0).getDiruSarrerak().get(0).getKantitatea(), 0.01);
 		assertEquals(sarreraData, eb1.getSukurtsalak().get(0).getKontuBankarioak().get(0).getDiruSarrerak().get(0).getSarreraData());
 		assertEquals("sarrera", eb1.getSukurtsalak().get(0).getKontuBankarioak().get(0).getDiruSarrerak().get(0).getKontzeptua());
 		assertEquals("ES1245784512346751245124", eb1.getSukurtsalak().get(0).getKontuBankarioak().get(0).getDiruSarrerak().get(0).getIgortzailea());
 		assertEquals(1, eb1.getSukurtsalak().get(0).getKontuBankarioak().get(0).getTransferentziak().get(0).getIdTransferentzia());
-		assertEquals(100, eb1.getSukurtsalak().get(0).getKontuBankarioak().get(0).getTransferentziak().get(0).getKantitatea());
+		assertEquals(100, eb1.getSukurtsalak().get(0).getKontuBankarioak().get(0).getTransferentziak().get(0).getKantitatea(), 0.01);
 		assertEquals(transferentziaData, eb1.getSukurtsalak().get(0).getKontuBankarioak().get(0).getTransferentziak().get(0).getTransferentziaData());
 		assertEquals("proba", eb1.getSukurtsalak().get(0).getKontuBankarioak().get(0).getTransferentziak().get(0).getKotzeptua());
 		assertEquals("ES1245784512346751245124", eb1.getSukurtsalak().get(0).getKontuBankarioak().get(0).getTransferentziak().get(0).getJasotzailea());
-		assertEquals(10, eb1.getSukurtsalak().get(0).getKontuBankarioak().get(0).getTransferentziak().get(0).getKomisioa());
+		assertEquals(10, eb1.getSukurtsalak().get(0).getKontuBankarioak().get(0).getTransferentziak().get(0).getKomisioa(), 0.01);
 		assertEquals(1, eb1.getSukurtsalak().get(0).getKontuBankarioak().get(0).getHipotekak().get(0).getIdHipoteka());
-		assertEquals(100000, eb1.getSukurtsalak().get(0).getKontuBankarioak().get(0).getHipotekak().get(0).getKantitatea());
-		assertEquals(50000, eb1.getSukurtsalak().get(0).getKontuBankarioak().get(0).getHipotekak().get(0).getOrdaindutakoa());
-		assertEquals(10, eb1.getSukurtsalak().get(0).getKontuBankarioak().get(0).getHipotekak().get(0).getKomisioa());
+		assertEquals(100000, eb1.getSukurtsalak().get(0).getKontuBankarioak().get(0).getHipotekak().get(0).getKantitatea(), 0.01);
+		assertEquals(50000, eb1.getSukurtsalak().get(0).getKontuBankarioak().get(0).getHipotekak().get(0).getOrdaindutakoa(), 0.01);
+		assertEquals(10, eb1.getSukurtsalak().get(0).getKontuBankarioak().get(0).getHipotekak().get(0).getKomisioa(), 0.01);
 		assertEquals(hasieraData, eb1.getSukurtsalak().get(0).getKontuBankarioak().get(0).getHipotekak().get(0).getHasieraData());
 		assertEquals(amaieraData, eb1.getSukurtsalak().get(0).getKontuBankarioak().get(0).getHipotekak().get(0).getAmaieraData());
 	}
@@ -168,7 +168,7 @@ public class EntitateBankarioaTest {
 		ArrayList<Sukurtsala> sukurtzalak = new ArrayList<Sukurtsala>();
 		sukurtzalak.add(s1);
 		
-		EntitateBankarioa eb1 = new EntitateBankarioa ("BBK", 1, 18, sukurtzalak);
+		EntitateBankarioa eb1 = new EntitateBankarioa ("BBK", 1, "ES25", sukurtzalak);
 		
 		cal1.set(Calendar.DAY_OF_MONTH, 22);
 		cal1.set(Calendar.MONTH, 8);
@@ -223,36 +223,36 @@ public class EntitateBankarioaTest {
 		// Setters
 		eb1.setIzena("BBVA");
 		eb1.setIdEntitatea(2);
-		eb1.setEntitateZbk(19);
+		eb1.setEntitateZbk("ES36");
 		eb1.setSukurtsalak(sukurtzalak2);
 		
 		assertEquals("BBVA", eb1.getIzena());
 		assertEquals(2,eb1.getIdEntitatea());
-		assertEquals(19, eb1.getEntitateZbk());
+		assertEquals("ES36", eb1.getEntitateZbk());
 		assertEquals(2, eb1.getSukurtsalak().get(0).getIdSukurtsala());
 		assertEquals(14, eb1.getSukurtsalak().get(0).getKodSukurtsala());
 		assertEquals("Autonomia kalea", eb1.getSukurtsalak().get(0).getKokalekua());
 		assertEquals(48001, eb1.getSukurtsalak().get(0).getPostaKodea());
 		assertEquals("ES1576197348527531958261", eb1.getSukurtsalak().get(0).getKontuBankarioak().get(0).getIban());
-		assertEquals(3000, eb1.getSukurtsalak().get(0).getKontuBankarioak().get(0).getSaldoa());
-		assertEquals(200, eb1.getSukurtsalak().get(0).getKontuBankarioak().get(0).getHilekoLimitea());
+		assertEquals(3000, eb1.getSukurtsalak().get(0).getKontuBankarioak().get(0).getSaldoa(), 0.01);
+		assertEquals(200, eb1.getSukurtsalak().get(0).getKontuBankarioak().get(0).getHilekoLimitea(), 0.01);
 		assertEquals(sorreraData, eb1.getSukurtsalak().get(0).getKontuBankarioak().get(0).getSorreraData());
 		assertEquals(Egoera.izoztuta, eb1.getSukurtsalak().get(0).getKontuBankarioak().get(0).getEgoera());
 		assertEquals(2, eb1.getSukurtsalak().get(0).getKontuBankarioak().get(0).getDiruSarrerak().get(0).getIdSarrera());
-		assertEquals(200, eb1.getSukurtsalak().get(0).getKontuBankarioak().get(0).getDiruSarrerak().get(0).getKantitatea());
+		assertEquals(200, eb1.getSukurtsalak().get(0).getKontuBankarioak().get(0).getDiruSarrerak().get(0).getKantitatea(), 0.01);
 		assertEquals(sarreraData, eb1.getSukurtsalak().get(0).getKontuBankarioak().get(0).getDiruSarrerak().get(0).getSarreraData());
 		assertEquals("sarrera2", eb1.getSukurtsalak().get(0).getKontuBankarioak().get(0).getDiruSarrerak().get(0).getKontzeptua());
 		assertEquals("ES1297514512626751245124", eb1.getSukurtsalak().get(0).getKontuBankarioak().get(0).getDiruSarrerak().get(0).getIgortzailea());
 		assertEquals(3, eb1.getSukurtsalak().get(0).getKontuBankarioak().get(0).getTransferentziak().get(0).getIdTransferentzia());
-		assertEquals(300, eb1.getSukurtsalak().get(0).getKontuBankarioak().get(0).getTransferentziak().get(0).getKantitatea());
+		assertEquals(300, eb1.getSukurtsalak().get(0).getKontuBankarioak().get(0).getTransferentziak().get(0).getKantitatea(), 0.01);
 		assertEquals(transferentziaData, eb1.getSukurtsalak().get(0).getKontuBankarioak().get(0).getTransferentziak().get(0).getTransferentziaData());
 		assertEquals("proba2", eb1.getSukurtsalak().get(0).getKontuBankarioak().get(0).getTransferentziak().get(0).getKotzeptua());
 		assertEquals("ES1245709142346751245124", eb1.getSukurtsalak().get(0).getKontuBankarioak().get(0).getTransferentziak().get(0).getJasotzailea());
-		assertEquals(10, eb1.getSukurtsalak().get(0).getKontuBankarioak().get(0).getTransferentziak().get(0).getKomisioa());
+		assertEquals(10, eb1.getSukurtsalak().get(0).getKontuBankarioak().get(0).getTransferentziak().get(0).getKomisioa(), 0.01);
 		assertEquals(2, eb1.getSukurtsalak().get(0).getKontuBankarioak().get(0).getHipotekak().get(0).getIdHipoteka());
-		assertEquals(200000, eb1.getSukurtsalak().get(0).getKontuBankarioak().get(0).getHipotekak().get(0).getKantitatea());
-		assertEquals(70000, eb1.getSukurtsalak().get(0).getKontuBankarioak().get(0).getHipotekak().get(0).getOrdaindutakoa());
-		assertEquals(10, eb1.getSukurtsalak().get(0).getKontuBankarioak().get(0).getHipotekak().get(0).getKomisioa());
+		assertEquals(200000, eb1.getSukurtsalak().get(0).getKontuBankarioak().get(0).getHipotekak().get(0).getKantitatea(), 0.01);
+		assertEquals(70000, eb1.getSukurtsalak().get(0).getKontuBankarioak().get(0).getHipotekak().get(0).getOrdaindutakoa(), 0.01);
+		assertEquals(10, eb1.getSukurtsalak().get(0).getKontuBankarioak().get(0).getHipotekak().get(0).getKomisioa(), 0.01);
 		assertEquals(hasieraData, eb1.getSukurtsalak().get(0).getKontuBankarioak().get(0).getHipotekak().get(0).getHasieraData());
 		assertEquals(amaieraData, eb1.getSukurtsalak().get(0).getKontuBankarioak().get(0).getHipotekak().get(0).getAmaieraData());
 	}
@@ -315,7 +315,7 @@ public class EntitateBankarioaTest {
 		ArrayList<Sukurtsala> sukurtzalak = new ArrayList<Sukurtsala>();
 		sukurtzalak.add(s1);
 		
-		EntitateBankarioa eb1 = new EntitateBankarioa ("BBK", 1, 18, sukurtzalak);
+		EntitateBankarioa eb1 = new EntitateBankarioa ("BBK", 1, "ES25", sukurtzalak);
 		
 		// ToString
 		assertEquals("EntitateBankarioa izena=" + eb1.getIzena() + ", idEntitatea=" + eb1.getIdEntitatea() + ", entitateZbk=" + eb1.getEntitateZbk()
@@ -380,10 +380,11 @@ public class EntitateBankarioaTest {
 		ArrayList<Sukurtsala> sukurtzalak = new ArrayList<Sukurtsala>();
 		sukurtzalak.add(s1);
 		
-		EntitateBankarioa eb1 = new EntitateBankarioa ("BBK", 1, 18, sukurtzalak);
-		EntitateBankarioa eb2 = new EntitateBankarioa ("BBK", 1, 18, sukurtzalak);
+		EntitateBankarioa eb1 = new EntitateBankarioa ("BBK", 1, "ES25", sukurtzalak);
+		EntitateBankarioa eb2 = new EntitateBankarioa ("BBK", 1, "Es25", sukurtzalak);
 		
 		// Equals
 		assertTrue(eb1.equals(eb2));
 	}
+
 }

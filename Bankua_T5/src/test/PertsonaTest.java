@@ -1,17 +1,16 @@
 package test;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.*;
 
 import java.util.Calendar;
 import java.util.Date;
 
-import org.junit.jupiter.api.Test;
+import org.junit.Test;
 
 import model.Pertsona;
 import model.Pertsona.Generoa;
 
-class PertsonaTest {
+public class PertsonaTest {
 
 	@Test
 	public void testPertsonaConsGet() {
@@ -92,4 +91,5 @@ class PertsonaTest {
 		// Equals
 		assertTrue(p1.equals(p2));
 	}
+
 }
