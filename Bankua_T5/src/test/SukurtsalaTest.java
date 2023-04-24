@@ -351,9 +351,11 @@ public class SukurtsalaTest {
 		
 		Sukurtsala s1 = new Sukurtsala(1, 13, "Gallarraga kalea", 48830, KontuBankarioak);
 		Sukurtsala s2 = new Sukurtsala(1, 13, "Gallarraga kalea", 48830, KontuBankarioak);
+		Sukurtsala s3 = new Sukurtsala();
 		
 		// Equals
 		assertTrue(s1.equals(s2));
+		assertFalse(s3.equals(null));
 	}
 
 }

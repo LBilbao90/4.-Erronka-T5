@@ -30,6 +30,9 @@ public class KontuBankarioa {
 		this.hipotekak = hipotekak;
 	}
 	
+	public KontuBankarioa(){
+	}
+	
 	// Getters and Setters
 	public String getIban() {
 		return iban;

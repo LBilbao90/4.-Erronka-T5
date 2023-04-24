@@ -419,8 +419,11 @@ public class TxartelaTest {
 		Txartela txartela = new Txartela("123145677894",455,Mota.debito, kontuBankarioak,pertsonak);
 		Txartela txartela2 = new Txartela("123145677894",455,Mota.debito, kontuBankarioak,pertsonak);
 		
+		Txartela txartela3 = new Txartela();
+		
 		// Equals
 		assertTrue(txartela.equals(txartela2));
+		assertFalse(txartela3.equals(null));
 	}
 
 }

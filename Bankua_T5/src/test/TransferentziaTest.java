@@ -83,9 +83,11 @@ public class TransferentziaTest {
 		Date transferentziaData = cal1.getTime();
 		Transferentzia t1 = new Transferentzia (1, 100, transferentziaData, "proba", "ES1245784512346751245124", 10);
 		Transferentzia t2 = new Transferentzia (1, 100, transferentziaData, "proba", "ES1245784512346751245124", 10);
+		Transferentzia t3 = new Transferentzia ();
 		
 		// Equals
 		assertTrue(t1.equals(t2));
+		assertFalse(t3.equals(null));
 	}
 
 }

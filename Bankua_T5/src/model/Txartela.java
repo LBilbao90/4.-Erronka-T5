@@ -23,6 +23,9 @@ public class Txartela {
 		this.kontuBankarioak = kontuBankarioak;
 		this.pertsonak = pertsonak;
 	}
+	
+	public Txartela() {
+	}
 
 	// Getters and Setters
 	public String getIdTxartela() {

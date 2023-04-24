@@ -1,6 +1,7 @@
 package model;
 
 import java.util.Date;
+import java.util.Objects;
 
 public class Transferentzia implements Komisioa{
 	private int idTransferentzia;
@@ -18,6 +19,10 @@ public class Transferentzia implements Komisioa{
 		this.kotzeptua = kotzeptua;
 		this.jasotzailea = jasotzailea;
 		this.komisioa = komisioa;
+	}
+	
+	public Transferentzia() {
+		this.komisioa = 10;
 	}
 
 	// Getters and Setters
@@ -68,7 +73,7 @@ public class Transferentzia implements Komisioa{
 		if (obj == null)
 			return false;
 		Transferentzia other = (Transferentzia) obj;
-		return idTransferentzia == other.idTransferentzia;
+		return Objects.equals(idTransferentzia, other.idTransferentzia);
 	}
 
 	// Methods

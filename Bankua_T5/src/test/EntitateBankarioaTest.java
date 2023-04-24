@@ -391,9 +391,11 @@ public class EntitateBankarioaTest {
 		
 		EntitateBankarioa eb1 = new EntitateBankarioa ("BBK", 1, "ES25", sukurtzalak);
 		EntitateBankarioa eb2 = new EntitateBankarioa ("BBK", 1, "ES25", sukurtzalak);
+		EntitateBankarioa eb3 = new EntitateBankarioa ();
 		
 		// Equals
 		assertTrue(eb1.equals(eb2));
+		assertFalse(eb3.equals(null));
 	}
 
 }

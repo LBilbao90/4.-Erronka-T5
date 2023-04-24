@@ -1,6 +1,7 @@
 package model;
 
 import java.util.ArrayList;
+import java.util.Objects;
 
 public class Sukurtsala {
 	private int idSukurtsala;
@@ -16,6 +17,9 @@ public class Sukurtsala {
 		this.kokalekua = kokalekua;
 		this.postaKodea = postaKodea;
 		this.kontuBankarioak = kontuBankarioak;
+	}
+	
+	public Sukurtsala() {
 	}
 	
 	// Getters and Setters
@@ -63,6 +67,6 @@ public class Sukurtsala {
 		if (obj == null)
 			return false;
 		Sukurtsala other = (Sukurtsala) obj;
-		return idSukurtsala == other.idSukurtsala;
+		return Objects.equals(idSukurtsala, other.idSukurtsala);
 	}
 }

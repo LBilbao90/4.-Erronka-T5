@@ -15,7 +15,7 @@ public class Hipoteka implements Komisioa{
 		eskatuta, onartuta, itxita, errefusatuta;
 	}
 	
-	
+	// Constructors
 	public Hipoteka(int idHipoteka, double kantitatea, double ordaindutakoa, double komisioa, Date hasieraData, Date amaieraData) {
 		this.idHipoteka = idHipoteka;
 		this.kantitatea = kantitatea;
@@ -23,6 +23,10 @@ public class Hipoteka implements Komisioa{
 		this.komisioa = komisioa;
 		this.hasieraData = hasieraData;
 		this.amaieraData = amaieraData;
+	}
+	
+	public Hipoteka() {
+		this.komisioa = 10;
 	}
 
 	// Getters and Setters

@@ -1,6 +1,7 @@
 package model;
 
 import java.util.ArrayList;
+import java.util.Objects;
 
 public class EntitateBankarioa {
 	private String izena;
@@ -72,7 +73,7 @@ public class EntitateBankarioa {
 		if (obj == null)
 			return false;
 		EntitateBankarioa other = (EntitateBankarioa) obj;
-		return entitateZbk == other.entitateZbk;
+		return Objects.equals(entitateZbk, other.entitateZbk);
 	}
 	
 }

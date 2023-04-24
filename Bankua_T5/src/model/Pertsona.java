@@ -88,7 +88,6 @@ public abstract class Pertsona {
 	}
 
 	// Methods
-	public void erakutsiMugimenduak() {
-		
+	public void erakutsiMugimenduak() {	
 	}
 }

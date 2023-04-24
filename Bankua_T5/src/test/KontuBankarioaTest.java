@@ -321,9 +321,11 @@ public class KontuBankarioaTest {
 		
 		KontuBankarioa kb1 = new KontuBankarioa("ES1576197348527531954865", 2000, 100, sorreraData, Egoera.aktiboa, diruSarrerak,transferentziak, hipotekak);
 		KontuBankarioa kb2 = new KontuBankarioa("ES1576197348527531954865", 2000, 100, sorreraData, Egoera.aktiboa, diruSarrerak,transferentziak, hipotekak);
+		KontuBankarioa kb3 = new KontuBankarioa();
 		
 		// ToString
 		assertTrue(kb1.equals(kb2));
+		assertFalse(kb3.equals(null));
 	}
 
 }

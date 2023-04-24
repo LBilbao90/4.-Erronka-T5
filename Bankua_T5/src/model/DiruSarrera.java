@@ -1,6 +1,7 @@
 package model;
 
 import java.util.Date;
+import java.util.Objects;
 
 public class DiruSarrera {
 	private int idSarrera;
@@ -16,6 +17,9 @@ public class DiruSarrera {
 		this.sarreraData = sarreraData;
 		this.kontzeptua = kontzeptua;
 		this.igortzailea = igortzailea;
+	}
+	
+	public DiruSarrera() {
 	}
 	
 	// Getters and Setters
@@ -63,6 +67,6 @@ public class DiruSarrera {
 		if (obj == null)
 			return false;
 		DiruSarrera other = (DiruSarrera) obj;
-		return idSarrera == other.idSarrera;
+		return Objects.equals(idSarrera, other.idSarrera);
 	}
 }

@@ -124,9 +124,11 @@ public class HipotekaTest {
 		
 		Hipoteka h1 = new Hipoteka (1, 100000, 50000, 10, hasieraData, amaieraData);
 		Hipoteka h2 = new Hipoteka (1, 100000, 50000, 10, hasieraData, amaieraData);
+		Hipoteka h3 = new Hipoteka ();
 		
 		// Equals
 		assertTrue(h1.equals(h2));
+		assertFalse(h3.equals(null));
 	}
 
 }

@@ -90,15 +90,11 @@ public class DiruSarreraTest {
 		
 		DiruSarrera ds1 = new DiruSarrera(1, 100, sarreraData, "sarrera", "ES1245784512346751245124");
 		DiruSarrera ds2 = new DiruSarrera(1, 100, sarreraData, "sarrera", "ES1245784512346751245124");
-		
-		Calendar cal2 = Calendar.getInstance();
-		cal2.set(Calendar.DAY_OF_MONTH, 20);
-		cal2.set(Calendar.MONTH, 3);
-		cal2.set(Calendar.YEAR, 2023);
-		sarreraData = cal2.getTime();
+		DiruSarrera ds3 = new DiruSarrera();
 		
 		// Equals
 		assertTrue(ds1.equals(ds2));
+		assertFalse(ds3.equals(null));
 	}
 
 }
