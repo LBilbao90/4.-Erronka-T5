@@ -30,6 +30,11 @@ public class Bezeroa extends Pertsona{
 	}
 
 
+	@Override
+	public String toString() {
+		return "Bezeroa txartelak=" + txartelak;
+	}
+	
 	// Methods
 	public void hipotekaOrdaindu() {}
 	

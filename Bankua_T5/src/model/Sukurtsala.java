@@ -4,21 +4,21 @@ import java.util.ArrayList;
 import java.util.Objects;
 
 public class Sukurtsala {
-	private int idSukurtsala;
+	private String idSukurtsala;
 	private String kodSukurtsala;
 	private String kokalekua;
 	private EntitateBankario entitateBankario;
 	private ArrayList<KontuBankario> kontuBankarioak;
 	
 	// Bezerorako Sortzailea
-	public Sukurtsala(int idSukurtsala, String kodSukurtsala, String kokalekua,EntitateBankario entitateBankario) {
+	public Sukurtsala(String idSukurtsala, String kodSukurtsala, String kokalekua,EntitateBankario entitateBankario) {
 		this.idSukurtsala = idSukurtsala;
 		this.kodSukurtsala = kodSukurtsala;
 		this.kokalekua = kokalekua;
 		this.entitateBankario=entitateBankario;
 	}
 	// Langilerako Sortzailea
-	public Sukurtsala(int idSukurtsala, String kodSukurtsala, String kokalekua,EntitateBankario entitateBankario,ArrayList<KontuBankario> kontuBankarioak) {
+	public Sukurtsala(String idSukurtsala, String kodSukurtsala, String kokalekua,EntitateBankario entitateBankario,ArrayList<KontuBankario> kontuBankarioak) {
 		this.idSukurtsala = idSukurtsala;
 		this.kodSukurtsala = kodSukurtsala;
 		this.kokalekua = kokalekua;
@@ -30,10 +30,10 @@ public class Sukurtsala {
 	}
 	
 	// Getters and Setters
-	public int getIdSukurtsala() {
+	public String getIdSukurtsala() {
 		return idSukurtsala;
 	}
-	public void setIdSukurtsala(int idSukurtsala) {
+	public void setIdSukurtsala(String idSukurtsala) {
 		this.idSukurtsala = idSukurtsala;
 	}
 	public String getKokalekua() {

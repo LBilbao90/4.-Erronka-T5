@@ -17,6 +17,7 @@ import java.awt.CardLayout;
 import java.awt.Color;
 
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JButton;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
@@ -45,6 +46,7 @@ public class App extends JFrame {
 	final ImageIcon logo_aurrera = new ImageIcon(new ImageIcon("src/res/flecha_alante.png").getImage().getScaledInstance(44,30,Image.SCALE_DEFAULT));
 	final ImageIcon fondo_argazki = new ImageIcon(new ImageIcon("src/res/logo2.2.png").getImage().getScaledInstance(932,130,Image.SCALE_DEFAULT));
 	Bezeroa bezero = null;
+	String nan_bezero = "";
 	private JTable table_entitateKont;
 	private JTable transfer_ikusi_table;
 	private JTextField txt_jasotzaile;
@@ -250,9 +252,13 @@ public class App extends JFrame {
 		btn_bezero_sartu.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				if(metodoak.bezeroLogin(txt_bezero_erabiltzaile.getText(),String.valueOf(passBezero.getPassword()))) {
-					//bezero=metodoak.bezeroaKargatu();
+					nan_bezero= txt_bezero_erabiltzaile.getText();
+					bezero=metodoak.bezeroaKargatu(nan_bezero);
+					System.out.println(bezero);
 					loginBezero.setVisible(false);
 					bezeroEntitate.setVisible(true);
+				}else {
+					JOptionPane.showMessageDialog(null,"Login Okerra!","Error!", JOptionPane.ERROR_MESSAGE);
 				}
 			}
 		});
