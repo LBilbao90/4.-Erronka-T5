@@ -103,7 +103,7 @@ public class Metodoak {
 		
 		Connection conn;					
 		try {
-			//Datu baseari konexioa eta Bezeroa kargatzeko kontsulta egiten dugu
+			//Datu baseari konexioa eta Bezeroa logeatzeko kontsulta egiten dugu
 			conn = (Connection) DriverManager.getConnection ("jdbc:mysql://localhost:3306/bankua","root","");
 			Statement comand = (Statement) conn.createStatement();	
 			ResultSet req = comand.executeQuery("select COUNT(*) as kant from "+bezeroa+" where "+nan+"='"+nan_bez+"' and "+pasahitza+"='"+pas_bez+"';");
@@ -122,6 +122,33 @@ public class Metodoak {
 		}
 		
 		return aurkituta;
+	}
+	
+	public String langileLogin(String nan_lang, String pas_lang) {
+		String login= null;
+		
+		Connection conn;					
+		try {
+			//Datu baseari konexioa eta Langilea logeatzeko kontsulta egiten dugu
+			conn = (Connection) DriverManager.getConnection ("jdbc:mysql://localhost:3306/bankua","root","");
+			Statement comand = (Statement) conn.createStatement();	
+			ResultSet req = comand.executeQuery("select "+lanpostua+" from "+langile+" where "+nan+"='"+nan_lang+"' and "+pasahitza+"='"+pas_lang+"';");
+			//Daturik aurkitzen badu
+			if(req.next()) {
+				if(req.getString(1).equals("gerentea")) {
+					login="gerentea";
+				}else if(req.getString(1).equals("zuzendaria")) {
+					login="zuzendaria";
+				}
+			}
+			conn.close();
+		}catch(SQLException ex) {
+			System.out.println("SQLException: "+ ex.getMessage());
+			System.out.println("SQLState: "+ ex.getSQLState());
+			System.out.println("ErrorCode: "+ ex.getErrorCode());
+		}
+				
+		return login;
 	}
 	
 	public Bezeroa bezeroaKargatu(String nan_bezero){
@@ -226,7 +253,7 @@ public class Metodoak {
 							EntitateBankario entitate_kontu = null;
 							//Sukurtsala kargatzeko kontsulta egiten dugu
 							Statement comand8 = (Statement) conn.createStatement();	
-							ResultSet req8 = comand8.executeQuery("select e."+id_entitate+", e."+izena+", e."+entitateZenbaki+", e."+url+", e."+bounds+" from "+entitatebankario+" e join "+sukurtsala+" s on e."+id_entitate+"=s."+id_entitate+" where s."+id_sukurtsal+"='"+suk_id+"';");
+							ResultSet req8 = comand8.executeQuery("select e."+id_entitate+", e."+izena+", e."+entitateZenbaki+", e."+urlImg+", e."+bounds+" from "+entitatebankario+" e join "+sukurtsala+" s on e."+id_entitate+"=s."+id_entitate+" where s."+id_sukurtsal+"='"+suk_id+"';");
 							//Emaitzik badaude
 							if(req8.next()) {
 								String ent_id = req8.getString(1);
@@ -260,18 +287,32 @@ public class Metodoak {
 		return bezero;
 	}
 	
-	/*public String langileLogin(String erabiltzaile, String pasahitza, ArrayList<EntitateBankario> entitateak) {
-		String login= null;
+	public ArrayList<EntitateBankario> botoiakSortu(){
+		ArrayList<EntitateBankario> entitateak = new ArrayList<>();		
 		
-		for(int i=0;i<entitateak.size() && login==null;i++) {
-			for(int j=0;j<entitateak.get(i).getSukurtsalak().size() && login==null;j++) {
-				for(int k=0;k<entitateak.get(i).getSukurtsalak().get(j).getLangileak().size() && login==null;k++) {
-					if(entitateak.get(i).getSukurtsalak().get(j).getLangileak().get(k).getNan().equals(erabiltzaile) && entitateak.get(i).getSukurtsalak().get(j).getLangileak().get(k).getPasahitza().equals(pasahitza)) {
-						login=entitateak.get(i).getSukurtsalak().get(j).getLangileak().get(k).getLanpostu();
-					}
-				}
+		Connection conn;					
+		try {			
+			//Datu baseari konexioa eta Entitateak kargatzeko kontsulta egiten dugu
+			conn = (Connection) DriverManager.getConnection ("jdbc:mysql://localhost:3306/bankua","root","");
+			Statement comand = (Statement) conn.createStatement();	
+			ResultSet req = comand.executeQuery("select "+id_entitate+","+izena+","+entitateZenbaki+","+urlImg+","+bounds+" from "+entitatebankario+";");
+			//Emaitzik badaude
+			while(req.next()) {
+				String ent_id = req.getString(1);
+				String ent_izen = req.getString(2);
+				String ent_zbk = req.getString(3);
+				String ent_url = req.getString(4);
+				String ent_bound = req.getString(5);
+				//Datuak Entitate Bankarioan gorde
+				EntitateBankario entitate_kontu = new EntitateBankario(ent_izen,ent_id,ent_zbk,ent_bound,ent_url);
+				entitateak.add(entitate_kontu);
 			}
+			conn.close();
+		}catch(SQLException ex) {
+			System.out.println("SQLException: "+ ex.getMessage());
+			System.out.println("SQLState: "+ ex.getSQLState());
+			System.out.println("ErrorCode: "+ ex.getErrorCode());
 		}		
-		return login;
-	}*/
+		return entitateak;
+	}
 }

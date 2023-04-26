@@ -45,6 +45,7 @@ public class App extends JFrame {
 	final ImageIcon logo_atzera = new ImageIcon(new ImageIcon("src/res/flecha_atras.png").getImage().getScaledInstance(44,30,Image.SCALE_DEFAULT));
 	final ImageIcon logo_aurrera = new ImageIcon(new ImageIcon("src/res/flecha_alante.png").getImage().getScaledInstance(44,30,Image.SCALE_DEFAULT));
 	final ImageIcon fondo_argazki = new ImageIcon(new ImageIcon("src/res/logo2.2.png").getImage().getScaledInstance(932,130,Image.SCALE_DEFAULT));
+	ArrayList<EntitateBankario> entitateak = new ArrayList<>();
 	Bezeroa bezero = null;
 	String nan_bezero = "";
 	private JTable table_entitateKont;
@@ -106,9 +107,8 @@ public class App extends JFrame {
 
 		//////////////////////////////////
 		// 			Datuak Kargatu	    //
-		//////////////////////////////////
-		
-		
+		//////////////////////////////////		
+
 		
 		//////////////////////////////////
 		// 			 Panelak 		    //
@@ -254,7 +254,22 @@ public class App extends JFrame {
 				if(metodoak.bezeroLogin(txt_bezero_erabiltzaile.getText(),String.valueOf(passBezero.getPassword()))) {
 					nan_bezero= txt_bezero_erabiltzaile.getText();
 					bezero=metodoak.bezeroaKargatu(nan_bezero);
-					System.out.println(bezero);
+					entitateak = metodoak.botoiakSortu();
+
+					//Entitateen botoiak sortzen dira
+					for(int i=0;i<entitateak.size();i++) {		
+						String[] limiteak = entitateak.get(i).getBounds().split("/");
+						ImageIcon logo_banco = new ImageIcon(new ImageIcon(entitateak.get(i).getUrl()).getImage().getScaledInstance(Integer.parseInt(limiteak[2]),Integer.parseInt(limiteak[3]),Image.SCALE_DEFAULT));
+						JButton btn_banco = new JButton(logo_banco);
+						btn_banco.setToolTipText(String.valueOf(i+1));
+
+						btn_banco.setBounds(Integer.parseInt(limiteak[0]), Integer.parseInt(limiteak[1]), Integer.parseInt(limiteak[2]), Integer.parseInt(limiteak[3]));
+						bezeroEntitate.add(btn_banco);
+						btn_banco.setOpaque(false);
+						btn_banco.setContentAreaFilled(false);
+						btn_banco.setBorderPainted(false);
+					}
+					
 					loginBezero.setVisible(false);
 					bezeroEntitate.setVisible(true);
 				}else {
@@ -265,29 +280,16 @@ public class App extends JFrame {
 		btn_bezero_sartu.setBounds(437, 423, 89, 23);
 		loginBezero.add(btn_bezero_sartu);
 		
-		/*//Entitateen botoiak sortzen dira
-		for(int i=0;i<entitateak.size();i++) {		
-			String[] limiteak = entitateak.get(i).getBounds().split("/");
-			ImageIcon logo_banco = new ImageIcon(new ImageIcon(entitateak.get(i).getUrl()).getImage().getScaledInstance(Integer.parseInt(limiteak[2]),Integer.parseInt(limiteak[3]),Image.SCALE_DEFAULT));
-			JButton btn_banco = new JButton(logo_banco);
-			btn_banco.setToolTipText(String.valueOf(i+1));
-
-			btn_banco.setBounds(Integer.parseInt(limiteak[0]), Integer.parseInt(limiteak[1]), Integer.parseInt(limiteak[2]), Integer.parseInt(limiteak[3]));
-			bezeroEntitate.add(btn_banco);
-			btn_banco.setOpaque(false);
-			btn_banco.setContentAreaFilled(false);
-			btn_banco.setBorderPainted(false);
-		}*/
 		
 		JButton btn_langile_sartu = new JButton("Sartu");
 		btn_langile_sartu.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				//txt_langile_erabiltzaile.getText()
-				//passLangile
-				//if(metodoak.langileLogin(txt_langile_erabiltzaile.getText(),String.valueOf(passLangile.getPassword()),entitateak)!=null) {
+				if(metodoak.langileLogin(txt_langile_erabiltzaile.getText(),String.valueOf(passLangile.getPassword()))!=null) {
 					loginLangile.setVisible(false);
 					sukurtsalak.setVisible(true);
-				//}
+				}else {
+					JOptionPane.showMessageDialog(null,"Login Okerra!","Error!", JOptionPane.ERROR_MESSAGE);
+				}
 			}
 		});
 		btn_langile_sartu.setBounds(437, 423, 89, 23);
@@ -672,6 +674,11 @@ public class App extends JFrame {
 		JLabel lbl_fondo_entitate = new JLabel(fondo_argazki);
 		lbl_fondo_entitate.setBounds(0, 0, 932, 130);
 		bezeroEntitate.add(lbl_fondo_entitate);
+		
+		JLabel lbl_ent_bank = new JLabel("ENTITATE BANKARIOAK");
+		lbl_ent_bank.setFont(new Font("Tahoma", Font.BOLD, 15));
+		lbl_ent_bank.setBounds(375, 154, 210, 48);
+		bezeroEntitate.add(lbl_ent_bank);
 
 		JLabel lbl_fondo_entitatekontuak = new JLabel(fondo_argazki);
 		lbl_fondo_entitatekontuak.setBounds(0, 0, 932, 130);
