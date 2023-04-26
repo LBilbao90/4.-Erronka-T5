@@ -2,16 +2,30 @@ package model;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.Locale;
 import java.util.concurrent.TimeUnit;
 
 public class Bezeroa extends Pertsona{
+	private ArrayList<Txartela> txartelak;
+	
 	// Constructors
-	public Bezeroa(String nan, String izena, String abizena, String jaiotzeData, String sexua, String telefonoa, String pasahitza) {
+	public Bezeroa(String nan, String izena, String abizena, String jaiotzeData, String sexua, String telefonoa, String pasahitza, ArrayList<Txartela> txartelak) {
 		super(nan, izena, abizena, jaiotzeData, sexua, telefonoa, pasahitza);
+		this.txartelak=txartelak;
 	}
 	
+	//Getters 
+	public ArrayList<Txartela> getTxartelak() {
+		return txartelak;
+	}
+	//Setters
+	public void setTxartelak(ArrayList<Txartela> txartelak) {
+		this.txartelak = txartelak;
+	}
+
+
 	// Methods
 	public void hipotekaOrdaindu() {}
 	

@@ -1,22 +1,19 @@
 package model;
 
-import java.util.ArrayList;
 import java.util.Objects;
 
 public class Sukurtsala {
 	private int idSukurtsala;
 	private String kodSukurtsala;
 	private String kokalekua;
-	private ArrayList<KontuBankario> kontuBankarioak;
-	private ArrayList<Langilea> langileak;
+	private EntitateBankario entitateBankario;
 	
 	// Constructors
-	public Sukurtsala(int idSukurtsala, String kodSukurtsala, String kokalekua, ArrayList<KontuBankario> kontuBankarioak, ArrayList<Langilea> langileak) {
+	public Sukurtsala(int idSukurtsala, String kodSukurtsala, String kokalekua,EntitateBankario entitateBankario) {
 		this.idSukurtsala = idSukurtsala;
 		this.kodSukurtsala = kodSukurtsala;
 		this.kokalekua = kokalekua;
-		this.kontuBankarioak = kontuBankarioak;
-		this.langileak = langileak;
+		this.entitateBankario=entitateBankario;
 	}
 
 	public Sukurtsala() {
@@ -35,30 +32,24 @@ public class Sukurtsala {
 	public void setKokalekua(String kokalekua) {
 		this.kokalekua = kokalekua;
 	}	
-	public ArrayList<KontuBankario> getKontuBankarioak() {
-		return kontuBankarioak;
-	}
-	public void setKontuBankarioak(ArrayList<KontuBankario> kontuBankarioak) {
-		this.kontuBankarioak = kontuBankarioak;
-	}
 	public String getKodSukurtsala() {
 		return kodSukurtsala;
 	}
 	public void setKodSukurtsala(String kodSukurtsala) {
 		this.kodSukurtsala = kodSukurtsala;
 	}
-	public ArrayList<Langilea> getLangileak() {
-		return langileak;
+	public EntitateBankario getEntitateBankario() {
+		return entitateBankario;
 	}
-	public void setLangileak(ArrayList<Langilea> langileak) {
-		this.langileak = langileak;
+	public void setEntitateBankario(EntitateBankario entitateBankario) {
+		this.entitateBankario = entitateBankario;
 	}
 
 	// ToString
 	@Override
 	public String toString() {
 		return "Sukurtsala idSukurtsala=" + idSukurtsala + ", kodSukurtsala=" + kodSukurtsala + ", kokalekua="
-				+ kokalekua + ", kontuBankarioak=" + kontuBankarioak;
+				+ kokalekua;
 	}
 	
 	// Equals

@@ -1,11 +1,11 @@
 -- phpMyAdmin SQL Dump
--- version 5.2.1
+-- version 5.2.0
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 25-04-2023 a las 20:13:47
--- Versión del servidor: 10.4.28-MariaDB
--- Versión de PHP: 8.2.4
+-- Tiempo de generación: 26-04-2023 a las 14:37:50
+-- Versión del servidor: 10.4.27-MariaDB
+-- Versión de PHP: 8.2.0
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -116,8 +116,7 @@ CREATE TABLE `kontubankario` (
   `hilekoLimitea` int(11) DEFAULT NULL,
   `sorreraData` date DEFAULT NULL,
   `egoera` enum('aktiboa','izoztuta','ixteko','itxita') DEFAULT NULL,
-  `id_sukurtsal` int(11) DEFAULT NULL,
-  `id_entitate` int(11) DEFAULT NULL
+  `id_sukurtsal` int(11) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
@@ -207,8 +206,7 @@ CREATE TABLE `transferentzia` (
 
 CREATE TABLE `txartela` (
   `id_txartela` char(16) NOT NULL,
-  `nanBezero` char(9) DEFAULT NULL,
-  `segurtazunKodea` char(4) DEFAULT NULL,
+  `segurtasunKodea` char(4) DEFAULT NULL,
   `mota` enum('kredito','debito') DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
@@ -248,7 +246,6 @@ ALTER TABLE `hipoteka`
 --
 ALTER TABLE `kontubankario`
   ADD PRIMARY KEY (`IBAN`),
-  ADD KEY `Fk_KontuBank_EntitateBank` (`id_entitate`),
   ADD KEY `Fk_KontuBankarioa_Sukurtsala` (`id_sukurtsal`);
 
 --
@@ -345,7 +342,6 @@ ALTER TABLE `hipoteka`
 -- Filtros para la tabla `kontubankario`
 --
 ALTER TABLE `kontubankario`
-  ADD CONSTRAINT `Fk_KontuBank_EntitateBank` FOREIGN KEY (`id_entitate`) REFERENCES `entitatebankario` (`id_entitate`),
   ADD CONSTRAINT `Fk_KontuBankarioa_Sukurtsala` FOREIGN KEY (`id_sukurtsal`) REFERENCES `sukurtsala` (`id_sukurtsal`);
 
 --

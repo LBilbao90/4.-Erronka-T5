@@ -1,22 +1,19 @@
 package model;
 
-import java.util.ArrayList;
 import java.util.Objects;
 
 public class EntitateBankario {
 	private String izena;
 	private String idEntitatea;
 	private String entitateZbk;
-	private ArrayList<Sukurtsala> sukurtsalak;
 	private String url;
 	private String bounds;
 	
 	// Constructors
-	public EntitateBankario(String izena, String idEntitatea, String entitateZbk, ArrayList<Sukurtsala> sukurtsalak, String bounds, String url) {
+	public EntitateBankario(String izena, String idEntitatea, String entitateZbk, String bounds, String url) {
 		this.izena = izena;
 		this.idEntitatea = idEntitatea;
 		this.entitateZbk = entitateZbk;
-		this.sukurtsalak = sukurtsalak;
 		this.url=url;
 		this.bounds=bounds;
 	}
@@ -42,12 +39,6 @@ public class EntitateBankario {
 	public void setEntitateZbk(String entitateZbk) {
 		this.entitateZbk = entitateZbk;
 	}
-	public ArrayList<Sukurtsala> getSukurtsalak() {
-		return sukurtsalak;
-	}
-	public void setSukurtsalak(ArrayList<Sukurtsala> sukurtzalak) {
-		this.sukurtsalak = sukurtzalak;
-	}
 	public String getUrl() {
 		return url;
 	}
@@ -63,8 +54,7 @@ public class EntitateBankario {
 	// ToString
 	@Override
 	public String toString() {
-		return "EntitateBankarioa izena=" + izena + ", idEntitatea=" + idEntitatea + ", entitateZbk=" + entitateZbk
-				+ ", sukurtsalak=" + sukurtsalak;
+		return "EntitateBankarioa izena=" + izena + ", idEntitatea=" + idEntitatea + ", entitateZbk=" + entitateZbk;
 	}
 	
 	// Equals

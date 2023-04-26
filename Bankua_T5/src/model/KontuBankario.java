@@ -11,10 +11,11 @@ public class KontuBankario {
 	private String egoera; // aktiboa, izoztuta, ixtita, ixteko
 	private ArrayList<DiruSarrera> diruSarrerak;
 	private ArrayList<Transferentzia> transferentziak;
-	private ArrayList<Hipoteka> hipotekak;
+	private Hipoteka hipotekak;
+	private Sukurtsala sukurtsala;
 	
 	// Constructors
-	public KontuBankario(String iban, double saldoa, double hilekoLimitea, String sorreraData, String egoera, ArrayList<DiruSarrera> diruSarrerak, ArrayList<Transferentzia> transferentziak, ArrayList<Hipoteka> hipotekak) {
+	public KontuBankario(String iban, double saldoa, double hilekoLimitea, String sorreraData, String egoera, ArrayList<DiruSarrera> diruSarrerak, ArrayList<Transferentzia> transferentziak, Hipoteka hipotekak, Sukurtsala sukurtsala) {
 		this.iban = iban;
 		this.saldoa = saldoa;
 		this.hilekoLimitea = hilekoLimitea;
@@ -23,6 +24,7 @@ public class KontuBankario {
 		this.diruSarrerak = diruSarrerak;
 		this.transferentziak = transferentziak;
 		this.hipotekak = hipotekak;
+		this.sukurtsala=sukurtsala;
 	}
 	
 	public KontuBankario(){
@@ -71,19 +73,26 @@ public class KontuBankario {
 	public void setTransferentziak(ArrayList<Transferentzia> transferentziak) {
 		this.transferentziak = transferentziak;
 	}
-	public ArrayList<Hipoteka> getHipotekak() {
+	public Hipoteka getHipotekak() {
 		return hipotekak;
 	}
-	public void setHipotekak(ArrayList<Hipoteka> hipotekak) {
+	public void setHipotekak(Hipoteka hipotekak) {
 		this.hipotekak = hipotekak;
+	}
+	public Sukurtsala getSukurtsala() {
+		return sukurtsala;
+	}
+
+	public void setSukurtsala(Sukurtsala sukurtsala) {
+		this.sukurtsala = sukurtsala;
 	}
 
 	// ToString
 	@Override
 	public String toString() {
-		return "KontuBankarioa iban=" + iban + ", saldoa=" + saldoa + ", hilekoLimitea=" + hilekoLimitea
+		return "KontuBankario iban=" + iban + ", saldoa=" + saldoa + ", hilekoLimitea=" + hilekoLimitea
 				+ ", sorreraData=" + sorreraData + ", egoera=" + egoera + ", diruSarrerak=" + diruSarrerak
-				+ ", transferentziak=" + transferentziak + ", hipotekak=" + hipotekak;
+				+ ", transferentziak=" + transferentziak + ", hipotekak=" + hipotekak + ", sukurtsala=" + sukurtsala;
 	}
 
 	// Equals
