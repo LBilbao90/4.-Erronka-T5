@@ -1,28 +1,30 @@
 package model;
 
-import java.util.Date;
 
 public abstract class Langilea extends Pertsona{
-	protected String sukurtsala;
+	protected String lanpostu;
 	
 	// Constructors
-	public Langilea(String nan, String izena, String abizena, Date jaiotzeData, Generoa sexua, String telefonoa, String pasahitza, String sukurtsala) {
+	public Langilea(String nan, String izena, String abizena, String jaiotzeData, String sexua, String telefonoa, String pasahitza, String lanpostu) {
 		super(nan, izena, abizena, jaiotzeData, sexua, telefonoa, pasahitza);
-		this.sukurtsala = sukurtsala;
+		this.lanpostu = lanpostu;
+	}
+	
+	public Langilea() {
 	}
 
 	// Getters and Setters
-	public String getSukurtsala() {
-		return sukurtsala;
+	public String getLanpostu() {
+		return lanpostu;
 	}
-	public void setSukurtsala(String sukurtzala) {
-		this.sukurtsala = sukurtzala;
+	public void setLanpostu(String lanpostu) {
+		this.lanpostu = lanpostu;
 	}
 	
 	// ToString
 	@Override
 	public String toString() {
-		return super.toString() + " Sukurtsala=" + sukurtsala;
+		return super.toString() + " Lanpostu=" + lanpostu;
 	}
 	
 	// Methods

@@ -1,23 +1,18 @@
 package model;
 
-import java.util.Date;
 import java.util.Objects;
 
 public abstract class Pertsona {
 	protected String nan;
 	protected String izena;
 	protected String abizena;
-	protected Date jaiotzeData;
-	protected Generoa  sexua;
+	protected String jaiotzeData;
+	protected String sexua;
 	protected String telefonoa;
 	protected String pasahitza;
 	
-	public enum Generoa {
-		emakumea, gizona
-	}
-	
 	// Constructors
-	public Pertsona(String nan, String izena, String abizena, Date jaiotzeData, Generoa sexua, String telefonoa, String pasahitza) {
+	public Pertsona(String nan, String izena, String abizena, String jaiotzeData, String sexua, String telefonoa, String pasahitza) {
 		this.nan = nan;
 		this.izena = izena;
 		this.abizena = abizena;
@@ -26,6 +21,8 @@ public abstract class Pertsona {
 		this.telefonoa = telefonoa;
 		this.pasahitza = pasahitza;
 	}
+	
+	public Pertsona() {}
 	
 	// Getters and Setters
 	public String getNan() {
@@ -46,16 +43,16 @@ public abstract class Pertsona {
 	public void setAbizena(String abizena) {
 		this.abizena = abizena;
 	}
-	public Date getJaiotzeData() {
+	public String getJaiotzeData() {
 		return jaiotzeData;
 	}
-	public void setJaiotzeData(Date jaiotzeData) {
+	public void setJaiotzeData(String jaiotzeData) {
 		this.jaiotzeData = jaiotzeData;
 	}
-	public Generoa getSexua() {
+	public String getSexua() {
 		return sexua;
 	}
-	public void setSexua(Generoa sexua) {
+	public void setSexua(String sexua) {
 		this.sexua = sexua;
 	}
 	public String getTelefonoa() {

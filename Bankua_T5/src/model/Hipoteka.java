@@ -1,28 +1,23 @@
 package model;
 
-import java.util.Date;
+import java.util.Objects;
 
 public class Hipoteka implements Komisioa{
-	private int idHipoteka;
 	private double kantitatea;
 	private double ordaindutakoa;
 	private final double komisioa;
-	private Date hasieraData;
-	private Date amaieraData;
-	private Egoera egoera;
-	
-	public enum Egoera{
-		eskatuta, onartuta, itxita, errefusatuta;
-	}
+	private String hasieraData;
+	private String amaieraData;
+	private String egoera; //eskatuta, onartuta, itxita, errefusatuta
 	
 	// Constructors
-	public Hipoteka(int idHipoteka, double kantitatea, double ordaindutakoa, double komisioa, Date hasieraData, Date amaieraData) {
-		this.idHipoteka = idHipoteka;
+	public Hipoteka(double kantitatea, double ordaindutakoa, double komisioa, String hasieraData, String amaieraData, String egoera) {
 		this.kantitatea = kantitatea;
 		this.ordaindutakoa = ordaindutakoa;
 		this.komisioa = komisioa;
 		this.hasieraData = hasieraData;
 		this.amaieraData = amaieraData;
+		this.egoera=egoera;
 	}
 	
 	public Hipoteka() {
@@ -30,12 +25,6 @@ public class Hipoteka implements Komisioa{
 	}
 
 	// Getters and Setters
-	public int getIdHipoteka() {
-		return idHipoteka;
-	}
-	public void setIdHipoteka(int idHipoteka) {
-		this.idHipoteka = idHipoteka;
-	}
 	public double getKantitatea() {
 		return kantitatea;
 	}
@@ -51,29 +40,29 @@ public class Hipoteka implements Komisioa{
 	public double getKomisioa() {
 		return komisioa;
 	}
-	public Date getHasieraData() {
+	public String getHasieraData() {
 		return hasieraData;
 	}
-	public void setHasieraData(Date hasieraData) {
+	public void setHasieraData(String hasieraData) {
 		this.hasieraData = hasieraData;
 	}
-	public Date getAmaieraData() {
+	public String getAmaieraData() {
 		return amaieraData;
 	}
-	public void setAmaieraData(Date amaieraData) {
+	public void setAmaieraData(String amaieraData) {
 		this.amaieraData = amaieraData;
 	}
-	public Egoera getEgoera() {
+	public String getEgoera() {
 		return egoera;
 	}
-	public void setEgoera(Egoera egoera) {
+	public void setEgoera(String egoera) {
 		this.egoera = egoera;
 	}
 	
 	// ToString
 	@Override
 	public String toString() {
-		return "Hipoteka idHipoteka=" + idHipoteka + ", kantitatea=" + kantitatea + ", ordaindutakoa=" + ordaindutakoa
+		return "Hipoteka kantitatea=" + kantitatea + ", ordaindutakoa=" + ordaindutakoa
 				+ ", komisioa=" + komisioa + ", hasieraData=" + hasieraData + ", amaieraData=" + amaieraData
 				+ ", egoera=" + egoera;
 	}
@@ -84,12 +73,15 @@ public class Hipoteka implements Komisioa{
 		if (obj == null)
 			return false;
 		Hipoteka other = (Hipoteka) obj;
-		return idHipoteka == other.idHipoteka;
+		return Objects.equals(amaieraData, other.amaieraData) && Objects.equals(egoera, other.egoera)
+				&& Objects.equals(hasieraData, other.hasieraData)
+				&& Double.doubleToLongBits(kantitatea) == Double.doubleToLongBits(other.kantitatea)
+				&& Double.doubleToLongBits(komisioa) == Double.doubleToLongBits(other.komisioa)
+				&& Double.doubleToLongBits(ordaindutakoa) == Double.doubleToLongBits(other.ordaindutakoa);
 	}
 
 	@Override
 	public double kalkulatuPrezioa() {
 		return 0;
 	}
-
 }

@@ -9,8 +9,8 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 
-import controlagailua.Metodoak;
-import model.EntitateBankarioa;
+import controlador.Metodoak;
+import model.EntitateBankario;
 
 import java.awt.CardLayout;
 import java.awt.Color;
@@ -18,6 +18,7 @@ import java.awt.Color;
 import javax.swing.JLabel;
 import javax.swing.JButton;
 import java.awt.event.ActionListener;
+import java.util.ArrayList;
 import java.awt.event.ActionEvent;
 import java.awt.Font;
 import javax.swing.JTextField;
@@ -25,7 +26,6 @@ import javax.swing.JPasswordField;
 import javax.swing.JTable;
 import javax.swing.JScrollPane;
 import javax.swing.JComboBox;
-import javax.swing.Icon;
 
 public class App extends JFrame {
 
@@ -39,11 +39,11 @@ public class App extends JFrame {
 	private JTextField txt_langile_erabiltzaile;
 	private JPasswordField passLangile;
 	Metodoak metodoak = new Metodoak();
-	EntitateBankarioa[] bankuak = new EntitateBankarioa[0];
 	final ImageIcon homeicon = new ImageIcon(new ImageIcon("src/res/casa.png").getImage().getScaledInstance(44, 34,Image.SCALE_DEFAULT));
 	final ImageIcon logo_atzera = new ImageIcon(new ImageIcon("src/res/flecha_atras.png").getImage().getScaledInstance(44,30,Image.SCALE_DEFAULT));
 	final ImageIcon logo_aurrera = new ImageIcon(new ImageIcon("src/res/flecha_alante.png").getImage().getScaledInstance(44,30,Image.SCALE_DEFAULT));
 	final ImageIcon fondo_argazki = new ImageIcon(new ImageIcon("src/res/logo2.2.png").getImage().getScaledInstance(932,130,Image.SCALE_DEFAULT));
+	ArrayList<EntitateBankario> entitateak = new ArrayList<>();
 	private JTable table_entitateKont;
 	private JTable transfer_ikusi_table;
 	private JTextField txt_jasotzaile;
@@ -92,7 +92,7 @@ public class App extends JFrame {
 	 */
 	public App() {
 		super("Modern Management Bank");
-		setIconImage(Toolkit.getDefaultToolkit().getImage(App.class.getResource("/res/banku_ikono.png")));
+		setIconImage(Toolkit.getDefaultToolkit().getImage(App.class.getResource("../res/banku_ikono.png")));
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 958, 603);
 		contentPane = new JPanel();
@@ -100,6 +100,12 @@ public class App extends JFrame {
 
 		setContentPane(contentPane);
 		contentPane.setLayout(new CardLayout(0, 0));
+
+		//////////////////////////////////
+		// 			Datuak Kargatu	    //
+		//////////////////////////////////
+		
+		entitateak=metodoak.entitateakKargatu();
 		
 		//////////////////////////////////
 		// 			 Panelak 		    //
@@ -249,13 +255,12 @@ public class App extends JFrame {
 		btn_bezero_sartu.setBounds(437, 423, 89, 23);
 		loginBezero.add(btn_bezero_sartu);
 		
-		bankuak = metodoak.botoiakSortu();
-		for(int j=0;j<bankuak.length;j++) {		
-			String[] limiteak = bankuak[j].getBounds().split("/");
-			ImageIcon logo_banco = new ImageIcon(new ImageIcon(bankuak[j].getUrl()).getImage().getScaledInstance(Integer.parseInt(limiteak[2]),Integer.parseInt(limiteak[3]),Image.SCALE_DEFAULT));
+		//Entitateen botoiak sortzen dira
+		for(int i=0;i<entitateak.size();i++) {		
+			String[] limiteak = entitateak.get(i).getBounds().split("/");
+			ImageIcon logo_banco = new ImageIcon(new ImageIcon(entitateak.get(i).getUrl()).getImage().getScaledInstance(Integer.parseInt(limiteak[2]),Integer.parseInt(limiteak[3]),Image.SCALE_DEFAULT));
 			JButton btn_banco = new JButton(logo_banco);
-			btn_banco.setToolTipText(String.valueOf(j+1));
-
+			btn_banco.setToolTipText(String.valueOf(i+1));
 
 			btn_banco.setBounds(Integer.parseInt(limiteak[0]), Integer.parseInt(limiteak[1]), Integer.parseInt(limiteak[2]), Integer.parseInt(limiteak[3]));
 			bezeroEntitate.add(btn_banco);
@@ -267,8 +272,12 @@ public class App extends JFrame {
 		JButton btn_langile_sartu = new JButton("Sartu");
 		btn_langile_sartu.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				loginLangile.setVisible(false);
-				sukurtsalak.setVisible(true);
+				//txt_langile_erabiltzaile.getText()
+				//passLangile
+				if(metodoak.langileLogin(txt_langile_erabiltzaile.getText(),String.valueOf(passLangile.getPassword()),entitateak)!=null) {
+					loginLangile.setVisible(false);
+					sukurtsalak.setVisible(true);
+				}
 			}
 		});
 		btn_langile_sartu.setBounds(437, 423, 89, 23);

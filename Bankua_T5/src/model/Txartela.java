@@ -1,27 +1,22 @@
 package model;
 
-import java.util.ArrayList;
 import java.util.Objects;
 
 public class Txartela {
 	private String idTxartela;
 	private int segurtasunKodea;
-	private Mota mota;
-	private ArrayList<KontuBankarioa> kontuBankarioak;
-	private ArrayList<Pertsona> pertsonak;
-	
-	public enum Mota{
-		debito, kredito
-	}
+	private String mota; // debito, kredito
+	private KontuBankario kontuBankarioa;
+	private Bezeroa bezeroa;
 
 	// Constructors
-	public Txartela(String idTxartela, int segurtasunKodea, Mota mota, ArrayList<KontuBankarioa> kontuBankarioak, ArrayList<Pertsona> pertsonak) {
+	public Txartela(String idTxartela, int segurtasunKodea, String mota, KontuBankario kontuBankarioa, Bezeroa bezeroa) {
 		super();
 		this.idTxartela = idTxartela;
 		this.segurtasunKodea = segurtasunKodea;
 		this.mota = mota;
-		this.kontuBankarioak = kontuBankarioak;
-		this.pertsonak = pertsonak;
+		this.kontuBankarioa = kontuBankarioa;
+		this.bezeroa = bezeroa;
 	}
 	
 	public Txartela() {
@@ -40,30 +35,30 @@ public class Txartela {
 	public void setSegurtasunKodea(int segurtasunKodea) {
 		this.segurtasunKodea = segurtasunKodea;
 	}
-	public Mota getMota() {
+	public String getMota() {
 		return mota;
 	}
-	public void setMota(Mota mota) {
+	public void setMota(String mota) {
 		this.mota = mota;
 	}
-	public ArrayList<KontuBankarioa> getKontuBankarioak() {
-		return kontuBankarioak;
+	public KontuBankario getKontuBankarioa() {
+		return kontuBankarioa;
 	}
-	public void setKontuBankarioak(ArrayList<KontuBankarioa> kontuBankarioak) {
-		this.kontuBankarioak = kontuBankarioak;
+	public void setKontuBankarioa(KontuBankario kontuBankarioa) {
+		this.kontuBankarioa = kontuBankarioa;
 	}
-	public ArrayList<Pertsona> getPertsonak() {
-		return pertsonak;
+	public Bezeroa getBezeroa() {
+		return bezeroa;
 	}
-	public void setPertsonak(ArrayList<Pertsona> pertsonak) {
-		this.pertsonak = pertsonak;
+	public void setBezeroa(Bezeroa bezeroa) {
+		this.bezeroa = bezeroa;
 	}
 
 	// ToString
 	@Override
 	public String toString() {
 		return "Txartela idTxartela=" + idTxartela + ", segurtasunKodea=" + segurtasunKodea + ", mota=" + mota
-				+ ", kontuBankarioak=" + kontuBankarioak + ", pertsonak=" + pertsonak;
+				+ ", kontuBankarioa=" + kontuBankarioa + ", bezeroa=" + bezeroa;
 	}
 
 	// Equals

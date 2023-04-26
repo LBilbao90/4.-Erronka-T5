@@ -5,20 +5,20 @@ import java.util.Objects;
 
 public class Sukurtsala {
 	private int idSukurtsala;
-	private int kodSukurtsala;
+	private String kodSukurtsala;
 	private String kokalekua;
-	private int postaKodea;
-	private ArrayList<KontuBankarioa> kontuBankarioak;
+	private ArrayList<KontuBankario> kontuBankarioak;
+	private ArrayList<Langilea> langileak;
 	
 	// Constructors
-	public Sukurtsala(int idSukurtsala, int kodSukurtsala, String kokalekua, int postaKodea, ArrayList<KontuBankarioa> kontuBankarioak) {
+	public Sukurtsala(int idSukurtsala, String kodSukurtsala, String kokalekua, ArrayList<KontuBankario> kontuBankarioak, ArrayList<Langilea> langileak) {
 		this.idSukurtsala = idSukurtsala;
 		this.kodSukurtsala = kodSukurtsala;
 		this.kokalekua = kokalekua;
-		this.postaKodea = postaKodea;
 		this.kontuBankarioak = kontuBankarioak;
+		this.langileak = langileak;
 	}
-	
+
 	public Sukurtsala() {
 	}
 	
@@ -34,31 +34,31 @@ public class Sukurtsala {
 	}
 	public void setKokalekua(String kokalekua) {
 		this.kokalekua = kokalekua;
-	}
-	public int getPostaKodea() {
-		return postaKodea;
-	}
-	public void setPostaKodea(int postaKodea) {
-		this.postaKodea = postaKodea;
 	}	
-	public ArrayList<KontuBankarioa> getKontuBankarioak() {
+	public ArrayList<KontuBankario> getKontuBankarioak() {
 		return kontuBankarioak;
 	}
-	public void setKontuBankarioak(ArrayList<KontuBankarioa> kontuBankarioak) {
+	public void setKontuBankarioak(ArrayList<KontuBankario> kontuBankarioak) {
 		this.kontuBankarioak = kontuBankarioak;
 	}
-	public int getKodSukurtsala() {
+	public String getKodSukurtsala() {
 		return kodSukurtsala;
 	}
-	public void setKodSukurtsala(int kodSukurtsala) {
+	public void setKodSukurtsala(String kodSukurtsala) {
 		this.kodSukurtsala = kodSukurtsala;
+	}
+	public ArrayList<Langilea> getLangileak() {
+		return langileak;
+	}
+	public void setLangileak(ArrayList<Langilea> langileak) {
+		this.langileak = langileak;
 	}
 
 	// ToString
 	@Override
 	public String toString() {
 		return "Sukurtsala idSukurtsala=" + idSukurtsala + ", kodSukurtsala=" + kodSukurtsala + ", kokalekua="
-				+ kokalekua + ", postaKodea=" + postaKodea + ", kontuBankarioak=" + kontuBankarioak;
+				+ kokalekua + ", kontuBankarioak=" + kontuBankarioak;
 	}
 	
 	// Equals

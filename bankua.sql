@@ -1,11 +1,11 @@
 -- phpMyAdmin SQL Dump
--- version 5.1.1
+-- version 5.2.1
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 24-04-2023 a las 10:23:09
--- Versión del servidor: 10.4.22-MariaDB
--- Versión de PHP: 8.1.2
+-- Tiempo de generación: 25-04-2023 a las 20:13:47
+-- Versión del servidor: 10.4.28-MariaDB
+-- Versión de PHP: 8.2.4
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -20,7 +20,7 @@ SET time_zone = "+00:00";
 --
 -- Base de datos: `bankua`
 --
-CREATE DATABASE IF NOT EXISTS `bankua` DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_spanish2_ci;
+CREATE DATABASE IF NOT EXISTS `bankua` DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci;
 USE `bankua`;
 
 -- --------------------------------------------------------
@@ -30,14 +30,14 @@ USE `bankua`;
 --
 
 CREATE TABLE `bezeroa` (
-  `NAN` varchar(9) COLLATE utf8mb4_spanish2_ci NOT NULL,
-  `izena` varchar(20) COLLATE utf8mb4_spanish2_ci DEFAULT NULL,
-  `abizenak` varchar(30) COLLATE utf8mb4_spanish2_ci DEFAULT NULL,
+  `NAN` char(9) NOT NULL,
+  `izena` varchar(20) DEFAULT NULL,
+  `abizenak` varchar(30) DEFAULT NULL,
   `jaiotzeData` date DEFAULT NULL,
-  `sexua` enum('gizon','emakume') COLLATE utf8mb4_spanish2_ci DEFAULT NULL,
-  `telefonoa` char(9) COLLATE utf8mb4_spanish2_ci DEFAULT NULL,
-  `pasahitza` varchar(30) COLLATE utf8mb4_spanish2_ci DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_spanish2_ci;
+  `sexua` enum('gizon','emakume') DEFAULT NULL,
+  `telefonoa` char(9) DEFAULT NULL,
+  `pasahitza` varchar(30) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Volcado de datos para la tabla `bezeroa`
@@ -58,10 +58,10 @@ CREATE TABLE `dirusarrera` (
   `idSarrera` int(11) NOT NULL,
   `kantitatea` double DEFAULT NULL,
   `sarreraData` date DEFAULT NULL,
-  `igortzaile` varchar(24) COLLATE utf8mb4_spanish2_ci DEFAULT NULL,
-  `kontzeptua` varchar(40) COLLATE utf8mb4_spanish2_ci DEFAULT NULL,
-  `IBANJasotzaile` varchar(24) COLLATE utf8mb4_spanish2_ci DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_spanish2_ci;
+  `igortzaile` char(24) DEFAULT NULL,
+  `kontzeptua` varchar(40) DEFAULT NULL,
+  `IBANJasotzaile` char(24) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
 
@@ -71,21 +71,21 @@ CREATE TABLE `dirusarrera` (
 
 CREATE TABLE `entitatebankario` (
   `id_entitate` int(11) NOT NULL,
-  `izena` varchar(20) COLLATE utf8mb4_spanish2_ci DEFAULT NULL,
-  `entitateZenbaki` varchar(8) COLLATE utf8mb4_spanish2_ci DEFAULT NULL,
-  `url` varchar(40) COLLATE utf8mb4_spanish2_ci DEFAULT NULL,
-  `bounds` varchar(15) COLLATE utf8mb4_spanish2_ci DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_spanish2_ci;
+  `izena` varchar(20) DEFAULT NULL,
+  `entitateZenbaki` char(8) DEFAULT NULL,
+  `url` varchar(40) DEFAULT NULL,
+  `bounds` varchar(15) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Volcado de datos para la tabla `entitatebankario`
 --
 
 INSERT INTO `entitatebankario` (`id_entitate`, `izena`, `entitateZenbaki`, `url`, `bounds`) VALUES
-(1, 'BBK', 'ES971234', 'src/res/bbk_logo.png', '218/253/128/45'),
-(2, 'BBVA', 'ES345678', 'src/res/bbva.png', '529/253/128/45'),
-(3, 'Santander', 'ES254321', 'src/res/santander.png', '218/384/128/45'),
-(4, 'Caixa', 'ES068765', 'src/res/kaixa.png', '539/353/121/103');
+(1, 'BBK', 'ES972345', 'src/res/bbk_logo.png', '218/253/128/45'),
+(2, 'BBVA', 'ES346789', 'src/res/bbva.png', '529/253/128/45'),
+(3, 'Santander', 'ES259876', 'src/res/santander.png', '218/384/128/45'),
+(4, 'Caixa', 'ES065432', 'src/res/kaixa.png', '539/353/121/103');
 
 -- --------------------------------------------------------
 
@@ -100,24 +100,25 @@ CREATE TABLE `hipoteka` (
   `komisioa` double DEFAULT NULL,
   `hasieraData` date DEFAULT NULL,
   `amaieraData` date DEFAULT NULL,
-  `egoera` enum('eskatuta','onartuta','errefusatua','itxita') COLLATE utf8mb4_spanish2_ci DEFAULT NULL,
-  `IBAN` varchar(24) COLLATE utf8mb4_spanish2_ci DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_spanish2_ci;
+  `egoera` enum('eskatuta','onartuta','errefusatua','itxita') DEFAULT NULL,
+  `IBAN` char(24) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
 
 --
--- Estructura de tabla para la tabla `kontubankarioa`
+-- Estructura de tabla para la tabla `kontubankario`
 --
 
-CREATE TABLE `kontubankarioa` (
-  `IBAN` varchar(24) COLLATE utf8mb4_spanish2_ci NOT NULL,
+CREATE TABLE `kontubankario` (
+  `IBAN` char(24) NOT NULL,
   `saldoa` double DEFAULT NULL,
   `hilekoLimitea` int(11) DEFAULT NULL,
   `sorreraData` date DEFAULT NULL,
-  `egoera` enum('aktiboa','izoztuta','itxita') COLLATE utf8mb4_spanish2_ci DEFAULT NULL,
-  `id_sukurtsal` int(11) DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_spanish2_ci;
+  `egoera` enum('aktiboa','izoztuta','ixteko','itxita') DEFAULT NULL,
+  `id_sukurtsal` int(11) DEFAULT NULL,
+  `id_entitate` int(11) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
 
@@ -126,10 +127,10 @@ CREATE TABLE `kontubankarioa` (
 --
 
 CREATE TABLE `kudeatu` (
-  `nan` varchar(9) COLLATE utf8mb4_spanish2_ci NOT NULL,
-  `IBAN` varchar(24) COLLATE utf8mb4_spanish2_ci NOT NULL,
-  `id_txartela` varchar(16) COLLATE utf8mb4_spanish2_ci NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_spanish2_ci;
+  `nan` char(9) NOT NULL,
+  `IBAN` char(24) NOT NULL,
+  `id_txartela` char(16) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
 
@@ -139,14 +140,17 @@ CREATE TABLE `kudeatu` (
 
 CREATE TABLE `langile` (
   `id_langile` int(11) NOT NULL,
-  `izena` varchar(20) COLLATE utf8mb4_spanish2_ci DEFAULT NULL,
-  `nan` char(9) COLLATE utf8mb4_spanish2_ci DEFAULT NULL,
-  `pasahitza` varchar(20) COLLATE utf8mb4_spanish2_ci DEFAULT NULL,
-  `lanpostua` enum('god','zuzendaria','gerentea') COLLATE utf8mb4_spanish2_ci DEFAULT NULL,
+  `nan` char(9) DEFAULT NULL,
+  `izena` varchar(20) DEFAULT NULL,
+  `abizenak` varchar(30) DEFAULT NULL,
+  `jaiotzeData` date DEFAULT NULL,
+  `sexua` enum('gizon','emakume') DEFAULT NULL,
+  `telefonoa` char(9) DEFAULT NULL,
+  `pasahitza` varchar(20) DEFAULT NULL,
+  `lanpostua` enum('god','zuzendaria','gerentea') DEFAULT NULL,
   `id_entitate` int(11) DEFAULT NULL,
-  `id_sukurtsal` int(11) DEFAULT NULL,
-  `telefonoa` char(9) COLLATE utf8mb4_spanish2_ci DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_spanish2_ci;
+  `id_sukurtsal` int(11) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
 
@@ -155,11 +159,29 @@ CREATE TABLE `langile` (
 --
 
 CREATE TABLE `sukurtsala` (
-  `kodSukurtsala` char(4) COLLATE utf8mb4_spanish2_ci DEFAULT NULL,
-  `kokalekua` varchar(30) COLLATE utf8mb4_spanish2_ci DEFAULT NULL,
+  `kodSukurtsala` char(4) DEFAULT NULL,
+  `kokalekua` varchar(30) DEFAULT NULL,
   `id_sukurtsal` int(11) NOT NULL,
   `id_entitate` int(11) DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_spanish2_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Volcado de datos para la tabla `sukurtsala`
+--
+
+INSERT INTO `sukurtsala` (`kodSukurtsala`, `kokalekua`, `id_sukurtsal`, `id_entitate`) VALUES
+('0111', 'Santutxu, Santutxu Kalea, 27', 1, 1),
+('0002', 'Urkixo Zumarkalea, 56', 2, 1),
+('0016', 'Alameda de Recalde, 26', 3, 1),
+('5948', 'Areiltza Doktorearen Zumarkale', 4, 2),
+('0050', 'C. de Bertendona, 4', 5, 2),
+('0003', 'Alameda de Recalde, 35', 6, 2),
+('0401', 'Indautxu Plaza, 1', 7, 3),
+('0011', 'Iparraguirre Kalea, 16', 8, 3),
+('0153', 'Autonomia Kalea, 18', 9, 3),
+('0091', 'Gran Vía de Don Diego López de', 10, 4),
+('0078', 'Autonomia Kalea, 54', 11, 4),
+('0001', 'Alameda de Recalde, 44', 12, 4);
 
 -- --------------------------------------------------------
 
@@ -171,11 +193,11 @@ CREATE TABLE `transferentzia` (
   `idTransferentzia` int(11) NOT NULL,
   `kantitatea` double DEFAULT NULL,
   `TransferentziaData` date DEFAULT NULL,
-  `jasotzailea` varchar(24) COLLATE utf8mb4_spanish2_ci DEFAULT NULL,
-  `kontzeptua` varchar(50) COLLATE utf8mb4_spanish2_ci DEFAULT NULL,
+  `jasotzailea` char(24) DEFAULT NULL,
+  `kontzeptua` varchar(50) DEFAULT NULL,
   `komisioa` double DEFAULT NULL,
-  `IBANIgortzaile` varchar(24) COLLATE utf8mb4_spanish2_ci DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_spanish2_ci;
+  `IBANIgortzaile` char(24) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
 
@@ -184,11 +206,11 @@ CREATE TABLE `transferentzia` (
 --
 
 CREATE TABLE `txartela` (
-  `id_txartela` varchar(16) COLLATE utf8mb4_spanish2_ci NOT NULL,
-  `nanBezero` varchar(9) COLLATE utf8mb4_spanish2_ci DEFAULT NULL,
-  `segurtasunKodea` char(4) COLLATE utf8mb4_spanish2_ci DEFAULT NULL,
-  `mota` enum('kredito','debito') COLLATE utf8mb4_spanish2_ci DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_spanish2_ci;
+  `id_txartela` char(16) NOT NULL,
+  `nanBezero` char(9) DEFAULT NULL,
+  `segurtazunKodea` char(4) DEFAULT NULL,
+  `mota` enum('kredito','debito') DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Índices para tablas volcadas
@@ -222,10 +244,11 @@ ALTER TABLE `hipoteka`
   ADD KEY `idx_hipoteka_ibanea_egoera` (`IBAN`,`egoera`);
 
 --
--- Indices de la tabla `kontubankarioa`
+-- Indices de la tabla `kontubankario`
 --
-ALTER TABLE `kontubankarioa`
+ALTER TABLE `kontubankario`
   ADD PRIMARY KEY (`IBAN`),
+  ADD KEY `Fk_KontuBank_EntitateBank` (`id_entitate`),
   ADD KEY `Fk_KontuBankarioa_Sukurtsala` (`id_sukurtsal`);
 
 --
@@ -297,12 +320,6 @@ ALTER TABLE `langile`
   MODIFY `id_langile` int(11) NOT NULL AUTO_INCREMENT;
 
 --
--- AUTO_INCREMENT de la tabla `sukurtsala`
---
-ALTER TABLE `sukurtsala`
-  MODIFY `id_sukurtsal` int(11) NOT NULL AUTO_INCREMENT;
-
---
 -- AUTO_INCREMENT de la tabla `transferentzia`
 --
 ALTER TABLE `transferentzia`
@@ -316,18 +333,19 @@ ALTER TABLE `transferentzia`
 -- Filtros para la tabla `dirusarrera`
 --
 ALTER TABLE `dirusarrera`
-  ADD CONSTRAINT `Fk_Sarrera_KontuBankario` FOREIGN KEY (`IBANJasotzaile`) REFERENCES `kontubankarioa` (`IBAN`);
+  ADD CONSTRAINT `Fk_Sarrera_KontuBankario` FOREIGN KEY (`IBANJasotzaile`) REFERENCES `kontubankario` (`IBAN`);
 
 --
 -- Filtros para la tabla `hipoteka`
 --
 ALTER TABLE `hipoteka`
-  ADD CONSTRAINT `FK_Hipoteka_KontuBankarioa` FOREIGN KEY (`IBAN`) REFERENCES `kontubankarioa` (`IBAN`);
+  ADD CONSTRAINT `FK_Hipoteka_KontuBankarioa` FOREIGN KEY (`IBAN`) REFERENCES `kontubankario` (`IBAN`);
 
 --
--- Filtros para la tabla `kontubankarioa`
+-- Filtros para la tabla `kontubankario`
 --
-ALTER TABLE `kontubankarioa`
+ALTER TABLE `kontubankario`
+  ADD CONSTRAINT `Fk_KontuBank_EntitateBank` FOREIGN KEY (`id_entitate`) REFERENCES `entitatebankario` (`id_entitate`),
   ADD CONSTRAINT `Fk_KontuBankarioa_Sukurtsala` FOREIGN KEY (`id_sukurtsal`) REFERENCES `sukurtsala` (`id_sukurtsal`);
 
 --
@@ -335,7 +353,7 @@ ALTER TABLE `kontubankarioa`
 --
 ALTER TABLE `kudeatu`
   ADD CONSTRAINT `Fk_kudeatu_bezero` FOREIGN KEY (`nan`) REFERENCES `bezeroa` (`NAN`),
-  ADD CONSTRAINT `Fk_kudeatu_kontubankarioa` FOREIGN KEY (`IBAN`) REFERENCES `kontubankarioa` (`IBAN`),
+  ADD CONSTRAINT `Fk_kudeatu_kontubankarioa` FOREIGN KEY (`IBAN`) REFERENCES `kontubankario` (`IBAN`),
   ADD CONSTRAINT `Fk_kudeatu_txartela` FOREIGN KEY (`id_txartela`) REFERENCES `txartela` (`id_txartela`);
 
 --
@@ -355,7 +373,7 @@ ALTER TABLE `sukurtsala`
 -- Filtros para la tabla `transferentzia`
 --
 ALTER TABLE `transferentzia`
-  ADD CONSTRAINT `FK_Transferentzia_KontuBankarioa` FOREIGN KEY (`IBANIgortzaile`) REFERENCES `kontubankarioa` (`IBAN`);
+  ADD CONSTRAINT `FK_Transferentzia_KontuBankarioa` FOREIGN KEY (`IBANIgortzaile`) REFERENCES `kontubankario` (`IBAN`);
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

@@ -3,328 +3,221 @@ package test;
 import static org.junit.Assert.*;
 
 import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
 
 import org.junit.Test;
 
 import model.DiruSarrera;
-import model.EntitateBankarioa;
+import model.EntitateBankario;
 import model.Hipoteka;
-import model.KontuBankarioa;
-import model.KontuBankarioa.Egoera;
+import model.KontuBankario;
+import model.Langilea;
 import model.Sukurtsala;
 import model.Transferentzia;
+import model.Zuzendaria;
 
 public class EntitateBankarioaTest {
 
 	@Test
 	public void testEntitaBankarioaConsGet() {
-		Calendar cal1 = Calendar.getInstance();
-		cal1.set(Calendar.DAY_OF_MONTH, 20);
-		cal1.set(Calendar.MONTH, 0);
-		cal1.set(Calendar.YEAR, 2003);
-		Date sorreraData = cal1.getTime();
-		
-		Calendar cal2 = Calendar.getInstance();
-		cal2.set(Calendar.DAY_OF_MONTH, 19);
-		cal2.set(Calendar.MONTH, 3);
-		cal2.set(Calendar.YEAR, 2023);
-		Date sarreraData = cal2.getTime();
-		
-		DiruSarrera ds1 = new DiruSarrera(1, 100, sarreraData, "sarrera", "ES1245784512346751245124");
+		DiruSarrera ds1 = new DiruSarrera(100, "03-19-2023", "sarrera", "ES1245784512346751245124");
 		
 		ArrayList<DiruSarrera> diruSarrerak = new ArrayList<DiruSarrera> ();
 		diruSarrerak.add(ds1);
 		
-		Calendar cal3 = Calendar.getInstance();
-		cal3.set(Calendar.DAY_OF_MONTH, 23);
-		cal3.set(Calendar.MONTH, 4);
-		cal3.set(Calendar.YEAR, 2008);
-		Date transferentziaData = cal3.getTime();
-		
-		Transferentzia t1 = new Transferentzia (1, 100, transferentziaData, "proba", "ES1245784512346751245124", 10);
+		Transferentzia t1 = new Transferentzia (100, "04-23-2008", "proba", "ES1245784512346751245124");
 		
 		ArrayList<Transferentzia> transferentziak = new ArrayList<Transferentzia>();
 		transferentziak.add(t1);
 		
-		Calendar cal4 = Calendar.getInstance();
-		cal4.set(Calendar.DAY_OF_MONTH, 12);
-		cal4.set(Calendar.MONTH, 3);
-		cal4.set(Calendar.YEAR, 2010);
-		Date hasieraData = cal4.getTime();
-		
-
-		Calendar cal5 = Calendar.getInstance();
-		cal5.set(Calendar.DAY_OF_MONTH, 10);
-		cal5.set(Calendar.MONTH, 6);
-		cal5.set(Calendar.YEAR, 2020);
-		Date amaieraData = cal5.getTime();
-		
-		Hipoteka h1 = new Hipoteka (1, 100000, 50000, 10, hasieraData, amaieraData);
+		Hipoteka h1 = new Hipoteka (100000, 50000, 10, "03-12-2010", "06-10-2020", "eskatuta");
 		
 		ArrayList<Hipoteka> hipotekak = new ArrayList<Hipoteka> ();
 		hipotekak.add(h1);
 		
-		KontuBankarioa kb1 = new KontuBankarioa("ES1576197348527531954865", 2000, 100, sorreraData, Egoera.aktiboa, diruSarrerak,transferentziak, hipotekak);
+		KontuBankario kb1 = new KontuBankario("ES1576197348527531954865", 2000, 100, "01-20-2003", "aktiboa", diruSarrerak,transferentziak, hipotekak);
 		
-		ArrayList<KontuBankarioa> KontuBankarioak = new ArrayList<KontuBankarioa>();
+		ArrayList<KontuBankario> KontuBankarioak = new ArrayList<KontuBankario>();
 		KontuBankarioak.add(kb1);
 		
-		Sukurtsala s1 = new Sukurtsala(1, 13, "Gallarraga kalea", 48830, KontuBankarioak);
+		Zuzendaria z1 = new Zuzendaria("12345678A", "Juan", "Perez", "10-21-2002", "gizona", "111222333", "12345678", "Zuzendaria");
 		
-		ArrayList<Sukurtsala> sukurtzalak = new ArrayList<Sukurtsala>();
-		sukurtzalak.add(s1);
+		ArrayList<Langilea> langileak = new ArrayList<Langilea>();
+		langileak.add(z1);
 		
-		EntitateBankarioa eb1 = new EntitateBankarioa ("BBK", 1, "ES25", sukurtzalak);
+		Sukurtsala s1 = new Sukurtsala(1, "13","Gallarraga kalea", KontuBankarioak, langileak);
 		
-		eb1.setBounds("0, 0, 932, 130");
-		eb1.setUrl("src/res/bbk_logo.png");
+		ArrayList<Sukurtsala> sukurtsalak = new ArrayList<Sukurtsala>();
+		sukurtsalak.add(s1);
+		
+		EntitateBankario eb1 = new EntitateBankario ("BBK", "1", "ES25", sukurtsalak, "0, 0, 932, 130", "src-res-bbk_logo.png");
 		
 		// Getters
 		assertEquals("BBK", eb1.getIzena());
-		assertEquals(1,eb1.getIdEntitatea());
+		assertEquals("1",eb1.getIdEntitatea());
 		assertEquals("ES25", eb1.getEntitateZbk());
 		assertEquals("0, 0, 932, 130", eb1.getBounds());
-		assertEquals("src/res/bbk_logo.png", eb1.getUrl());
+		assertEquals("src-res-bbk_logo.png", eb1.getUrl());
 		assertEquals(1, eb1.getSukurtsalak().get(0).getIdSukurtsala());
-		assertEquals(13, eb1.getSukurtsalak().get(0).getKodSukurtsala());
+		assertEquals("13", eb1.getSukurtsalak().get(0).getKodSukurtsala());
 		assertEquals("Gallarraga kalea", eb1.getSukurtsalak().get(0).getKokalekua());
-		assertEquals(48830, eb1.getSukurtsalak().get(0).getPostaKodea());
 		assertEquals("ES1576197348527531954865", eb1.getSukurtsalak().get(0).getKontuBankarioak().get(0).getIban());
 		assertEquals(2000, eb1.getSukurtsalak().get(0).getKontuBankarioak().get(0).getSaldoa(), 0.01);
 		assertEquals(100, eb1.getSukurtsalak().get(0).getKontuBankarioak().get(0).getHilekoLimitea(), 0.01);
-		assertEquals(sorreraData, eb1.getSukurtsalak().get(0).getKontuBankarioak().get(0).getSorreraData());
-		assertEquals(Egoera.aktiboa, eb1.getSukurtsalak().get(0).getKontuBankarioak().get(0).getEgoera());
-		assertEquals(1, eb1.getSukurtsalak().get(0).getKontuBankarioak().get(0).getDiruSarrerak().get(0).getIdSarrera());
+		assertEquals("01-20-2003", eb1.getSukurtsalak().get(0).getKontuBankarioak().get(0).getSorreraData());
+		assertEquals("aktiboa", eb1.getSukurtsalak().get(0).getKontuBankarioak().get(0).getEgoera());
 		assertEquals(100, eb1.getSukurtsalak().get(0).getKontuBankarioak().get(0).getDiruSarrerak().get(0).getKantitatea(), 0.01);
-		assertEquals(sarreraData, eb1.getSukurtsalak().get(0).getKontuBankarioak().get(0).getDiruSarrerak().get(0).getSarreraData());
+		assertEquals("03-19-2023", eb1.getSukurtsalak().get(0).getKontuBankarioak().get(0).getDiruSarrerak().get(0).getSarreraData());
 		assertEquals("sarrera", eb1.getSukurtsalak().get(0).getKontuBankarioak().get(0).getDiruSarrerak().get(0).getKontzeptua());
 		assertEquals("ES1245784512346751245124", eb1.getSukurtsalak().get(0).getKontuBankarioak().get(0).getDiruSarrerak().get(0).getIgortzailea());
-		assertEquals(1, eb1.getSukurtsalak().get(0).getKontuBankarioak().get(0).getTransferentziak().get(0).getIdTransferentzia());
 		assertEquals(100, eb1.getSukurtsalak().get(0).getKontuBankarioak().get(0).getTransferentziak().get(0).getKantitatea(), 0.01);
-		assertEquals(transferentziaData, eb1.getSukurtsalak().get(0).getKontuBankarioak().get(0).getTransferentziak().get(0).getTransferentziaData());
+		assertEquals("04-23-2008", eb1.getSukurtsalak().get(0).getKontuBankarioak().get(0).getTransferentziak().get(0).getTransferentziaData());
 		assertEquals("proba", eb1.getSukurtsalak().get(0).getKontuBankarioak().get(0).getTransferentziak().get(0).getKotzeptua());
 		assertEquals("ES1245784512346751245124", eb1.getSukurtsalak().get(0).getKontuBankarioak().get(0).getTransferentziak().get(0).getJasotzailea());
-		assertEquals(10, eb1.getSukurtsalak().get(0).getKontuBankarioak().get(0).getTransferentziak().get(0).getKomisioa(), 0.01);
-		assertEquals(1, eb1.getSukurtsalak().get(0).getKontuBankarioak().get(0).getHipotekak().get(0).getIdHipoteka());
+		assertEquals(2, eb1.getSukurtsalak().get(0).getKontuBankarioak().get(0).getTransferentziak().get(0).getKomisioa(), 0.01);
 		assertEquals(100000, eb1.getSukurtsalak().get(0).getKontuBankarioak().get(0).getHipotekak().get(0).getKantitatea(), 0.01);
 		assertEquals(50000, eb1.getSukurtsalak().get(0).getKontuBankarioak().get(0).getHipotekak().get(0).getOrdaindutakoa(), 0.01);
 		assertEquals(10, eb1.getSukurtsalak().get(0).getKontuBankarioak().get(0).getHipotekak().get(0).getKomisioa(), 0.01);
-		assertEquals(hasieraData, eb1.getSukurtsalak().get(0).getKontuBankarioak().get(0).getHipotekak().get(0).getHasieraData());
-		assertEquals(amaieraData, eb1.getSukurtsalak().get(0).getKontuBankarioak().get(0).getHipotekak().get(0).getAmaieraData());
+		assertEquals("03-12-2010", eb1.getSukurtsalak().get(0).getKontuBankarioak().get(0).getHipotekak().get(0).getHasieraData());
+		assertEquals("06-10-2020", eb1.getSukurtsalak().get(0).getKontuBankarioak().get(0).getHipotekak().get(0).getAmaieraData());
+		assertEquals("eskatuta", eb1.getSukurtsalak().get(0).getKontuBankarioak().get(0).getHipotekak().get(0).getEgoera());
 	}
 	
 	@Test
 	public void testEntitaBankarioaSet() {
-		Calendar cal1 = Calendar.getInstance();
-		cal1.set(Calendar.DAY_OF_MONTH, 20);
-		cal1.set(Calendar.MONTH, 0);
-		cal1.set(Calendar.YEAR, 2003);
-		Date sorreraData = cal1.getTime();
-		
-		Calendar cal2 = Calendar.getInstance();
-		cal2.set(Calendar.DAY_OF_MONTH, 19);
-		cal2.set(Calendar.MONTH, 3);
-		cal2.set(Calendar.YEAR, 2023);
-		Date sarreraData = cal2.getTime();
-		
-		DiruSarrera ds1 = new DiruSarrera(1, 100, sarreraData, "sarrera", "ES1245784512346751245124");
+		DiruSarrera ds1 = new DiruSarrera(100, "03-19-2023", "sarrera", "ES1245784512346751245124");
 		
 		ArrayList<DiruSarrera> diruSarrerak = new ArrayList<DiruSarrera> ();
 		diruSarrerak.add(ds1);
 		
-		Calendar cal3 = Calendar.getInstance();
-		cal3.set(Calendar.DAY_OF_MONTH, 23);
-		cal3.set(Calendar.MONTH, 4);
-		cal3.set(Calendar.YEAR, 2008);
-		Date transferentziaData = cal3.getTime();
-		
-		Transferentzia t1 = new Transferentzia (1, 100, transferentziaData, "proba", "ES1245784512346751245124", 10);
+		Transferentzia t1 = new Transferentzia (100, "04-23-2008", "proba", "ES1245784512346751245124");
 		
 		ArrayList<Transferentzia> transferentziak = new ArrayList<Transferentzia>();
 		transferentziak.add(t1);
 		
-		Calendar cal4 = Calendar.getInstance();
-		cal4.set(Calendar.DAY_OF_MONTH, 12);
-		cal4.set(Calendar.MONTH, 3);
-		cal4.set(Calendar.YEAR, 2010);
-		Date hasieraData = cal4.getTime();
-		
-
-		Calendar cal5 = Calendar.getInstance();
-		cal5.set(Calendar.DAY_OF_MONTH, 10);
-		cal5.set(Calendar.MONTH, 6);
-		cal5.set(Calendar.YEAR, 2020);
-		Date amaieraData = cal5.getTime();
-		
-		Hipoteka h1 = new Hipoteka (1, 100000, 50000, 10, hasieraData, amaieraData);
+		Hipoteka h1 = new Hipoteka (100000, 50000, 10, "03-12-2010", "06-10-2020", "eskatuta");
 		
 		ArrayList<Hipoteka> hipotekak = new ArrayList<Hipoteka> ();
 		hipotekak.add(h1);
 		
-		KontuBankarioa kb1 = new KontuBankarioa("ES1576197348527531954865", 2000, 100, sorreraData, Egoera.aktiboa, diruSarrerak,transferentziak, hipotekak);
+		KontuBankario kb1 = new KontuBankario("ES1576197348527531954865", 2000, 100, "01-20-2003", "aktiboa", diruSarrerak,transferentziak, hipotekak);
 		
-		ArrayList<KontuBankarioa> KontuBankarioak = new ArrayList<KontuBankarioa>();
+		ArrayList<KontuBankario> KontuBankarioak = new ArrayList<KontuBankario>();
 		KontuBankarioak.add(kb1);
 		
-		Sukurtsala s1 = new Sukurtsala(1, 13, "Gallarraga kalea", 48830, KontuBankarioak);
+		Zuzendaria z1 = new Zuzendaria("12345678A", "Juan", "Perez", "10-21-2002", "gizona", "111222333", "12345678", "Zuzendaria");
 		
-		ArrayList<Sukurtsala> sukurtzalak = new ArrayList<Sukurtsala>();
-		sukurtzalak.add(s1);
+		ArrayList<Langilea> langileak = new ArrayList<Langilea>();
+		langileak.add(z1);
 		
-		EntitateBankarioa eb1 = new EntitateBankarioa ("BBK", 1, "ES25", sukurtzalak);
+		Sukurtsala s1 = new Sukurtsala(1, "13","Gallarraga kalea", KontuBankarioak, langileak);
 		
-		cal1.set(Calendar.DAY_OF_MONTH, 22);
-		cal1.set(Calendar.MONTH, 8);
-		cal1.set(Calendar.YEAR, 2004);
-		sorreraData = cal1.getTime();
+		ArrayList<Sukurtsala> sukurtsalak = new ArrayList<Sukurtsala>();
+		sukurtsalak.add(s1);
 		
-		cal2.set(Calendar.DAY_OF_MONTH, 10);
-		cal2.set(Calendar.MONTH, 9);
-		cal2.set(Calendar.YEAR, 2023);
-		sarreraData = cal2.getTime();
+		EntitateBankario eb1 = new EntitateBankario ("BBK", "1", "ES25", sukurtsalak, "0, 0, 932, 130", "src-res-bbk_logo.png");
 		
-		DiruSarrera ds2 = new DiruSarrera(2, 200, sarreraData, "sarrera2", "ES1297514512626751245124");
+		
+		DiruSarrera ds2 = new DiruSarrera(200, "09-10-2003", "sarrera2", "ES1297514512626751245124");
 		
 		ArrayList<DiruSarrera> diruSarrerak2 = new ArrayList<DiruSarrera> ();
 		diruSarrerak2.add(ds2);
 		
-		cal3.set(Calendar.DAY_OF_MONTH, 17);
-		cal3.set(Calendar.MONTH, 7);
-		cal3.set(Calendar.YEAR, 2010);
-		transferentziaData = cal3.getTime();
-		
-		Transferentzia t2 = new Transferentzia (3, 300, transferentziaData, "proba2", "ES1245709142346751245124", 10);
+		Transferentzia t2 = new Transferentzia (300, "08-17-2023", "proba2", "ES1245709142346751245124");
 		
 		ArrayList<Transferentzia> transferentziak2 = new ArrayList<Transferentzia>();
 		transferentziak2.add(t2);
 		
-		cal4.set(Calendar.DAY_OF_MONTH, 15);
-		cal4.set(Calendar.MONTH, 6);
-		cal4.set(Calendar.YEAR, 2012);
-		hasieraData = cal4.getTime();
-		
-		cal5.set(Calendar.DAY_OF_MONTH, 11);
-		cal5.set(Calendar.MONTH, 7);
-		cal5.set(Calendar.YEAR, 2022);
-		amaieraData = cal5.getTime();
-		
-		Hipoteka h2 = new Hipoteka (2, 200000, 70000, 10, hasieraData, amaieraData);
+		Hipoteka h2 = new Hipoteka (200000, 70000, 10, "06-15-2012", "07-11-2022", "onartuta");
 		
 		ArrayList<Hipoteka> hipotekak2 = new ArrayList<Hipoteka> ();
 		hipotekak2.add(h2);
 		
-		KontuBankarioa kb2 = new KontuBankarioa("ES1576197348527531958261", 3000, 200, sorreraData, Egoera.izoztuta, diruSarrerak2,transferentziak2, hipotekak2);
+		KontuBankario kb2 = new KontuBankario("ES1576197348527531958261", 3000, 200, "08-22-2004", "izoztuta", diruSarrerak2,transferentziak2, hipotekak2);
 		
-		ArrayList<KontuBankarioa> KontuBankarioak2 = new ArrayList<KontuBankarioa>();
+		ArrayList<KontuBankario> KontuBankarioak2 = new ArrayList<KontuBankario>();
 		KontuBankarioak2.add(kb2);
 		
-		Sukurtsala s2 = new Sukurtsala(2, 14, "Autonomia kalea", 48001, KontuBankarioak2);
+		Zuzendaria z2 = new Zuzendaria("12345678B", "Laura", "Sanchez", "08-19-2002", "emakumea", "111222333", "87654321", "Gerentea");
+		
+		ArrayList<Langilea> langileak2 = new ArrayList<Langilea>();
+		langileak2.add(z2);
+		
+		Sukurtsala s2 = new Sukurtsala(2, "11","Autonomia kalea", KontuBankarioak2, langileak2);
 		
 		ArrayList<Sukurtsala> sukurtzalak2 = new ArrayList<Sukurtsala>();
 		sukurtzalak2.add(s2);
 		
 		// Setters
 		eb1.setIzena("BBVA");
-		eb1.setIdEntitatea(2);
+		eb1.setIdEntitatea("2");
 		eb1.setEntitateZbk("ES36");
 		eb1.setSukurtsalak(sukurtzalak2);
 		eb1.setBounds("0, 0, 932, 130");
-		eb1.setUrl("src/res/bbk_logo.png");
+		eb1.setUrl("src-res-bbk_logo.png");
 		
 		assertEquals("BBVA", eb1.getIzena());
-		assertEquals(2,eb1.getIdEntitatea());
+		assertEquals("2",eb1.getIdEntitatea());
 		assertEquals("ES36", eb1.getEntitateZbk());
 		assertEquals("0, 0, 932, 130", eb1.getBounds());
-		assertEquals("src/res/bbk_logo.png", eb1.getUrl());
+		assertEquals("src-res-bbk_logo.png", eb1.getUrl());
 		assertEquals(2, eb1.getSukurtsalak().get(0).getIdSukurtsala());
-		assertEquals(14, eb1.getSukurtsalak().get(0).getKodSukurtsala());
+		assertEquals("11", eb1.getSukurtsalak().get(0).getKodSukurtsala());
 		assertEquals("Autonomia kalea", eb1.getSukurtsalak().get(0).getKokalekua());
-		assertEquals(48001, eb1.getSukurtsalak().get(0).getPostaKodea());
 		assertEquals("ES1576197348527531958261", eb1.getSukurtsalak().get(0).getKontuBankarioak().get(0).getIban());
 		assertEquals(3000, eb1.getSukurtsalak().get(0).getKontuBankarioak().get(0).getSaldoa(), 0.01);
 		assertEquals(200, eb1.getSukurtsalak().get(0).getKontuBankarioak().get(0).getHilekoLimitea(), 0.01);
-		assertEquals(sorreraData, eb1.getSukurtsalak().get(0).getKontuBankarioak().get(0).getSorreraData());
-		assertEquals(Egoera.izoztuta, eb1.getSukurtsalak().get(0).getKontuBankarioak().get(0).getEgoera());
-		assertEquals(2, eb1.getSukurtsalak().get(0).getKontuBankarioak().get(0).getDiruSarrerak().get(0).getIdSarrera());
+		assertEquals("08-22-2004", eb1.getSukurtsalak().get(0).getKontuBankarioak().get(0).getSorreraData());
+		assertEquals("izoztuta", eb1.getSukurtsalak().get(0).getKontuBankarioak().get(0).getEgoera());
 		assertEquals(200, eb1.getSukurtsalak().get(0).getKontuBankarioak().get(0).getDiruSarrerak().get(0).getKantitatea(), 0.01);
-		assertEquals(sarreraData, eb1.getSukurtsalak().get(0).getKontuBankarioak().get(0).getDiruSarrerak().get(0).getSarreraData());
+		assertEquals("09-10-2003", eb1.getSukurtsalak().get(0).getKontuBankarioak().get(0).getDiruSarrerak().get(0).getSarreraData());
 		assertEquals("sarrera2", eb1.getSukurtsalak().get(0).getKontuBankarioak().get(0).getDiruSarrerak().get(0).getKontzeptua());
 		assertEquals("ES1297514512626751245124", eb1.getSukurtsalak().get(0).getKontuBankarioak().get(0).getDiruSarrerak().get(0).getIgortzailea());
-		assertEquals(3, eb1.getSukurtsalak().get(0).getKontuBankarioak().get(0).getTransferentziak().get(0).getIdTransferentzia());
 		assertEquals(300, eb1.getSukurtsalak().get(0).getKontuBankarioak().get(0).getTransferentziak().get(0).getKantitatea(), 0.01);
-		assertEquals(transferentziaData, eb1.getSukurtsalak().get(0).getKontuBankarioak().get(0).getTransferentziak().get(0).getTransferentziaData());
+		assertEquals("08-17-2023", eb1.getSukurtsalak().get(0).getKontuBankarioak().get(0).getTransferentziak().get(0).getTransferentziaData());
 		assertEquals("proba2", eb1.getSukurtsalak().get(0).getKontuBankarioak().get(0).getTransferentziak().get(0).getKotzeptua());
 		assertEquals("ES1245709142346751245124", eb1.getSukurtsalak().get(0).getKontuBankarioak().get(0).getTransferentziak().get(0).getJasotzailea());
-		assertEquals(10, eb1.getSukurtsalak().get(0).getKontuBankarioak().get(0).getTransferentziak().get(0).getKomisioa(), 0.01);
-		assertEquals(2, eb1.getSukurtsalak().get(0).getKontuBankarioak().get(0).getHipotekak().get(0).getIdHipoteka());
+		assertEquals(2, eb1.getSukurtsalak().get(0).getKontuBankarioak().get(0).getTransferentziak().get(0).getKomisioa(), 0.01);
 		assertEquals(200000, eb1.getSukurtsalak().get(0).getKontuBankarioak().get(0).getHipotekak().get(0).getKantitatea(), 0.01);
 		assertEquals(70000, eb1.getSukurtsalak().get(0).getKontuBankarioak().get(0).getHipotekak().get(0).getOrdaindutakoa(), 0.01);
 		assertEquals(10, eb1.getSukurtsalak().get(0).getKontuBankarioak().get(0).getHipotekak().get(0).getKomisioa(), 0.01);
-		assertEquals(hasieraData, eb1.getSukurtsalak().get(0).getKontuBankarioak().get(0).getHipotekak().get(0).getHasieraData());
-		assertEquals(amaieraData, eb1.getSukurtsalak().get(0).getKontuBankarioak().get(0).getHipotekak().get(0).getAmaieraData());
+		assertEquals("06-15-2012", eb1.getSukurtsalak().get(0).getKontuBankarioak().get(0).getHipotekak().get(0).getHasieraData());
+		assertEquals("07-11-2022", eb1.getSukurtsalak().get(0).getKontuBankarioak().get(0).getHipotekak().get(0).getAmaieraData());
+		assertEquals("onartuta", eb1.getSukurtsalak().get(0).getKontuBankarioak().get(0).getHipotekak().get(0).getEgoera());
 	}
 	
 	@Test
 	public void testEntitaBankarioaToString() {
-		Calendar cal1 = Calendar.getInstance();
-		cal1.set(Calendar.DAY_OF_MONTH, 20);
-		cal1.set(Calendar.MONTH, 0);
-		cal1.set(Calendar.YEAR, 2003);
-		Date sorreraData = cal1.getTime();
-		
-		Calendar cal2 = Calendar.getInstance();
-		cal2.set(Calendar.DAY_OF_MONTH, 19);
-		cal2.set(Calendar.MONTH, 3);
-		cal2.set(Calendar.YEAR, 2023);
-		Date sarreraData = cal2.getTime();
-		
-		DiruSarrera ds1 = new DiruSarrera(1, 100, sarreraData, "sarrera", "ES1245784512346751245124");
+		DiruSarrera ds1 = new DiruSarrera(100, "03-19-2023", "sarrera", "ES1245784512346751245124");
 		
 		ArrayList<DiruSarrera> diruSarrerak = new ArrayList<DiruSarrera> ();
 		diruSarrerak.add(ds1);
 		
-		Calendar cal3 = Calendar.getInstance();
-		cal3.set(Calendar.DAY_OF_MONTH, 23);
-		cal3.set(Calendar.MONTH, 4);
-		cal3.set(Calendar.YEAR, 2008);
-		Date transferentziaData = cal3.getTime();
-		
-		Transferentzia t1 = new Transferentzia (1, 100, transferentziaData, "proba", "ES1245784512346751245124", 10);
+		Transferentzia t1 = new Transferentzia (100, "04-23-2008", "proba", "ES1245784512346751245124");
 		
 		ArrayList<Transferentzia> transferentziak = new ArrayList<Transferentzia>();
 		transferentziak.add(t1);
 		
-		Calendar cal4 = Calendar.getInstance();
-		cal4.set(Calendar.DAY_OF_MONTH, 12);
-		cal4.set(Calendar.MONTH, 3);
-		cal4.set(Calendar.YEAR, 2010);
-		Date hasieraData = cal4.getTime();
-		
-
-		Calendar cal5 = Calendar.getInstance();
-		cal5.set(Calendar.DAY_OF_MONTH, 10);
-		cal5.set(Calendar.MONTH, 6);
-		cal5.set(Calendar.YEAR, 2020);
-		Date amaieraData = cal5.getTime();
-		
-		Hipoteka h1 = new Hipoteka (1, 100000, 50000, 10, hasieraData, amaieraData);
+		Hipoteka h1 = new Hipoteka (100000, 50000, 10, "03-12-2010", "06-10-2020", "eskatuta");
 		
 		ArrayList<Hipoteka> hipotekak = new ArrayList<Hipoteka> ();
 		hipotekak.add(h1);
 		
-		KontuBankarioa kb1 = new KontuBankarioa("ES1576197348527531954865", 2000, 100, sorreraData, Egoera.aktiboa, diruSarrerak,transferentziak, hipotekak);
+		KontuBankario kb1 = new KontuBankario("ES1576197348527531954865", 2000, 100, "01-20-2003", "aktiboa", diruSarrerak,transferentziak, hipotekak);
 		
-		ArrayList<KontuBankarioa> KontuBankarioak = new ArrayList<KontuBankarioa>();
+		ArrayList<KontuBankario> KontuBankarioak = new ArrayList<KontuBankario>();
 		KontuBankarioak.add(kb1);
 		
-		Sukurtsala s1 = new Sukurtsala(1, 13, "Gallarraga kalea", 48830, KontuBankarioak);
+		Zuzendaria z1 = new Zuzendaria("12345678A", "Juan", "Perez", "10-21-2002", "gizona", "111222333", "12345678", "Zuzendaria");
 		
-		ArrayList<Sukurtsala> sukurtzalak = new ArrayList<Sukurtsala>();
-		sukurtzalak.add(s1);
+		ArrayList<Langilea> langileak = new ArrayList<Langilea>();
+		langileak.add(z1);
 		
-		EntitateBankarioa eb1 = new EntitateBankarioa ("BBK", 1, "ES25", sukurtzalak);
+		Sukurtsala s1 = new Sukurtsala(1, "13","Gallarraga kalea", KontuBankarioak, langileak);
+		
+		ArrayList<Sukurtsala> sukurtsalak = new ArrayList<Sukurtsala>();
+		sukurtsalak.add(s1);
+		
+		EntitateBankario eb1 = new EntitateBankario ("BBK", "1", "ES25", sukurtsalak, "0, 0, 932, 130", "src-res-bbk_logo.png");
 		
 		// ToString
 		assertEquals("EntitateBankarioa izena=" + eb1.getIzena() + ", idEntitatea=" + eb1.getIdEntitatea() + ", entitateZbk=" + eb1.getEntitateZbk()
@@ -333,65 +226,39 @@ public class EntitateBankarioaTest {
 	
 	@Test
 	public void testEntitaBankarioaEquals() {
-		Calendar cal1 = Calendar.getInstance();
-		cal1.set(Calendar.DAY_OF_MONTH, 20);
-		cal1.set(Calendar.MONTH, 0);
-		cal1.set(Calendar.YEAR, 2003);
-		Date sorreraData = cal1.getTime();
-		
-		Calendar cal2 = Calendar.getInstance();
-		cal2.set(Calendar.DAY_OF_MONTH, 19);
-		cal2.set(Calendar.MONTH, 3);
-		cal2.set(Calendar.YEAR, 2023);
-		Date sarreraData = cal2.getTime();
-		
-		DiruSarrera ds1 = new DiruSarrera(1, 100, sarreraData, "sarrera", "ES1245784512346751245124");
+		DiruSarrera ds1 = new DiruSarrera(100, "03-19-2023", "sarrera", "ES1245784512346751245124");
 		
 		ArrayList<DiruSarrera> diruSarrerak = new ArrayList<DiruSarrera> ();
 		diruSarrerak.add(ds1);
 		
-		Calendar cal3 = Calendar.getInstance();
-		cal3.set(Calendar.DAY_OF_MONTH, 23);
-		cal3.set(Calendar.MONTH, 4);
-		cal3.set(Calendar.YEAR, 2008);
-		Date transferentziaData = cal3.getTime();
-		
-		Transferentzia t1 = new Transferentzia (1, 100, transferentziaData, "proba", "ES1245784512346751245124", 10);
+		Transferentzia t1 = new Transferentzia (100, "04-23-2008", "proba", "ES1245784512346751245124");
 		
 		ArrayList<Transferentzia> transferentziak = new ArrayList<Transferentzia>();
 		transferentziak.add(t1);
 		
-		Calendar cal4 = Calendar.getInstance();
-		cal4.set(Calendar.DAY_OF_MONTH, 12);
-		cal4.set(Calendar.MONTH, 3);
-		cal4.set(Calendar.YEAR, 2010);
-		Date hasieraData = cal4.getTime();
-		
-
-		Calendar cal5 = Calendar.getInstance();
-		cal5.set(Calendar.DAY_OF_MONTH, 10);
-		cal5.set(Calendar.MONTH, 6);
-		cal5.set(Calendar.YEAR, 2020);
-		Date amaieraData = cal5.getTime();
-		
-		Hipoteka h1 = new Hipoteka (1, 100000, 50000, 10, hasieraData, amaieraData);
+		Hipoteka h1 = new Hipoteka (100000, 50000, 10, "03-12-2010", "06-10-2020", "eskatuta");
 		
 		ArrayList<Hipoteka> hipotekak = new ArrayList<Hipoteka> ();
 		hipotekak.add(h1);
 		
-		KontuBankarioa kb1 = new KontuBankarioa("ES1576197348527531954865", 2000, 100, sorreraData, Egoera.aktiboa, diruSarrerak,transferentziak, hipotekak);
+		KontuBankario kb1 = new KontuBankario("ES1576197348527531954865", 2000, 100, "01-20-2003", "aktiboa", diruSarrerak,transferentziak, hipotekak);
 		
-		ArrayList<KontuBankarioa> KontuBankarioak = new ArrayList<KontuBankarioa>();
+		ArrayList<KontuBankario> KontuBankarioak = new ArrayList<KontuBankario>();
 		KontuBankarioak.add(kb1);
 		
-		Sukurtsala s1 = new Sukurtsala(1, 13, "Gallarraga kalea", 48830, KontuBankarioak);
+		Zuzendaria z1 = new Zuzendaria("12345678A", "Juan", "Perez", "10-21-2002", "gizona", "111222333", "12345678", "Zuzendaria");
 		
-		ArrayList<Sukurtsala> sukurtzalak = new ArrayList<Sukurtsala>();
-		sukurtzalak.add(s1);
+		ArrayList<Langilea> langileak = new ArrayList<Langilea>();
+		langileak.add(z1);
 		
-		EntitateBankarioa eb1 = new EntitateBankarioa ("BBK", 1, "ES25", sukurtzalak);
-		EntitateBankarioa eb2 = new EntitateBankarioa ("BBK", 1, "ES25", sukurtzalak);
-		EntitateBankarioa eb3 = new EntitateBankarioa ();
+		Sukurtsala s1 = new Sukurtsala(1, "13","Gallarraga kalea", KontuBankarioak, langileak);
+		
+		ArrayList<Sukurtsala> sukurtsalak = new ArrayList<Sukurtsala>();
+		sukurtsalak.add(s1);
+		
+		EntitateBankario eb1 = new EntitateBankario ("BBK", "1", "ES25", sukurtsalak, "0, 0, 932, 130", "src-res-bbk_logo.png");
+		EntitateBankario eb2 = new EntitateBankario ("BBK", "1", "ES25", sukurtsalak, "0, 0, 932, 130", "src-res-bbk_logo.png");
+		EntitateBankario eb3 = new EntitateBankario ();
 		
 		// Equals
 		assertTrue(eb1.equals(eb2));

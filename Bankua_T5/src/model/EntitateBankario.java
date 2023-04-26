@@ -3,23 +3,25 @@ package model;
 import java.util.ArrayList;
 import java.util.Objects;
 
-public class EntitateBankarioa {
+public class EntitateBankario {
 	private String izena;
-	private int idEntitatea;
+	private String idEntitatea;
 	private String entitateZbk;
 	private ArrayList<Sukurtsala> sukurtsalak;
 	private String url;
 	private String bounds;
 	
 	// Constructors
-	public EntitateBankarioa(String izena, int idEntitatea, String entitateZbk, ArrayList<Sukurtsala> sukurtsalak) {
+	public EntitateBankario(String izena, String idEntitatea, String entitateZbk, ArrayList<Sukurtsala> sukurtsalak, String bounds, String url) {
 		this.izena = izena;
 		this.idEntitatea = idEntitatea;
 		this.entitateZbk = entitateZbk;
 		this.sukurtsalak = sukurtsalak;
+		this.url=url;
+		this.bounds=bounds;
 	}
 	
-	public EntitateBankarioa() {}
+	public EntitateBankario() {}
 
 	// Getters and Setters
 	public String getIzena() {
@@ -28,10 +30,10 @@ public class EntitateBankarioa {
 	public void setIzena(String izena) {
 		this.izena = izena;
 	}
-	public int getIdEntitatea() {
+	public String getIdEntitatea() {
 		return idEntitatea;
 	}
-	public void setIdEntitatea(int idEntitatea) {
+	public void setIdEntitatea(String idEntitatea) {
 		this.idEntitatea = idEntitatea;
 	}
 	public String getEntitateZbk() {
@@ -46,8 +48,6 @@ public class EntitateBankarioa {
 	public void setSukurtsalak(ArrayList<Sukurtsala> sukurtzalak) {
 		this.sukurtsalak = sukurtzalak;
 	}
-	
-
 	public String getUrl() {
 		return url;
 	}
@@ -72,7 +72,7 @@ public class EntitateBankarioa {
 	public boolean equals(Object obj) {
 		if (obj == null)
 			return false;
-		EntitateBankarioa other = (EntitateBankarioa) obj;
+		EntitateBankario other = (EntitateBankario) obj;
 		return Objects.equals(entitateZbk, other.entitateZbk);
 	}
 	

@@ -1,47 +1,38 @@
 package model;
 
-import java.util.Date;
 import java.util.Objects;
 
 public class Transferentzia implements Komisioa{
-	private int idTransferentzia;
 	private double kantitatea;
-	private Date transferentziaData;
+	private String transferentziaData;
 	private String kotzeptua;
 	private String jasotzailea;
 	private final double komisioa;
 	
 	// Constructors
-	public Transferentzia(int idTransferentzia, double kantitatea, Date transferentziaData, String kotzeptua, String jasotzailea, double komisioa) {
-		this.idTransferentzia = idTransferentzia;
+	public Transferentzia(double kantitatea, String transferentziaData, String kotzeptua, String jasotzailea) {
 		this.kantitatea = kantitatea;
 		this.transferentziaData = transferentziaData;
 		this.kotzeptua = kotzeptua;
 		this.jasotzailea = jasotzailea;
-		this.komisioa = komisioa;
+		this.komisioa = 2;
 	}
 	
 	public Transferentzia() {
-		this.komisioa = 10;
+		this.komisioa = 2;
 	}
 
 	// Getters and Setters
-	public int getIdTransferentzia() {
-		return idTransferentzia;
-	}
-	public void setIdTransferentzia(int idTransferentzia) {
-		this.idTransferentzia = idTransferentzia;
-	}
 	public double getKantitatea() {
 		return kantitatea;
 	}
 	public void setKantitatea(double kantitatea) {
 		this.kantitatea = kantitatea;
 	}
-	public Date getTransferentziaData() {
+	public String getTransferentziaData() {
 		return transferentziaData;
 	}
-	public void setTransferentziaData(Date transferentziaData) {
+	public void setTransferentziaData(String transferentziaData) {
 		this.transferentziaData = transferentziaData;
 	}
 	public String getKotzeptua() {
@@ -63,17 +54,22 @@ public class Transferentzia implements Komisioa{
 	// ToString
 	@Override
 	public String toString() {
-		return "Transferentzia idTransferentzia=" + idTransferentzia + ", kantitatea=" + kantitatea
+		return "Transferentzia kantitatea=" + kantitatea
 				+ ", transferentziaData=" + transferentziaData + ", kotzeptua=" + kotzeptua + ", jasotzailea="
 				+ jasotzailea + ", komisioa=" + komisioa;
 	}
-
+	
+	// Equals
 	@Override
 	public boolean equals(Object obj) {
 		if (obj == null)
 			return false;
 		Transferentzia other = (Transferentzia) obj;
-		return Objects.equals(idTransferentzia, other.idTransferentzia);
+		return Objects.equals(jasotzailea, other.jasotzailea)
+				&& Double.doubleToLongBits(kantitatea) == Double.doubleToLongBits(other.kantitatea)
+				&& Double.doubleToLongBits(komisioa) == Double.doubleToLongBits(other.komisioa)
+				&& Objects.equals(kotzeptua, other.kotzeptua)
+				&& Objects.equals(transferentziaData, other.transferentziaData);
 	}
 
 	// Methods
@@ -81,5 +77,4 @@ public class Transferentzia implements Komisioa{
 	public double kalkulatuPrezioa() {
 		return 0;
 	}
-
 }
