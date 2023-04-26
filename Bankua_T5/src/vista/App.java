@@ -10,6 +10,7 @@ import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 
 import controlador.Metodoak;
+import model.Bezeroa;
 import model.EntitateBankario;
 
 import java.awt.CardLayout;
@@ -43,7 +44,7 @@ public class App extends JFrame {
 	final ImageIcon logo_atzera = new ImageIcon(new ImageIcon("src/res/flecha_atras.png").getImage().getScaledInstance(44,30,Image.SCALE_DEFAULT));
 	final ImageIcon logo_aurrera = new ImageIcon(new ImageIcon("src/res/flecha_alante.png").getImage().getScaledInstance(44,30,Image.SCALE_DEFAULT));
 	final ImageIcon fondo_argazki = new ImageIcon(new ImageIcon("src/res/logo2.2.png").getImage().getScaledInstance(932,130,Image.SCALE_DEFAULT));
-	ArrayList<EntitateBankario> entitateak = new ArrayList<>();
+	Bezeroa bezero = null;
 	private JTable table_entitateKont;
 	private JTable transfer_ikusi_table;
 	private JTextField txt_jasotzaile;
@@ -105,7 +106,7 @@ public class App extends JFrame {
 		// 			Datuak Kargatu	    //
 		//////////////////////////////////
 		
-		entitateak=metodoak.entitateakKargatu();
+		
 		
 		//////////////////////////////////
 		// 			 Panelak 		    //
@@ -248,14 +249,17 @@ public class App extends JFrame {
 		JButton btn_bezero_sartu = new JButton("Sartu");
 		btn_bezero_sartu.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				loginBezero.setVisible(false);
-				bezeroEntitate.setVisible(true);
+				if(metodoak.bezeroLogin(txt_bezero_erabiltzaile.getText(),String.valueOf(passBezero.getPassword()))) {
+					//bezero=metodoak.bezeroaKargatu();
+					loginBezero.setVisible(false);
+					bezeroEntitate.setVisible(true);
+				}
 			}
 		});
 		btn_bezero_sartu.setBounds(437, 423, 89, 23);
 		loginBezero.add(btn_bezero_sartu);
 		
-		//Entitateen botoiak sortzen dira
+		/*//Entitateen botoiak sortzen dira
 		for(int i=0;i<entitateak.size();i++) {		
 			String[] limiteak = entitateak.get(i).getBounds().split("/");
 			ImageIcon logo_banco = new ImageIcon(new ImageIcon(entitateak.get(i).getUrl()).getImage().getScaledInstance(Integer.parseInt(limiteak[2]),Integer.parseInt(limiteak[3]),Image.SCALE_DEFAULT));
@@ -267,17 +271,17 @@ public class App extends JFrame {
 			btn_banco.setOpaque(false);
 			btn_banco.setContentAreaFilled(false);
 			btn_banco.setBorderPainted(false);
-		}
+		}*/
 		
 		JButton btn_langile_sartu = new JButton("Sartu");
 		btn_langile_sartu.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				//txt_langile_erabiltzaile.getText()
 				//passLangile
-				if(metodoak.langileLogin(txt_langile_erabiltzaile.getText(),String.valueOf(passLangile.getPassword()),entitateak)!=null) {
+				//if(metodoak.langileLogin(txt_langile_erabiltzaile.getText(),String.valueOf(passLangile.getPassword()),entitateak)!=null) {
 					loginLangile.setVisible(false);
 					sukurtsalak.setVisible(true);
-				}
+				//}
 			}
 		});
 		btn_langile_sartu.setBounds(437, 423, 89, 23);

@@ -1,5 +1,6 @@
 package model;
 
+import java.util.ArrayList;
 import java.util.Objects;
 
 public class Sukurtsala {
@@ -7,13 +8,22 @@ public class Sukurtsala {
 	private String kodSukurtsala;
 	private String kokalekua;
 	private EntitateBankario entitateBankario;
+	private ArrayList<KontuBankario> kontuBankarioak;
 	
-	// Constructors
+	// Bezerorako Sortzailea
 	public Sukurtsala(int idSukurtsala, String kodSukurtsala, String kokalekua,EntitateBankario entitateBankario) {
 		this.idSukurtsala = idSukurtsala;
 		this.kodSukurtsala = kodSukurtsala;
 		this.kokalekua = kokalekua;
 		this.entitateBankario=entitateBankario;
+	}
+	// Langilerako Sortzailea
+	public Sukurtsala(int idSukurtsala, String kodSukurtsala, String kokalekua,EntitateBankario entitateBankario,ArrayList<KontuBankario> kontuBankarioak) {
+		this.idSukurtsala = idSukurtsala;
+		this.kodSukurtsala = kodSukurtsala;
+		this.kokalekua = kokalekua;
+		this.entitateBankario=entitateBankario;
+		this.kontuBankarioak=kontuBankarioak;
 	}
 
 	public Sukurtsala() {
@@ -43,6 +53,12 @@ public class Sukurtsala {
 	}
 	public void setEntitateBankario(EntitateBankario entitateBankario) {
 		this.entitateBankario = entitateBankario;
+	}
+	public ArrayList<KontuBankario> getKontuBankarioak() {
+		return kontuBankarioak;
+	}
+	public void setKontuBankarioak(ArrayList<KontuBankario> kontuBankarioak) {
+		this.kontuBankarioak = kontuBankarioak;
 	}
 
 	// ToString

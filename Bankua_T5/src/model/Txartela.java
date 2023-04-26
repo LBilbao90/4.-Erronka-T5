@@ -5,15 +5,23 @@ public class Txartela {
 	private int segurtasunKodea;
 	private String mota; // debito, kredito
 	private KontuBankario kontuBankario;
+	private Bezeroa bezero;
 
-	// Constructors
+	// Bezerorako Sortzailea
 	public Txartela(int segurtasunKodea, String mota, KontuBankario kontuBankario) {
 		super();
 		this.segurtasunKodea = segurtasunKodea;
 		this.mota = mota;
 		this.kontuBankario=kontuBankario;
 	}
-	
+	// Langilerako Sortzailea
+	public Txartela(int segurtasunKodea, String mota, Bezeroa bezero) {
+		super();
+		this.segurtasunKodea = segurtasunKodea;
+		this.mota = mota;
+		this.bezero=bezero;
+	}
+		
 	public Txartela() {
 	}	
 	
@@ -37,7 +45,13 @@ public class Txartela {
 	public void setKontuBankario(KontuBankario kontuBankario) {
 		this.kontuBankario = kontuBankario;
 	}
-
+	public Bezeroa getBezero() {
+		return bezero;
+	}
+	public void setBezero(Bezeroa bezero) {
+		this.bezero = bezero;
+	}
+	
 	// ToString
 	@Override
 	public String toString() {

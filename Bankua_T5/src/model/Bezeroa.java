@@ -10,10 +10,14 @@ import java.util.concurrent.TimeUnit;
 public class Bezeroa extends Pertsona{
 	private ArrayList<Txartela> txartelak;
 	
-	// Constructors
+	// Bezerorako Sortzailea
 	public Bezeroa(String nan, String izena, String abizena, String jaiotzeData, String sexua, String telefonoa, String pasahitza, ArrayList<Txartela> txartelak) {
 		super(nan, izena, abizena, jaiotzeData, sexua, telefonoa, pasahitza);
 		this.txartelak=txartelak;
+	}
+	// Langilerako Sortzailea
+	public Bezeroa(String nan, String izena, String abizena, String jaiotzeData, String sexua, String telefonoa, String pasahitza) {
+		super(nan, izena, abizena, jaiotzeData, sexua, telefonoa, pasahitza);
 	}
 	
 	//Getters 

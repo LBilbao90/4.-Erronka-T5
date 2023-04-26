@@ -1,11 +1,11 @@
 -- phpMyAdmin SQL Dump
--- version 5.2.0
+-- version 5.2.1
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 26-04-2023 a las 14:37:50
--- Versión del servidor: 10.4.27-MariaDB
--- Versión de PHP: 8.2.0
+-- Tiempo de generación: 26-04-2023 a las 17:57:27
+-- Versión del servidor: 10.4.28-MariaDB
+-- Versión de PHP: 8.2.4
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -45,7 +45,7 @@ CREATE TABLE `bezeroa` (
 
 INSERT INTO `bezeroa` (`NAN`, `izena`, `abizenak`, `jaiotzeData`, `sexua`, `telefonoa`, `pasahitza`) VALUES
 ('12345678A', 'Aingeru', 'Siranaula', '2002-10-21', 'gizon', '111222333', '12345678'),
-('12345678B', 'Ibai', 'Alvarez', '2000-08-16', 'gizon', '444555666', '12345678'),
+('12345678B', 'Ibai', 'Alvarez', '2000-08-16', 'gizon', '444555666', '1234'),
 ('12345678C', 'Hodei', 'Martinez', '2004-04-16', 'gizon', '777888999', '12345678');
 
 -- --------------------------------------------------------
@@ -147,9 +147,15 @@ CREATE TABLE `langile` (
   `telefonoa` char(9) DEFAULT NULL,
   `pasahitza` varchar(20) DEFAULT NULL,
   `lanpostua` enum('god','zuzendaria','gerentea') DEFAULT NULL,
-  `id_entitate` int(11) DEFAULT NULL,
   `id_sukurtsal` int(11) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Volcado de datos para la tabla `langile`
+--
+
+INSERT INTO `langile` (`id_langile`, `nan`, `izena`, `abizenak`, `jaiotzeData`, `sexua`, `telefonoa`, `pasahitza`, `lanpostua`, `id_sukurtsal`) VALUES
+(1, '12345678B', 'Ibai', 'Alvarez', '2000-10-21', 'gizon', '111222333', '1234', 'zuzendaria', 1);
 
 -- --------------------------------------------------------
 
@@ -261,7 +267,6 @@ ALTER TABLE `kudeatu`
 --
 ALTER TABLE `langile`
   ADD PRIMARY KEY (`id_langile`),
-  ADD KEY `Fk_Langile_Entitate` (`id_entitate`),
   ADD KEY `Fk_Langile_Sukurtsal` (`id_sukurtsal`),
   ADD KEY `idx_langile_lanpostu` (`lanpostua`);
 
@@ -314,7 +319,7 @@ ALTER TABLE `hipoteka`
 -- AUTO_INCREMENT de la tabla `langile`
 --
 ALTER TABLE `langile`
-  MODIFY `id_langile` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id_langile` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- AUTO_INCREMENT de la tabla `transferentzia`
@@ -356,7 +361,6 @@ ALTER TABLE `kudeatu`
 -- Filtros para la tabla `langile`
 --
 ALTER TABLE `langile`
-  ADD CONSTRAINT `Fk_Langile_Entitate` FOREIGN KEY (`id_entitate`) REFERENCES `entitatebankario` (`id_entitate`),
   ADD CONSTRAINT `Fk_Langile_Sukurtsal` FOREIGN KEY (`id_sukurtsal`) REFERENCES `sukurtsala` (`id_sukurtsal`);
 
 --

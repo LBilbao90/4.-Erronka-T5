@@ -13,8 +13,9 @@ public class KontuBankario {
 	private ArrayList<Transferentzia> transferentziak;
 	private Hipoteka hipotekak;
 	private Sukurtsala sukurtsala;
+	private ArrayList<Txartela> txartelak;
 	
-	// Constructors
+	// Bezerorako Sortzailea
 	public KontuBankario(String iban, double saldoa, double hilekoLimitea, String sorreraData, String egoera, ArrayList<DiruSarrera> diruSarrerak, ArrayList<Transferentzia> transferentziak, Hipoteka hipotekak, Sukurtsala sukurtsala) {
 		this.iban = iban;
 		this.saldoa = saldoa;
@@ -26,6 +27,19 @@ public class KontuBankario {
 		this.hipotekak = hipotekak;
 		this.sukurtsala=sukurtsala;
 	}
+	// Langilerako Sortzailea
+	public KontuBankario(String iban, double saldoa, double hilekoLimitea, String sorreraData, String egoera, ArrayList<DiruSarrera> diruSarrerak, ArrayList<Transferentzia> transferentziak, Hipoteka hipotekak,ArrayList<Txartela> txartelak) {
+		this.iban = iban;
+		this.saldoa = saldoa;
+		this.hilekoLimitea = hilekoLimitea;
+		this.sorreraData = sorreraData;
+		this.egoera = egoera;
+		this.diruSarrerak = diruSarrerak;
+		this.transferentziak = transferentziak;
+		this.hipotekak = hipotekak;
+		this.txartelak=txartelak;
+	}
+	
 	
 	public KontuBankario(){
 	}
@@ -86,7 +100,13 @@ public class KontuBankario {
 	public void setSukurtsala(Sukurtsala sukurtsala) {
 		this.sukurtsala = sukurtsala;
 	}
-
+	public ArrayList<Txartela> getTxartelak() {
+		return txartelak;
+	}
+	public void setTxartelak(ArrayList<Txartela> txartelak) {
+		this.txartelak = txartelak;
+	}
+	
 	// ToString
 	@Override
 	public String toString() {
