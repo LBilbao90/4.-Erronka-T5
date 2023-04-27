@@ -12,6 +12,10 @@ import javax.swing.border.EmptyBorder;
 import controlador.Metodoak;
 import model.Bezeroa;
 import model.EntitateBankario;
+import model.Langilea;
+
+import javax.swing.*;
+import java.awt.event.*;
 
 import java.awt.CardLayout;
 import java.awt.Color;
@@ -46,9 +50,13 @@ public class App extends JFrame {
 	final ImageIcon logo_aurrera = new ImageIcon(new ImageIcon("src/res/flecha_alante.png").getImage().getScaledInstance(44,30,Image.SCALE_DEFAULT));
 	final ImageIcon fondo_argazki = new ImageIcon(new ImageIcon("src/res/logo2.2.png").getImage().getScaledInstance(932,130,Image.SCALE_DEFAULT));
 	ArrayList<EntitateBankario> entitateak = new ArrayList<>();
+	Langilea langile = null;
 	Bezeroa bezero = null;
 	String nan_bezero = "";
 	String nan_langile = "";
+	String lanpostua = "";
+	String [] entitate_izen = null;
+	String[] sukurtsal_kok = null;
 	private JTable table_entitateKont;
 	private JTable transfer_ikusi_table;
 	private JTextField txt_jasotzaile;
@@ -285,9 +293,32 @@ public class App extends JFrame {
 		JButton btn_langile_sartu = new JButton("Sartu");
 		btn_langile_sartu.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				if(metodoak.langileLogin(txt_langile_erabiltzaile.getText(),String.valueOf(passLangile.getPassword()))!=null) {
+				lanpostua = metodoak.langileLogin(txt_langile_erabiltzaile.getText(),String.valueOf(passLangile.getPassword()));
+				if(lanpostua!=null) {					
 					nan_langile = txt_langile_erabiltzaile.getText();
-					metodoak.langileaKargatu(nan_langile);
+					langile = metodoak.langileaKargatu(nan_langile,lanpostua);
+					
+					entitate_izen = metodoak.langilearenEntitateak(langile);			
+
+					sukurtsal_kok = metodoak.langilearenSukurtsalak(langile, langile.getSukurtsalak().get(0).getEntitateBankario().getIzena());
+					JComboBox cb_sukurtsala = new JComboBox(sukurtsal_kok);
+					cb_sukurtsala.setBounds(412, 317, 230, 30);
+					sukurtsalak.add(cb_sukurtsala);
+					
+					JComboBox cb_entitate = new JComboBox(entitate_izen);
+					cb_entitate.addActionListener (new ActionListener () {
+						public void actionPerformed(ActionEvent e) {
+							sukurtsal_kok = metodoak.langilearenSukurtsalak(langile, cb_entitate.getSelectedItem().toString());
+							cb_sukurtsala.removeAllItems();
+							DefaultComboBoxModel sukurtsal_kokapena = new DefaultComboBoxModel(sukurtsal_kok);
+							cb_sukurtsala.setModel(sukurtsal_kokapena);
+						}
+					});
+					cb_entitate.setBounds(460, 278, 131, 30);
+					sukurtsalak.add(cb_entitate);	
+					
+					
+					
 					loginLangile.setVisible(false);
 					sukurtsalak.setVisible(true);
 				}else {
@@ -1505,18 +1536,9 @@ public class App extends JFrame {
 		lbl_entitate.setBounds(335, 276, 131, 30);
 		sukurtsalak.add(lbl_entitate);
 		
-		JComboBox cb_entitate = new JComboBox();
-		cb_entitate.setBounds(460, 278, 131, 30);
-		sukurtsalak.add(cb_entitate);
-		
 		JLabel lbl_sukurtsal = new JLabel("Sukurtsala:");
 		lbl_sukurtsal.setFont(new Font("Tahoma", Font.PLAIN, 14));
 		lbl_sukurtsal.setBounds(335, 317, 81, 30);
-		sukurtsalak.add(lbl_sukurtsal);
-		
-		JComboBox cb_sukurtsala = new JComboBox();
-		cb_sukurtsala.setBounds(412, 317, 131, 30);
-		sukurtsalak.add(cb_sukurtsala);
-		
+		sukurtsalak.add(lbl_sukurtsal);		
 	}
 }

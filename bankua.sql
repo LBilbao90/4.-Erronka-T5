@@ -1,11 +1,11 @@
 -- phpMyAdmin SQL Dump
--- version 5.2.0
+-- version 5.2.1
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 27-04-2023 a las 10:18:11
--- Versión del servidor: 10.4.27-MariaDB
--- Versión de PHP: 8.2.0
+-- Tiempo de generación: 27-04-2023 a las 19:38:12
+-- Versión del servidor: 10.4.28-MariaDB
+-- Versión de PHP: 8.2.4
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -104,6 +104,17 @@ CREATE TABLE `hipoteka` (
   `IBAN` char(24) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
+--
+-- Volcado de datos para la tabla `hipoteka`
+--
+
+INSERT INTO `hipoteka` (`idHipoteka`, `kantitatea`, `ordaindutakoa`, `komisioa`, `hasieraData`, `amaieraData`, `egoera`, `IBAN`) VALUES
+(1, 120000, 10000, 500, '2023-05-01', '2033-05-01', 'onartuta', 'ES3467890003915285942937'),
+(2, 80000, 6000, 300, '2023-06-01', NULL, 'eskatuta', 'ES2598760153921924586673'),
+(3, 150000, 12000, 800, '2023-07-01', '2033-07-01', 'onartuta', 'ES0654320001418753450238'),
+(4, 60000, 5000, 250, '2023-08-01', NULL, 'errefusatua', 'ES9723450111545932515164'),
+(5, 100000, 8000, 400, '2013-09-01', '2023-03-01', 'itxita', 'ES9723450002985781118223');
+
 -- --------------------------------------------------------
 
 --
@@ -119,6 +130,24 @@ CREATE TABLE `kontubankario` (
   `id_sukurtsal` int(11) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
+--
+-- Volcado de datos para la tabla `kontubankario`
+--
+
+INSERT INTO `kontubankario` (`IBAN`, `saldoa`, `hilekoLimitea`, `sorreraData`, `egoera`, `id_sukurtsal`) VALUES
+('ES0654320001418753450238', 5564, 3000, '2015-04-20', 'aktiboa', 12),
+('ES0654320078323475235803', 2498, 1500, '2021-12-15', 'aktiboa', 11),
+('ES0654320091166125485063', 100, 5000, '2010-05-15', 'aktiboa', 10),
+('ES2598760011153710456683', 5000, 1500, '2006-12-15', 'aktiboa', 8),
+('ES2598760153921924586673', 9000, 3000, '2010-10-26', 'aktiboa', 9),
+('ES2598760401403456015845', 10000, 5000, '2019-02-01', 'aktiboa', 7),
+('ES3467890003915285942937', 5000, 3000, '2018-11-02', 'aktiboa', 6),
+('ES3467890500545482067256', 2000, 1500, '2021-12-15', 'aktiboa', 5),
+('ES3467895948791937106722', 10000, 5000, '2019-08-23', 'aktiboa', 4),
+('ES9723450002985781118223', 2000, 1500, '2021-12-15', 'aktiboa', 2),
+('ES9723450016313512172028', 5000, 3000, '2022-03-01', 'aktiboa', 3),
+('ES9723450111545932515164', 1500, 1000, '2022-01-01', 'aktiboa', 1);
+
 -- --------------------------------------------------------
 
 --
@@ -130,6 +159,17 @@ CREATE TABLE `kudeatu` (
   `IBAN` char(24) NOT NULL,
   `id_txartela` char(16) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Volcado de datos para la tabla `kudeatu`
+--
+
+INSERT INTO `kudeatu` (`nan`, `IBAN`, `id_txartela`) VALUES
+('12345678A', 'ES9723450002985781118223', '1648237550487245'),
+('12345678A', 'ES9723450111545932515164', '0524837194618824'),
+('12345678B', 'ES3467895948791937106722', '1934679558422571'),
+('12345678C', 'ES0654320078323475235803', '9366410728416245'),
+('12345678C', 'ES2598760011153710456683', '4534976157268453');
 
 -- --------------------------------------------------------
 
@@ -155,7 +195,8 @@ CREATE TABLE `langile` (
 --
 
 INSERT INTO `langile` (`id_langile`, `nan`, `izena`, `abizenak`, `jaiotzeData`, `sexua`, `telefonoa`, `pasahitza`, `lanpostua`, `id_sukurtsal`) VALUES
-(1, '12345678B', 'Ibai', 'Alvarez', '2000-10-21', 'gizon', '111222333', '1234', 'zuzendaria', 1);
+(1, '12345678B', 'Ibai', 'Alvarez', '2000-10-21', 'gizon', '111222333', '1234', 'zuzendaria', 1),
+(2, '12345678G', 'GOD', 'DIOS', '2000-09-10', 'gizon', '000000000', '1234', 'god', 1);
 
 -- --------------------------------------------------------
 
@@ -204,6 +245,17 @@ CREATE TABLE `transferentzia` (
   `IBANIgortzaile` char(24) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
+--
+-- Volcado de datos para la tabla `transferentzia`
+--
+
+INSERT INTO `transferentzia` (`idTransferentzia`, `kantitatea`, `TransferentziaData`, `jasotzailea`, `kontzeptua`, `komisioa`, `IBANIgortzaile`) VALUES
+(1, 5000, '2022-12-07', 'ES9723450111545932515164', 'Ordainketa 1', 2.5, 'ES2598760153921924586673'),
+(2, 2000, '2019-06-23', 'ES9723450002985781118223', 'Ordainketa 2', 1, 'ES3467890500545482067256'),
+(3, 10000, '2016-04-11', 'ES2598760153921924586673', 'Ordainketa 3', 5, 'ES0654320001418753450238'),
+(4, 800, '2020-08-01', 'ES3467890003915285942937', 'Ordainketa 4', 0.4, 'ES9723450111545932515164'),
+(5, 1500, '2021-12-09', 'ES2598760401403456015845', 'Ordainketa 5', 0.75, 'ES0654320001418753450238');
+
 -- --------------------------------------------------------
 
 --
@@ -215,6 +267,17 @@ CREATE TABLE `txartela` (
   `segurtasunKodea` char(4) DEFAULT NULL,
   `mota` enum('kredito','debito') DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Volcado de datos para la tabla `txartela`
+--
+
+INSERT INTO `txartela` (`id_txartela`, `segurtasunKodea`, `mota`) VALUES
+('0524837194618824', '5678', 'debito'),
+('1648237550487245', '4321', 'kredito'),
+('1934679558422571', '9876', 'kredito'),
+('4534976157268453', '1234', 'kredito'),
+('9366410728416245', '8765', 'debito');
 
 --
 -- Índices para tablas volcadas
@@ -313,19 +376,19 @@ ALTER TABLE `entitatebankario`
 -- AUTO_INCREMENT de la tabla `hipoteka`
 --
 ALTER TABLE `hipoteka`
-  MODIFY `idHipoteka` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `idHipoteka` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
 -- AUTO_INCREMENT de la tabla `langile`
 --
 ALTER TABLE `langile`
-  MODIFY `id_langile` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id_langile` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT de la tabla `transferentzia`
 --
 ALTER TABLE `transferentzia`
-  MODIFY `idTransferentzia` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `idTransferentzia` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
 -- Restricciones para tablas volcadas

@@ -1,11 +1,10 @@
 package model;
 
-public class God extends Pertsona{
+import java.util.ArrayList;
 
-	public God(String nan, String izena, String abizena, String jaiotzeData, String sexua, String telefonoa, String pasahitza) {
-		super(nan, izena, abizena, jaiotzeData, sexua, telefonoa, pasahitza);
+public class God extends Langilea{
+
+	public God(String nan, String izena, String abizena, String jaiotzeData, String sexua, String telefonoa,String pasahitza, String lanpostu, ArrayList<Sukurtsala> sukurtsalak) {
+		super(nan, izena, abizena, jaiotzeData, sexua, telefonoa, pasahitza, lanpostu, sukurtsalak);
 	}
-	
-	
-
 }

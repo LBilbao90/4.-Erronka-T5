@@ -12,6 +12,7 @@ import com.mysql.jdbc.Statement;
 import model.Bezeroa;
 import model.EntitateBankario;
 import model.Gerentea;
+import model.God;
 import model.KontuBankario;
 import model.Langilea;
 import model.Sukurtsala;
@@ -139,6 +140,8 @@ public class Metodoak {
 					login="gerentea";
 				}else if(req.getString(1).equals("zuzendaria")) {
 					login="zuzendaria";
+				}else if(req.getString(1).equals("god")) {
+					login="god";
 				}
 			}
 			conn.close();
@@ -289,15 +292,16 @@ public class Metodoak {
 		return bezero;
 	}
 	
-	public Langilea langileaKargatu(String nan_langile) {
+	public Langilea langileaKargatu(String nan_langile, String lanpostu) {
 		Langilea langilea = null;
 		
 		Connection conn;					
 		try {
 			//Datu baseari konexioa eta Langilea kargatzeko kontsulta egiten dugu
-			conn = (Connection) DriverManager.getConnection ("jdbc:mysql://localhost:3306/bankua","root","");
+			conn = (Connection) DriverManager.getConnection (url,erabiltzaile,pass);
 			Statement comand1 = (Statement) conn.createStatement();	
 			ResultSet req1 = comand1.executeQuery("select l."+nan+",l."+izena+", l."+abizenak+", l."+jaiotzeData+", l."+sexua+", l."+telefonoa+", l."+pasahitza+", l."+lanpostua+" from "+langile+" l where l."+nan+"='"+nan_langile+"';");
+			
 			//Daturik aurkitzen badu
 			if(req1.next()) {
 				String lang_nan = req1.getString(1);
@@ -315,7 +319,14 @@ public class Metodoak {
 				
 				//Langilean dauden Sukurtsalen kontsulta
 				Statement comand2 = (Statement) conn.createStatement();	
-				ResultSet req2 = comand2.executeQuery("select s."+id_sukurtsal+", s."+kodSukurtsala+", s."+kokalekua+" from "+sukurtsala+" s join "+langile+" l on s."+id_sukurtsal+"=l."+id_sukurtsal+" where l."+nan+"='"+nan_langile+"';");
+				ResultSet req2 = null;
+				if(lanpostu.equals("zuzendaria")) {
+					req2 = comand2.executeQuery("select s."+id_sukurtsal+", s."+kodSukurtsala+", s."+kokalekua+" from "+sukurtsala+" s join "+entitatebankario+" e on s."+id_entitate+"=e."+id_entitate+" where s."+id_entitate+"=(select s."+id_entitate+" from "+sukurtsala+" s JOIN "+langile+" l on s."+id_sukurtsal+"=l."+id_sukurtsal+" where l."+nan+"='"+nan_langile+"');");
+				}else if(lanpostu.equals("gerentea")) {
+					req2 = comand2.executeQuery("select s."+id_sukurtsal+", s."+kodSukurtsala+", s."+kokalekua+" from "+sukurtsala+" s join "+langile+" l on s."+id_sukurtsal+"=l."+id_sukurtsal+" where l."+nan+"='"+nan_langile+"';");
+				}else if(lanpostu.equals("god")) {
+					req2 = comand2.executeQuery("select s."+id_sukurtsal+", s."+kodSukurtsala+", s."+kokalekua+" from "+sukurtsala+" s;");
+				}
 				//Daturik aurkitzen badu
 				while(req2.next()) {
 					String suk_id = req2.getString(1);
@@ -341,6 +352,7 @@ public class Metodoak {
 					//Sukurtsalean dauden Kontu Bankarioaren kontsulta
 					Statement comand4 = (Statement) conn.createStatement();	
 					ResultSet req4 = comand4.executeQuery("select k."+iban+",k."+saldoa+",k."+hilekoLimitea+",k."+sorreraData+",k."+egoera+" from "+kontuBankario+" k join "+sukurtsala+" s on k."+id_sukurtsal+"=s."+id_sukurtsal+" where k."+id_sukurtsal+"='"+suk_id+"';");
+					
 					//Daturik aurkitzen badu
 					while(req4.next()) {
 						String kont_iban = req4.getString(1);
@@ -441,7 +453,9 @@ public class Metodoak {
 					langilea = new Gerentea(lang_nan,lang_izen,lang_abiz,langile_data,lang_sex,lang_tel,lang_pass,lang_lanpostu,sukurtsalak);
 				}else if(lang_lanpostu.equals("zuzendaria")) {
 					langilea = new Zuzendaria(lang_nan,lang_izen,lang_abiz,langile_data,lang_sex,lang_tel,lang_pass,lang_lanpostu,sukurtsalak);
-				}
+				}else if(lang_lanpostu.equals("god")) {
+					langilea = new God(lang_nan,lang_izen,lang_abiz,langile_data,lang_sex,lang_tel,lang_pass,lang_lanpostu,sukurtsalak);
+					}
 			}
 			conn.close();
 		}catch(SQLException ex) {
@@ -480,5 +494,52 @@ public class Metodoak {
 			System.out.println("ErrorCode: "+ ex.getErrorCode());
 		}		
 		return entitateak;
+	}
+
+	public String[] langilearenEntitateak(Langilea langilea) {
+		String[] entitateak = new String[0];
+		boolean aurkitu = false;
+		for(int i=0;i<langilea.getSukurtsalak().size();i++) {
+			aurkitu = false;
+			if(entitateak.length==0) {
+				String[] entitateak_prob = new String[entitateak.length+1];
+				for(int k=0;k<entitateak.length;k++) {
+					entitateak_prob[k]=entitateak[k];
+				}
+				entitateak_prob[entitateak.length]= langilea.getSukurtsalak().get(i).getEntitateBankario().getIzena();
+				entitateak = entitateak_prob;
+			}else {
+				for(int j=0;j<entitateak.length;j++) {
+					if(langilea.getSukurtsalak().get(i).getEntitateBankario().getIzena().equals(entitateak[j])) {
+						aurkitu=true;
+					}else if(!langilea.getSukurtsalak().get(i).getEntitateBankario().getIzena().equals(entitateak[j]) && j==entitateak.length-1 && !aurkitu) {
+						String[] entitateak_prob = new String[entitateak.length+1];
+						for(int k=0;k<entitateak.length;k++) {
+							entitateak_prob[k]=entitateak[k];
+						}
+						entitateak_prob[entitateak.length]= langilea.getSukurtsalak().get(i).getEntitateBankario().getIzena();
+						entitateak = entitateak_prob;
+					}
+				}
+			}
+		}		
+		return entitateak;
+	}
+	
+	public String[] langilearenSukurtsalak(Langilea langilea, String entitatea) {
+		String[] sukurtsalak = new String[0];
+		
+		for(int i=0;i<langilea.getSukurtsalak().size();i++) {
+			if(langilea.getSukurtsalak().get(i).getEntitateBankario().getIzena().equals(entitatea)) {
+				String[] sukurtsalak_prob = new String[sukurtsalak.length+1];
+				for(int j=0;j<sukurtsalak.length;j++) {
+					sukurtsalak_prob[j]=sukurtsalak[j];
+				}
+				sukurtsalak_prob[sukurtsalak.length]=langilea.getSukurtsalak().get(i).getKokalekua();
+				sukurtsalak=sukurtsalak_prob;
+			}
+		}
+		
+		return sukurtsalak;
 	}
 }
