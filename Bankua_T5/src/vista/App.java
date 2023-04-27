@@ -48,6 +48,7 @@ public class App extends JFrame {
 	ArrayList<EntitateBankario> entitateak = new ArrayList<>();
 	Bezeroa bezero = null;
 	String nan_bezero = "";
+	String nan_langile = "";
 	private JTable table_entitateKont;
 	private JTable transfer_ikusi_table;
 	private JTextField txt_jasotzaile;
@@ -285,6 +286,8 @@ public class App extends JFrame {
 		btn_langile_sartu.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				if(metodoak.langileLogin(txt_langile_erabiltzaile.getText(),String.valueOf(passLangile.getPassword()))!=null) {
+					nan_langile = txt_langile_erabiltzaile.getText();
+					metodoak.langileaKargatu(nan_langile);
 					loginLangile.setVisible(false);
 					sukurtsalak.setVisible(true);
 				}else {

@@ -9,14 +9,12 @@ public class Txartela {
 
 	// Bezerorako Sortzailea
 	public Txartela(String segurtasunKodea, String mota, KontuBankario kontuBankario) {
-		super();
 		this.segurtasunKodea = segurtasunKodea;
 		this.mota = mota;
 		this.kontuBankario=kontuBankario;
 	}
 	// Langilerako Sortzailea
 	public Txartela(String segurtasunKodea, String mota, Bezeroa bezero) {
-		super();
 		this.segurtasunKodea = segurtasunKodea;
 		this.mota = mota;
 		this.bezero=bezero;
