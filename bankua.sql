@@ -1,11 +1,11 @@
 -- phpMyAdmin SQL Dump
--- version 5.2.1
+-- version 5.2.0
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 26-04-2023 a las 17:57:27
--- Versión del servidor: 10.4.28-MariaDB
--- Versión de PHP: 8.2.4
+-- Tiempo de generación: 27-04-2023 a las 10:18:11
+-- Versión del servidor: 10.4.27-MariaDB
+-- Versión de PHP: 8.2.0
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -34,7 +34,7 @@ CREATE TABLE `bezeroa` (
   `izena` varchar(20) DEFAULT NULL,
   `abizenak` varchar(30) DEFAULT NULL,
   `jaiotzeData` date DEFAULT NULL,
-  `sexua` enum('gizon','emakume') DEFAULT NULL,
+  `sexua` enum('gizona','emakumea') DEFAULT NULL,
   `telefonoa` char(9) DEFAULT NULL,
   `pasahitza` varchar(30) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
@@ -44,9 +44,9 @@ CREATE TABLE `bezeroa` (
 --
 
 INSERT INTO `bezeroa` (`NAN`, `izena`, `abizenak`, `jaiotzeData`, `sexua`, `telefonoa`, `pasahitza`) VALUES
-('12345678A', 'Aingeru', 'Siranaula', '2002-10-21', 'gizon', '111222333', '12345678'),
-('12345678B', 'Ibai', 'Alvarez', '2000-08-16', 'gizon', '444555666', '1234'),
-('12345678C', 'Hodei', 'Martinez', '2004-04-16', 'gizon', '777888999', '12345678');
+('12345678A', 'Aingeru', 'Siranaula', '2002-10-21', 'gizona', '111222333', '12345678'),
+('12345678B', 'Ibai', 'Alvarez', '2000-08-16', 'gizona', '444555666', '1234'),
+('12345678C', 'Hodei', 'Martinez', '2004-04-16', 'gizona', '777888999', '12345678');
 
 -- --------------------------------------------------------
 

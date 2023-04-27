@@ -24,45 +24,47 @@ public abstract class Pertsona {
 	
 	public Pertsona() {}
 	
-	// Getters and Setters
+	// Getters
 	public String getNan() {
 		return nan;
-	}
-	public void setNan(String nan) {
-		this.nan = nan;
 	}
 	public String getIzena() {
 		return izena;
 	}
-	public void setIzena(String izena) {
-		this.izena = izena;
-	}
 	public String getAbizena() {
 		return abizena;
-	}
-	public void setAbizena(String abizena) {
-		this.abizena = abizena;
 	}
 	public String getJaiotzeData() {
 		return jaiotzeData;
 	}
-	public void setJaiotzeData(String jaiotzeData) {
-		this.jaiotzeData = jaiotzeData;
-	}
 	public String getSexua() {
 		return sexua;
-	}
-	public void setSexua(String sexua) {
-		this.sexua = sexua;
 	}
 	public String getTelefonoa() {
 		return telefonoa;
 	}
-	public void setTelefonoa(String telefonoa) {
-		this.telefonoa = telefonoa;
-	}
 	public String getPasahitza() {
 		return pasahitza;
+	}
+	
+	// Setters
+	public void setNan(String nan) {
+		this.nan = nan;
+	}
+	public void setIzena(String izena) {
+		this.izena = izena;
+	}
+	public void setAbizena(String abizena) {
+		this.abizena = abizena;
+	}
+	public void setJaiotzeData(String jaiotzeData) {
+		this.jaiotzeData = jaiotzeData;
+	}
+	public void setSexua(String sexua) {
+		this.sexua = sexua;
+	}
+	public void setTelefonoa(String telefonoa) {
+		this.telefonoa = telefonoa;
 	}
 	public void setPasahitza(String pasahitza) {
 		this.pasahitza = pasahitza;

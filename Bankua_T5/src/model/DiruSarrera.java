@@ -19,27 +19,29 @@ public class DiruSarrera {
 	public DiruSarrera() {
 	}
 	
-	// Getters and Setters
+	// Getters
 	public double getKantitatea() {
 		return kantitatea;
-	}
-	public void setKantitatea(double kantitatea) {
-		this.kantitatea = kantitatea;
 	}
 	public String getSarreraData() {
 		return sarreraData;
 	}
-	public void setSarreraData(String sarreraData) {
-		this.sarreraData = sarreraData;
-	}
 	public String getKontzeptua() {
 		return kontzeptua;
 	}
-	public void setKontzeptua(String kontzeptua) {
-		this.kontzeptua = kontzeptua;
-	}
 	public String getIgortzailea() {
 		return igortzailea;
+	}
+	
+	// Setters
+	public void setKantitatea(double kantitatea) {
+		this.kantitatea = kantitatea;
+	}
+	public void setSarreraData(String sarreraData) {
+		this.sarreraData = sarreraData;
+	}
+	public void setKontzeptua(String kontzeptua) {
+		this.kontzeptua = kontzeptua;
 	}
 	public void setIgortzailea(String igortzailea) {
 		this.igortzailea = igortzailea;

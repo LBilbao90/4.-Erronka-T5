@@ -24,18 +24,12 @@ public class Hipoteka implements Komisioa{
 		this.komisioa = 10;
 	}
 
-	// Getters and Setters
+	// Getters
 	public double getKantitatea() {
 		return kantitatea;
 	}
-	public void setKantitatea(double kantitatea) {
-		this.kantitatea = kantitatea;
-	}
 	public double getOrdaindutakoa() {
 		return ordaindutakoa;
-	}
-	public void setOrdaindutakoa(double ordaindutakoa) {
-		this.ordaindutakoa = ordaindutakoa;
 	}
 	public double getKomisioa() {
 		return komisioa;
@@ -43,17 +37,25 @@ public class Hipoteka implements Komisioa{
 	public String getHasieraData() {
 		return hasieraData;
 	}
-	public void setHasieraData(String hasieraData) {
-		this.hasieraData = hasieraData;
-	}
 	public String getAmaieraData() {
 		return amaieraData;
 	}
-	public void setAmaieraData(String amaieraData) {
-		this.amaieraData = amaieraData;
-	}
 	public String getEgoera() {
 		return egoera;
+	}
+	
+	// Setters
+	public void setKantitatea(double kantitatea) {
+		this.kantitatea = kantitatea;
+	}
+	public void setOrdaindutakoa(double ordaindutakoa) {
+		this.ordaindutakoa = ordaindutakoa;
+	}
+	public void setHasieraData(String hasieraData) {
+		this.hasieraData = hasieraData;
+	}
+	public void setAmaieraData(String amaieraData) {
+		this.amaieraData = amaieraData;
 	}
 	public void setEgoera(String egoera) {
 		this.egoera = egoera;

@@ -22,33 +22,35 @@ public class Transferentzia implements Komisioa{
 		this.komisioa = 2;
 	}
 
-	// Getters and Setters
+	// Getters
 	public double getKantitatea() {
 		return kantitatea;
-	}
-	public void setKantitatea(double kantitatea) {
-		this.kantitatea = kantitatea;
 	}
 	public String getTransferentziaData() {
 		return transferentziaData;
 	}
-	public void setTransferentziaData(String transferentziaData) {
-		this.transferentziaData = transferentziaData;
-	}
 	public String getKotzeptua() {
 		return kotzeptua;
-	}
-	public void setKotzeptua(String kotzeptua) {
-		this.kotzeptua = kotzeptua;
 	}
 	public String getJasotzailea() {
 		return jasotzailea;
 	}
-	public void setJasotzailea(String jasotzailea) {
-		this.jasotzailea = jasotzailea;
-	}
 	public double getKomisioa() {
 		return komisioa;
+	}
+	
+	// Setters
+	public void setKantitatea(double kantitatea) {
+		this.kantitatea = kantitatea;
+	}
+	public void setTransferentziaData(String transferentziaData) {
+		this.transferentziaData = transferentziaData;
+	}
+	public void setKotzeptua(String kotzeptua) {
+		this.kotzeptua = kotzeptua;
+	}
+	public void setJasotzailea(String jasotzailea) {
+		this.jasotzailea = jasotzailea;
 	}
 	
 	// ToString

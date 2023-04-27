@@ -1,23 +1,27 @@
 package model;
 
+import java.util.Objects;
 
 public class Txartela {
 	private String segurtasunKodea;
 	private String mota; // debito, kredito
 	private KontuBankario kontuBankario;
-	private Bezeroa bezero;
+	private Bezeroa bezeroa;
 
+	// Constructors
+	
 	// Bezerorako Sortzailea
 	public Txartela(String segurtasunKodea, String mota, KontuBankario kontuBankario) {
 		this.segurtasunKodea = segurtasunKodea;
 		this.mota = mota;
-		this.kontuBankario=kontuBankario;
+		this.kontuBankario = kontuBankario;
 	}
+	
 	// Langilerako Sortzailea
-	public Txartela(String segurtasunKodea, String mota, Bezeroa bezero) {
+	public Txartela(String segurtasunKodea, String mota, Bezeroa bezeroa) {
 		this.segurtasunKodea = segurtasunKodea;
 		this.mota = mota;
-		this.bezero=bezero;
+		this.bezeroa = bezeroa;
 	}
 		
 	public Txartela() {
@@ -33,6 +37,10 @@ public class Txartela {
 	public KontuBankario getKontuBankario() {
 		return kontuBankario;
 	}
+	public Bezeroa getBezeroa() {
+		return bezeroa;
+	}
+	
 	//Setters
 	public void setSegurtasunKodea(String segurtasunKodea) {
 		this.segurtasunKodea = segurtasunKodea;
@@ -43,17 +51,14 @@ public class Txartela {
 	public void setKontuBankario(KontuBankario kontuBankario) {
 		this.kontuBankario = kontuBankario;
 	}
-	public Bezeroa getBezero() {
-		return bezero;
-	}
-	public void setBezero(Bezeroa bezero) {
-		this.bezero = bezero;
+	public void setBezeroa(Bezeroa bezeroa) {
+		this.bezeroa = bezeroa;
 	}
 	
 	// ToString
 	@Override
 	public String toString() {
-		return "Txartela segurtasunKodea=" + segurtasunKodea + ", mota=" + mota + ", kontuBankario=" + kontuBankario;
+		return "Txartela segurtasunKodea=" + segurtasunKodea + ", mota=" + mota;
 	}
 
 	// Equals
@@ -62,7 +67,9 @@ public class Txartela {
 		if (obj == null)
 			return false;
 		Txartela other = (Txartela) obj;
-		return false;//Objects.equals(idTxartela, other.idTxartela);
+		return Objects.equals(segurtasunKodea, other.segurtasunKodea)
+		&& Objects.equals(mota, other.mota)
+		&& Objects.equals(kontuBankario, other.kontuBankario)
+		&& Objects.equals(bezeroa, other.bezeroa);
 	}
-
 }
