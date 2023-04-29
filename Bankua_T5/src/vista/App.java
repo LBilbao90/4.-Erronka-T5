@@ -55,8 +55,26 @@ public class App extends JFrame {
 	String nan_bezero = "";
 	String nan_langile = "";
 	String lanpostua = "";
+	String sukurtsal_izen = "";
 	String [] entitate_izen = null;
 	String[] sukurtsal_kok = null;
+	String[][] sukurtsal_kontuak = null;
+	//Taulen header
+	String[] kontuak_lista = {"IBAN","Saldoa","Egoera"};
+	String[] transfer_header = {"Kantitatea","Transferentzia Data","Jasotzaile IBAN","Kontzeptua","Komisioa"};
+	String[] sarrera_header = {"Kantitatea","Transferentzia Data","Jasotzaile IBAN","Kontzeptua"};
+	
+	String[] langile_kontu_info = null;
+	String[][] transferentzia_info = null;
+	String[][] sarrera_info = null;
+	String langile_aukeratu_iban="";
+	//Combo Box arrayak
+	String[] kontu_egoera = {"aktiboa","izoztuta","ixteko","itxita"};
+	String[] sexu_array = {"gizona","emakumea"};
+	String[] hilak_array = null;	
+	String[] urteak_array= null;
+	String[] egunak_array = null;
+	
 	private JTable table_entitateKont;
 	private JTable transfer_ikusi_table;
 	private JTextField txt_jasotzaile;
@@ -83,6 +101,14 @@ public class App extends JFrame {
 	private JTextField txt_limite_sortu;
 	private JTable hipotekak_table;
 	private JTable itxi_table;
+	JComboBox cb_sukurtsala = null;
+	JComboBox cb_eguna = null;
+	JButton btn_kontu_itzi;
+	JScrollPane kontuak_pane;
+	JLabel lbl_iban_kontua;
+	JLabel lbl_jabeak_kontua;
+	JLabel lbl_saldo_kontua;
+	JScrollPane itxi_pane;
 	
 	/**
 	 * Launch the application.
@@ -118,6 +144,9 @@ public class App extends JFrame {
 		// 			Datuak Kargatu	    //
 		//////////////////////////////////		
 
+		urteak_array = metodoak.urteakBete();
+		hilak_array = metodoak.hilakBete();
+		egunak_array=metodoak.egunakBete(1);
 		
 		//////////////////////////////////
 		// 			 Panelak 		    //
@@ -297,11 +326,11 @@ public class App extends JFrame {
 				if(lanpostua!=null) {					
 					nan_langile = txt_langile_erabiltzaile.getText();
 					langile = metodoak.langileaKargatu(nan_langile,lanpostua);
-					
-					entitate_izen = metodoak.langilearenEntitateak(langile);			
-
+					//Langilearen entitate eta sukurtsalak kargatu
+					entitate_izen = metodoak.langilearenEntitateak(langile);		
 					sukurtsal_kok = metodoak.langilearenSukurtsalak(langile, langile.getSukurtsalak().get(0).getEntitateBankario().getIzena());
-					JComboBox cb_sukurtsala = new JComboBox(sukurtsal_kok);
+					
+					cb_sukurtsala = new JComboBox(sukurtsal_kok);
 					cb_sukurtsala.setBounds(412, 317, 230, 30);
 					sukurtsalak.add(cb_sukurtsala);
 					
@@ -315,9 +344,7 @@ public class App extends JFrame {
 						}
 					});
 					cb_entitate.setBounds(460, 278, 131, 30);
-					sukurtsalak.add(cb_entitate);	
-					
-					
+					sukurtsalak.add(cb_entitate);					
 					
 					loginLangile.setVisible(false);
 					sukurtsalak.setVisible(true);
@@ -523,6 +550,16 @@ public class App extends JFrame {
 		transferentzia.add(btn_atzera_3);
 		
 		JButton btn_atzera_4 = new JButton(logo_atzera);
+		btn_atzera_4.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				if(bezero==null) {
+					infoKontua.setVisible(true);
+				}else if(langile==null) {
+					transferentzia.setVisible(true);
+				}
+				transferentziaIkusi.setVisible(false);
+			}
+		});
 		btn_atzera_4.setOpaque(false);
 		btn_atzera_4.setContentAreaFilled(false);
 		btn_atzera_4.setBorderPainted(false);
@@ -572,6 +609,12 @@ public class App extends JFrame {
 		mugimenduak.add(btn_atzera_10);	
 		
 		JButton btn_atzera_11 = new JButton(logo_atzera);
+		btn_atzera_11.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				gerenteMenu.setVisible(false);
+				sukurtsalak.setVisible(true);
+			}
+		});
 		btn_atzera_11.setOpaque(false);
 		btn_atzera_11.setContentAreaFilled(false);
 		btn_atzera_11.setBorderPainted(false);
@@ -581,8 +624,25 @@ public class App extends JFrame {
 		JButton btn_aurrera_2 = new JButton(logo_aurrera);
 		btn_aurrera_2.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				kontuakLista.setVisible(false);
-				infoKontua.setVisible(true);
+				int row = kontuak_table.getSelectedRow();
+				if(row>=0) {
+					langile_aukeratu_iban=kontuak_table.getModel().getValueAt(row, 0).toString(); 
+					langile_kontu_info = metodoak.langileKontuInfo(langile, langile_aukeratu_iban, sukurtsal_izen);
+					lbl_iban_kontua.setText(langile_kontu_info[0]);
+					lbl_jabeak_kontua.setText(langile_kontu_info[1]);
+					lbl_saldo_kontua.setText(langile_kontu_info[2]);
+
+					JComboBox cb_egoera_kontua = new JComboBox(kontu_egoera);
+					cb_egoera_kontua.setBounds(415, 362, 126, 30);
+					infoKontua.add(cb_egoera_kontua);
+					cb_egoera_kontua.setSelectedItem(langile_kontu_info[3]);
+					
+					txt_limite_kontua.setText(langile_kontu_info[4]);
+					kontuakLista.setVisible(false);
+					infoKontua.setVisible(true);
+				}else {
+					JOptionPane.showMessageDialog(null, "Kontu Bankario bat aukeratu behar duzu.","Alerta", JOptionPane.INFORMATION_MESSAGE);
+				}
 			}
 		});
 		btn_aurrera_2.setOpaque(false);
@@ -592,6 +652,12 @@ public class App extends JFrame {
 		kontuakLista.add(btn_aurrera_2);
 		
 		JButton btn_atzera_12 = new JButton(logo_atzera);
+		btn_atzera_12.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				kontuakLista.setVisible(false);
+				gerenteMenu.setVisible(true);
+			}
+		});
 		btn_atzera_12.setOpaque(false);
 		btn_atzera_12.setContentAreaFilled(false);
 		btn_atzera_12.setBorderPainted(false);
@@ -647,25 +713,28 @@ public class App extends JFrame {
 		btn_atzera_19.setBounds(15, 513, 44, 30);
 		ixtekoKontuak.add(btn_atzera_19);
 
-		JButton btn_aurrera_1_1 = new JButton(logo_aurrera);
-		btn_aurrera_1_1.addActionListener(new ActionListener() {
+		JButton btn_aurrera_3 = new JButton(logo_aurrera);
+		btn_aurrera_3.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				sukurtsalak.setVisible(false);
-				gerenteMenu.setVisible(true);
+				sukurtsal_izen = cb_sukurtsala.getSelectedItem().toString();
+				if(sukurtsal_izen!=null) {
+					if(lanpostua.equals("zuzendaria") || lanpostua.equals("god")) {
+						btn_kontu_itzi.setVisible(true);
+					}else {
+						btn_kontu_itzi.setVisible(false);
+					}
+					sukurtsalak.setVisible(false);
+					gerenteMenu.setVisible(true);
+				}else {
+					JOptionPane.showMessageDialog(null,"Sukurtsala aukeratu!","Error!", JOptionPane.ERROR_MESSAGE);
+				}
 			}
 		});
-		btn_aurrera_1_1.setOpaque(false);
-		btn_aurrera_1_1.setContentAreaFilled(false);
-		btn_aurrera_1_1.setBorderPainted(false);
-		btn_aurrera_1_1.setBounds(873, 513, 44, 30);
-		sukurtsalak.add(btn_aurrera_1_1);
-		
-		JButton btn_atzera_20 = new JButton(logo_atzera);
-		btn_atzera_20.setOpaque(false);
-		btn_atzera_20.setContentAreaFilled(false);
-		btn_atzera_20.setBorderPainted(false);
-		btn_atzera_20.setBounds(15, 513, 44, 30);
-		sukurtsalak.add(btn_atzera_20);
+		btn_aurrera_3.setOpaque(false);
+		btn_aurrera_3.setContentAreaFilled(false);
+		btn_aurrera_3.setBorderPainted(false);
+		btn_aurrera_3.setBounds(873, 513, 44, 30);
+		sukurtsalak.add(btn_aurrera_3);
 		//////////////////////////////////
 		// 			Label       		//
 		//////////////////////////////////
@@ -867,8 +936,6 @@ public class App extends JFrame {
 		sarrerak_panel.setBounds(114, 242, 712, 232);
 		sarrerak.add(sarrerak_panel);
 		
-		sarrerak_table = new JTable();
-		sarrerak_panel.setViewportView(sarrerak_table);
 		
 		JLabel lbl_jasotzaileIban = new JLabel("IBAN Jasotzaile:");
 		lbl_jasotzaileIban.setFont(new Font("Tahoma", Font.PLAIN, 13));
@@ -928,8 +995,6 @@ public class App extends JFrame {
 		transfer_panel.setBounds(114, 242, 712, 232);
 		transferentziaIkusi.add(transfer_panel);
 		
-		transfer_ikusi_table = new JTable();
-		transfer_panel.setViewportView(transfer_ikusi_table);
 		
 		JButton btn_print_1 = new JButton("Imprimatu");
 		btn_print_1.setBounds(410, 502, 107, 30);
@@ -1149,7 +1214,12 @@ public class App extends JFrame {
 		
 		JButton btn_kontu_ikusi = new JButton("Kontuak Ikusi");
 		btn_kontu_ikusi.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
+			public void actionPerformed(ActionEvent e) {	
+				sukurtsal_kontuak=metodoak.langilearenSukurtsalarenKontuak(langile, sukurtsal_izen);
+
+				kontuak_table = new JTable(sukurtsal_kontuak,kontuak_lista);
+				kontuak_pane.setViewportView(kontuak_table);
+				
 				gerenteMenu.setVisible(false);
 				kontuakLista.setVisible(true);
 			}
@@ -1180,6 +1250,23 @@ public class App extends JFrame {
 		JButton btn_erabiltzaile_sortu = new JButton("Erabiltzaile Sortu");
 		btn_erabiltzaile_sortu.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+
+				cb_eguna = new JComboBox(egunak_array);
+				cb_eguna.setBounds(645, 362, 82, 30);
+				erabiltzaileSortu.add(cb_eguna);
+
+				JComboBox cb_hila = new JComboBox(hilak_array);
+				cb_hila.addActionListener (new ActionListener () {
+					public void actionPerformed(ActionEvent e) {
+						egunak_array= metodoak.egunakBete(Integer.parseInt(cb_hila.getSelectedItem().toString()));
+						cb_eguna.removeAllItems();
+						DefaultComboBoxModel egunak_model = new DefaultComboBoxModel(egunak_array);
+						cb_eguna.setModel(egunak_model);
+					}
+				});
+				cb_hila.setBounds(535, 362, 82, 30);
+				erabiltzaileSortu.add(cb_hila);
+				
 				gerenteMenu.setVisible(false);
 				erabiltzaileSortu.setVisible(true);
 			}
@@ -1187,9 +1274,14 @@ public class App extends JFrame {
 		btn_erabiltzaile_sortu.setBounds(516, 355, 153, 34);
 		gerenteMenu.add(btn_erabiltzaile_sortu);
 		
-		JButton btn_kontu_itzi = new JButton("Ixteko Kontuak");
+		btn_kontu_itzi = new JButton("Ixteko Kontuak");
 		btn_kontu_itzi.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				String[][] ixteko_array = metodoak.ixtekoKontuak(langile, sukurtsal_izen);
+				itxi_table = new JTable(ixteko_array,kontuak_lista);
+				itxi_pane.setViewportView(itxi_table);
+				itxi_table.getColumnModel().getColumn(0).setPreferredWidth(200);
+				
 				gerenteMenu.setVisible(false);
 				ixtekoKontuak.setVisible(true);
 			}
@@ -1197,12 +1289,10 @@ public class App extends JFrame {
 		btn_kontu_itzi.setBounds(394, 429, 153, 34);
 		gerenteMenu.add(btn_kontu_itzi);
 				
-		JScrollPane kontuak_pane = new JScrollPane();
+		kontuak_pane = new JScrollPane();
 		kontuak_pane.setBounds(158, 246, 610, 173);
 		kontuakLista.add(kontuak_pane);
 		
-		kontuak_table = new JTable();
-		kontuak_pane.setViewportView(kontuak_table);
 		
 		JLabel lblNewLabel_2_3_1 = new JLabel("KONTU ZERRENDA");
 		lblNewLabel_2_3_1.setFont(new Font("Tahoma", Font.BOLD, 15));
@@ -1224,17 +1314,17 @@ public class App extends JFrame {
 		lbl_saldo_kontu.setBounds(361, 321, 64, 30);
 		infoKontua.add(lbl_saldo_kontu);
 		
-		JLabel lbl_iban_kontua = new JLabel("ibana");
+		lbl_iban_kontua = new JLabel("ibana");
 		lbl_iban_kontua.setFont(new Font("Tahoma", Font.PLAIN, 13));
 		lbl_iban_kontua.setBounds(415, 235, 204, 30);
 		infoKontua.add(lbl_iban_kontua);
 		
-		JLabel lbl_jabeak_kontua = new JLabel("jabe");
+		lbl_jabeak_kontua = new JLabel("jabe");
 		lbl_jabeak_kontua.setFont(new Font("Tahoma", Font.PLAIN, 13));
 		lbl_jabeak_kontua.setBounds(420, 282, 370, 30);
 		infoKontua.add(lbl_jabeak_kontua);
 		
-		JLabel lbl_saldo_kontua = new JLabel("saldo");
+		lbl_saldo_kontua = new JLabel("saldo");
 		lbl_saldo_kontua.setFont(new Font("Tahoma", Font.PLAIN, 13));
 		lbl_saldo_kontua.setBounds(435, 321, 167, 30);
 		infoKontua.add(lbl_saldo_kontua);
@@ -1248,11 +1338,7 @@ public class App extends JFrame {
 		lbl_egoera_kontu.setFont(new Font("Tahoma", Font.PLAIN, 13));
 		lbl_egoera_kontu.setBounds(361, 362, 64, 30);
 		infoKontua.add(lbl_egoera_kontu);
-		
-		JComboBox cb_egoera_kontua = new JComboBox();
-		cb_egoera_kontua.setBounds(415, 362, 126, 30);
-		infoKontua.add(cb_egoera_kontua);
-		
+				
 		JLabel lbl_egoera_kontu_1 = new JLabel("Hileko Limitea:");
 		lbl_egoera_kontu_1.setFont(new Font("Tahoma", Font.PLAIN, 13));
 		lbl_egoera_kontu_1.setBounds(361, 403, 92, 30);
@@ -1266,16 +1352,41 @@ public class App extends JFrame {
 		JButton btn_gorde_aldaketak = new JButton("Gorde Aldaketak");
 		btn_gorde_aldaketak.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				
 			}
 		});
 		btn_gorde_aldaketak.setBounds(392, 470, 153, 34);
 		infoKontua.add(btn_gorde_aldaketak);
 		
 		JButton btn_transferentziak_ikusi = new JButton("Transferentziak Ikusi");
+		btn_transferentziak_ikusi.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				transferentzia_info=metodoak.langileKontuTransfer(langile, langile_aukeratu_iban);
+				
+				transfer_ikusi_table = new JTable(transferentzia_info,transfer_header);
+				transfer_panel.setViewportView(transfer_ikusi_table);
+				transfer_ikusi_table.getColumnModel().getColumn(2).setPreferredWidth(200);
+				
+				infoKontua.setVisible(false);
+				transferentziaIkusi.setVisible(true);
+			}
+		});
 		btn_transferentziak_ikusi.setBounds(731, 424, 180, 34);
 		infoKontua.add(btn_transferentziak_ikusi);
 		
 		JButton btn_dirusarrerak_ikusi = new JButton("Diru Sarrerak Ikusi");
+		btn_dirusarrerak_ikusi.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				sarrera_info=metodoak.langileKontuSarrerak(langile, langile_aukeratu_iban);
+
+				sarrerak_table = new JTable(sarrera_info,sarrera_header);
+				sarrerak_panel.setViewportView(sarrerak_table);
+				sarrerak_table.getColumnModel().getColumn(2).setPreferredWidth(200);
+				
+				infoKontua.setVisible(false);
+				sarrerak.setVisible(true);
+			}
+		});
 		btn_dirusarrerak_ikusi.setBounds(731, 470, 180, 34);
 		infoKontua.add(btn_dirusarrerak_ikusi);
 		
@@ -1308,7 +1419,7 @@ public class App extends JFrame {
 		lbl_sexua.setBounds(333, 320, 82, 30);
 		erabiltzaileSortu.add(lbl_sexua);
 		
-		JComboBox cb_sexua = new JComboBox();
+		JComboBox cb_sexua = new JComboBox(sexu_array);
 		cb_sexua.setBounds(425, 320, 129, 30);
 		erabiltzaileSortu.add(cb_sexua);
 		
@@ -1337,17 +1448,10 @@ public class App extends JFrame {
 		lbl_jaiotze.setBounds(333, 362, 82, 30);
 		erabiltzaileSortu.add(lbl_jaiotze);
 		
-		JComboBox cb_urtea = new JComboBox();
+		JComboBox cb_urtea = new JComboBox(urteak_array);
 		cb_urtea.setBounds(425, 362, 82, 30);
 		erabiltzaileSortu.add(cb_urtea);
-		
-		JComboBox cb_hila = new JComboBox();
-		cb_hila.setBounds(535, 362, 82, 30);
-		erabiltzaileSortu.add(cb_hila);
-		
-		JComboBox cb_eguna = new JComboBox();
-		cb_eguna.setBounds(645, 362, 82, 30);
-		erabiltzaileSortu.add(cb_eguna);
+				
 		
 		JLabel lbl_erabiltzaile_pass_1_1 = new JLabel("/");
 		lbl_erabiltzaile_pass_1_1.setFont(new Font("Tahoma", Font.PLAIN, 14));
@@ -1510,12 +1614,9 @@ public class App extends JFrame {
 		btn_onartu.setBounds(514, 478, 100, 34);
 		hipotekaTaulak.add(btn_onartu);
 		
-		JScrollPane itxi_pane = new JScrollPane();
+		itxi_pane = new JScrollPane();
 		itxi_pane.setBounds(102, 227, 712, 192);
 		ixtekoKontuak.add(itxi_pane);
-		
-		itxi_table = new JTable();
-		itxi_pane.setViewportView(itxi_table);
 		
 		JButton btn_itxi = new JButton("Itxi");
 		btn_itxi.setBounds(390, 450, 100, 34);

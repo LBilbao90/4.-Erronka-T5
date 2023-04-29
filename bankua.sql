@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 27-04-2023 a las 19:38:12
+-- Tiempo de generación: 29-04-2023 a las 14:32:24
 -- Versión del servidor: 10.4.28-MariaDB
 -- Versión de PHP: 8.2.4
 
@@ -63,6 +63,17 @@ CREATE TABLE `dirusarrera` (
   `IBANJasotzaile` char(24) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
+--
+-- Volcado de datos para la tabla `dirusarrera`
+--
+
+INSERT INTO `dirusarrera` (`idSarrera`, `kantitatea`, `sarreraData`, `igortzaile`, `kontzeptua`, `IBANJasotzaile`) VALUES
+(1, 5000, '2022-12-07', 'ES2598760153921924586673', 'Ordainketa 1', 'ES9723450111545932515164'),
+(2, 2000, '2019-06-23', 'ES3467890500545482067256', 'Ordainketa 2', 'ES9723450002985781118223'),
+(3, 10000, '2016-04-11', 'ES0654320001418753450238', 'Ordainketa 3', 'ES2598760153921924586673'),
+(4, 800, '2020-08-01', 'ES9723450111545932515164', 'Ordainketa 4', 'ES3467890003915285942937'),
+(5, 1500, '2021-12-09', 'ES0654320001418753450238', 'Ordainketa 5', 'ES2598760401403456015845');
+
 -- --------------------------------------------------------
 
 --
@@ -100,7 +111,7 @@ CREATE TABLE `hipoteka` (
   `komisioa` double DEFAULT NULL,
   `hasieraData` date DEFAULT NULL,
   `amaieraData` date DEFAULT NULL,
-  `egoera` enum('eskatuta','onartuta','errefusatua','itxita') DEFAULT NULL,
+  `egoera` enum('eskatuta','onartuta','errefusatuta','itxita') DEFAULT NULL,
   `IBAN` char(24) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
@@ -109,11 +120,11 @@ CREATE TABLE `hipoteka` (
 --
 
 INSERT INTO `hipoteka` (`idHipoteka`, `kantitatea`, `ordaindutakoa`, `komisioa`, `hasieraData`, `amaieraData`, `egoera`, `IBAN`) VALUES
-(1, 120000, 10000, 500, '2023-05-01', '2033-05-01', 'onartuta', 'ES3467890003915285942937'),
-(2, 80000, 6000, 300, '2023-06-01', NULL, 'eskatuta', 'ES2598760153921924586673'),
-(3, 150000, 12000, 800, '2023-07-01', '2033-07-01', 'onartuta', 'ES0654320001418753450238'),
-(4, 60000, 5000, 250, '2023-08-01', NULL, 'errefusatua', 'ES9723450111545932515164'),
-(5, 100000, 8000, 400, '2013-09-01', '2023-03-01', 'itxita', 'ES9723450002985781118223');
+(1, 120000, 10000, 5, '2023-05-01', '2033-05-01', 'onartuta', 'ES3467890003915285942937'),
+(2, 80000, 6000, 3, '2023-06-01', NULL, 'eskatuta', 'ES2598760153921924586673'),
+(3, 150000, 12000, 8, '2023-07-01', '2033-07-01', 'onartuta', 'ES0654320001418753450238'),
+(4, 60000, 5000, 9, '2023-08-01', NULL, 'errefusatuta', 'ES9723450111545932515164'),
+(5, 100000, 8000, 4, '2013-09-01', '2023-03-01', 'itxita', 'ES9723450002985781118223');
 
 -- --------------------------------------------------------
 
@@ -145,7 +156,7 @@ INSERT INTO `kontubankario` (`IBAN`, `saldoa`, `hilekoLimitea`, `sorreraData`, `
 ('ES3467890500545482067256', 2000, 1500, '2021-12-15', 'aktiboa', 5),
 ('ES3467895948791937106722', 10000, 5000, '2019-08-23', 'aktiboa', 4),
 ('ES9723450002985781118223', 2000, 1500, '2021-12-15', 'aktiboa', 2),
-('ES9723450016313512172028', 5000, 3000, '2022-03-01', 'aktiboa', 3),
+('ES9723450016313512172028', 5000, 3000, '2022-03-01', 'ixteko', 3),
 ('ES9723450111545932515164', 1500, 1000, '2022-01-01', 'aktiboa', 1);
 
 -- --------------------------------------------------------
@@ -183,7 +194,7 @@ CREATE TABLE `langile` (
   `izena` varchar(20) DEFAULT NULL,
   `abizenak` varchar(30) DEFAULT NULL,
   `jaiotzeData` date DEFAULT NULL,
-  `sexua` enum('gizon','emakume') DEFAULT NULL,
+  `sexua` enum('gizona','emakumea') DEFAULT NULL,
   `telefonoa` char(9) DEFAULT NULL,
   `pasahitza` varchar(20) DEFAULT NULL,
   `lanpostua` enum('god','zuzendaria','gerentea') DEFAULT NULL,
@@ -195,8 +206,9 @@ CREATE TABLE `langile` (
 --
 
 INSERT INTO `langile` (`id_langile`, `nan`, `izena`, `abizenak`, `jaiotzeData`, `sexua`, `telefonoa`, `pasahitza`, `lanpostua`, `id_sukurtsal`) VALUES
-(1, '12345678B', 'Ibai', 'Alvarez', '2000-10-21', 'gizon', '111222333', '1234', 'zuzendaria', 1),
-(2, '12345678G', 'GOD', 'DIOS', '2000-09-10', 'gizon', '000000000', '1234', 'god', 1);
+(1, '12345678B', 'Ibai', 'Alvarez', '2000-10-21', 'gizona', '111222333', '1234', 'zuzendaria', 1),
+(2, '12345678P', 'Ibai', 'Alvarez', '2000-10-21', 'gizona', '111222333', '1234', 'gerentea', 1),
+(3, '12345678G', 'GOD', 'TU PADRE', '2000-10-21', 'gizona', '000000000', '1234', 'god', 1);
 
 -- --------------------------------------------------------
 
@@ -364,7 +376,7 @@ ALTER TABLE `txartela`
 -- AUTO_INCREMENT de la tabla `dirusarrera`
 --
 ALTER TABLE `dirusarrera`
-  MODIFY `idSarrera` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `idSarrera` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
 -- AUTO_INCREMENT de la tabla `entitatebankario`
@@ -382,7 +394,7 @@ ALTER TABLE `hipoteka`
 -- AUTO_INCREMENT de la tabla `langile`
 --
 ALTER TABLE `langile`
-  MODIFY `id_langile` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `id_langile` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT de la tabla `transferentzia`

@@ -4,6 +4,7 @@ package controlador;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 
 import com.mysql.jdbc.Connection;
@@ -99,6 +100,15 @@ public class Metodoak {
 	//Kudeatu
 	final String kudeatu = "kudeatu";
 	
+
+    private static final DecimalFormat df = new DecimalFormat("0.00");
+    
+	/**
+	 * Bezeroaren logina zuzena edo okerra den esaten du.
+	 * @param nan_bez Bezeroaren NAN
+	 * @param pas_bez Bezeroaren pasahitza
+	 * @return <b>true</b> login zuzena bada eta <b>false</b> login okerra bada
+	 */
 	public boolean bezeroLogin(String nan_bez, String pas_bez) {
 		boolean aurkituta = false;
 		
@@ -125,6 +135,12 @@ public class Metodoak {
 		return aurkituta;
 	}
 	
+	/**
+	 * Langilearen logina zuzena edo okerra den esaten du eta zer motatakoa
+	 * @param nan_lang Langilearen NAN
+	 * @param pas_lang Langilearen pasahitza
+	 * @return <b>god</b> langilea GOD erabiltzailea erabiltzean, <b>zuzendaria</b> langilea Zuzendaria erabiltzailea erabiltzean, <b>gerentea</b> langilea Gerentea erabiltzailea erabiltzean eta <b>null</b> logina okerra bada.
+	 */
 	public String langileLogin(String nan_lang, String pas_lang) {
 		String login= null;
 		
@@ -154,6 +170,11 @@ public class Metodoak {
 		return login;
 	}
 	
+	/**
+	 * Bezeroaren klasea kargatzen du datu basetik eta bere barruan dauden atributu guztiak
+	 * @param nan_bezero Bezeroaren NAN
+	 * @return Bezeroaren objetua bere datuekin
+	 */
 	public Bezeroa bezeroaKargatu(String nan_bezero){
 		Bezeroa bezero=null;
 		
@@ -292,6 +313,12 @@ public class Metodoak {
 		return bezero;
 	}
 	
+	/**
+	 * Langilearen klasea kargatzen du datu basetik eta be barruan dauden atributu guztiak
+	 * @param nan_langile Langilearen NAN
+	 * @param lanpostu Langilearen pasahitza
+	 * @return <b>God</b>, <b>Zuzendaria</b> edo <b>Gerentea</b> objetua kargatuta lanpostuaren arabera
+	 */
 	public Langilea langileaKargatu(String nan_langile, String lanpostu) {
 		Langilea langilea = null;
 		
@@ -467,6 +494,10 @@ public class Metodoak {
 		return langilea;
 	}
 	
+	/**
+	 * Datu basean dauden entitate bankarioak kargatzen du botoiak sortzeko
+	 * @return Entitate Bankario ArrayList bat entitate guztiekin
+	 */
 	public ArrayList<EntitateBankario> botoiakSortu(){
 		ArrayList<EntitateBankario> entitateak = new ArrayList<>();		
 		
@@ -496,6 +527,11 @@ public class Metodoak {
 		return entitateak;
 	}
 
+	/**
+	 * Langilearen entitate bankarioak kargatzen ditu
+	 * @param langilea Langilearen objetua
+	 * @return Langilearen entitate bankarioen izenak String motatako Array batean
+	 */
 	public String[] langilearenEntitateak(Langilea langilea) {
 		String[] entitateak = new String[0];
 		boolean aurkitu = false;
@@ -526,6 +562,12 @@ public class Metodoak {
 		return entitateak;
 	}
 	
+	/**
+	 * Langilearen entitate bankarioaren eta lanpostuaren arabera dituen sukurtsalak kargatzen ditu
+	 * @param langilea Langilearen objetua
+	 * @param entitatea Langileak aukeratutako entitate bankarioaren izena
+	 * @return Langileak aukeratutako entitateko sukurtsalak String motatako Array batean
+	 */
 	public String[] langilearenSukurtsalak(Langilea langilea, String entitatea) {
 		String[] sukurtsalak = new String[0];
 		
@@ -542,4 +584,198 @@ public class Metodoak {
 		
 		return sukurtsalak;
 	}
+
+	public String[][] langilearenSukurtsalarenKontuak(Langilea langilea, String sukurtsal_izen){
+		String[][] kontuak = new String[0][3];
+		//Sukurtsalak arakatu
+		for(int i=0;i<langilea.getSukurtsalak().size();i++) {
+			if(langilea.getSukurtsalak().get(i).getKokalekua().equals(sukurtsal_izen)) {
+				//Kontu bankarioak arakatu
+				for(int j=0;j<langilea.getSukurtsalak().get(i).getKontuBankarioak().size();j++) {
+					String[][] kontuak_prob = new String[kontuak.length+1][3];
+					for(int k=0;k<kontuak.length;k++) {
+						for(int h=0;h<kontuak[k].length;h++) {
+							kontuak_prob[k][h]=kontuak[k][h];
+						}
+					}
+					kontuak_prob[kontuak.length][0]=langilea.getSukurtsalak().get(i).getKontuBankarioak().get(j).getIban();
+					kontuak_prob[kontuak.length][1]=String.valueOf(df.format(langilea.getSukurtsalak().get(i).getKontuBankarioak().get(j).getSaldoa())+" €");
+					kontuak_prob[kontuak.length][2]=langilea.getSukurtsalak().get(i).getKontuBankarioak().get(j).getEgoera();
+					kontuak=kontuak_prob;
+				}
+			}
+		}		
+		return kontuak;
+	}
+	
+	public String[] langileKontuInfo(Langilea langilea, String iban, String sukurtsal_izen) {
+		String[] informazio = new String[5];
+		informazio[1]="";
+		for(int i=0;i<langilea.getSukurtsalak().size();i++) {
+			if(langilea.getSukurtsalak().get(i).getKokalekua().equals(sukurtsal_izen)) {
+				//Kontu bankarioak arakatu
+				for(int j=0;j<langilea.getSukurtsalak().get(i).getKontuBankarioak().size();j++) {
+					if(langilea.getSukurtsalak().get(i).getKontuBankarioak().get(j).getIban().equals(iban)) {
+						informazio[0]= iban.substring(0,4)+" "+iban.substring(4,8)+" "+iban.substring(8,12)+" "+" "+iban.substring(12,16)+" "+" "+iban.substring(16,20)+" "+" "+iban.substring(20);
+						for(int k=0;k<langilea.getSukurtsalak().get(i).getKontuBankarioak().get(j).getTxartelak().size();k++) {
+							if(k==0) {
+								informazio[1]=langilea.getSukurtsalak().get(i).getKontuBankarioak().get(j).getTxartelak().get(k).getBezeroa().getIzena()+" "+ langilea.getSukurtsalak().get(i).getKontuBankarioak().get(j).getTxartelak().get(k).getBezeroa().getAbizena();
+							}else {
+								informazio[1]=informazio[1]+", "+langilea.getSukurtsalak().get(i).getKontuBankarioak().get(j).getTxartelak().get(k).getBezeroa().getIzena()+" "+ langilea.getSukurtsalak().get(i).getKontuBankarioak().get(j).getTxartelak().get(k).getBezeroa().getAbizena();
+							}
+						}
+						informazio[2]=String.valueOf(df.format(langilea.getSukurtsalak().get(i).getKontuBankarioak().get(j).getSaldoa())) +" €";
+						informazio[3]=langilea.getSukurtsalak().get(i).getKontuBankarioak().get(j).getEgoera();
+						informazio[4]=String.valueOf(df.format(langilea.getSukurtsalak().get(i).getKontuBankarioak().get(j).getHilekoLimitea()));
+					}
+				}
+			}
+		}		
+		return informazio;		
+	}
+	
+	public String[][] langileKontuTransfer(Langilea langilea, String iban) {
+		String[][] transfer_info = new String[0][5];
+		//Sukurtsalak arakatu
+		for(int i=0;i<langilea.getSukurtsalak().size();i++) {
+			//Kontu Bankarioak arakatu
+			for(int j=0;j<langilea.getSukurtsalak().get(i).getKontuBankarioak().size();j++) {
+				if(langilea.getSukurtsalak().get(i).getKontuBankarioak().get(j).getIban().equals(iban)) {
+					//Transferentziak arakatu
+					for(int k=0;k<langilea.getSukurtsalak().get(i).getKontuBankarioak().get(j).getTransferentziak().size();k++) {
+						
+						String[][] transfer_prob = new String[transfer_info.length+1][5];
+						for(int l=0;l<transfer_info.length;l++) {
+							for(int h=0;h<transfer_info[l].length;h++) {
+								transfer_info[l][h]=transfer_info[l][h];
+							}
+						}
+						transfer_prob[transfer_info.length][0] = df.format(langilea.getSukurtsalak().get(i).getKontuBankarioak().get(j).getTransferentziak().get(k).getKantitatea())+" €";
+						transfer_prob[transfer_info.length][1] = langilea.getSukurtsalak().get(i).getKontuBankarioak().get(j).getTransferentziak().get(k).getTransferentziaData();
+						String jasotzaile_iban = langilea.getSukurtsalak().get(i).getKontuBankarioak().get(j).getTransferentziak().get(k).getJasotzailea();
+						String iban_jaso = jasotzaile_iban.substring(0,4)+" "+jasotzaile_iban.substring(4,8)+" "+jasotzaile_iban.substring(8,12)+" "+" "+jasotzaile_iban.substring(12,16)+" "+" "+jasotzaile_iban.substring(16,20)+" "+" "+jasotzaile_iban.substring(20);
+						transfer_prob[transfer_info.length][2] = iban_jaso;
+						transfer_prob[transfer_info.length][3] = langilea.getSukurtsalak().get(i).getKontuBankarioak().get(j).getTransferentziak().get(k).getKotzeptua();
+						transfer_prob[transfer_info.length][4] = df.format(langilea.getSukurtsalak().get(i).getKontuBankarioak().get(j).getTransferentziak().get(k).getKomisioa())+" %";
+						transfer_info=transfer_prob;
+					}
+				}
+			}
+		}		
+		return transfer_info;
+	}
+	
+	public String[][] langileKontuSarrerak(Langilea langilea, String iban) {
+		String[][] sarrera_info = new String[0][4];
+		//Sukurtsalak arakatu
+		for(int i=0;i<langilea.getSukurtsalak().size();i++) {
+			//Kontu Bankarioak arakatu
+			for(int j=0;j<langilea.getSukurtsalak().get(i).getKontuBankarioak().size();j++) {
+				if(langilea.getSukurtsalak().get(i).getKontuBankarioak().get(j).getIban().equals(iban)) {
+					//Transferentziak arakatu
+					for(int k=0;k<langilea.getSukurtsalak().get(i).getKontuBankarioak().get(j).getDiruSarrerak().size();k++) {
+						
+						String[][] sarrera_prob = new String[sarrera_info.length+1][5];
+						for(int l=0;l<sarrera_info.length;l++) {
+							for(int h=0;h<sarrera_info[l].length;h++) {
+								sarrera_prob[l][h]=sarrera_info[l][h];
+							}
+						}
+						sarrera_prob[sarrera_info.length][0] = df.format(langilea.getSukurtsalak().get(i).getKontuBankarioak().get(j).getDiruSarrerak().get(k).getKantitatea())+" €";
+						sarrera_prob[sarrera_info.length][1] = langilea.getSukurtsalak().get(i).getKontuBankarioak().get(j).getDiruSarrerak().get(k).getSarreraData();
+						String igor_iban = langilea.getSukurtsalak().get(i).getKontuBankarioak().get(j).getDiruSarrerak().get(k).getIgortzailea();
+						String iban_igor = igor_iban.substring(0,4)+" "+igor_iban.substring(4,8)+" "+igor_iban.substring(8,12)+" "+" "+igor_iban.substring(12,16)+" "+" "+igor_iban.substring(16,20)+" "+" "+igor_iban.substring(20);
+						sarrera_prob[sarrera_info.length][2] = iban_igor;
+						sarrera_prob[sarrera_info.length][3] = langilea.getSukurtsalak().get(i).getKontuBankarioak().get(j).getDiruSarrerak().get(k).getKontzeptua();
+						sarrera_info=sarrera_prob;
+					}
+				}
+			}
+		}		
+		return sarrera_info;
+	}
+	
+	public static String[] urteakBete() {
+		String[] urteak= new String[0];
+		
+		for(int i=2003;i>1900;i--) {
+			String[] prob= new String[urteak.length+1];
+			for(int j=0;j<urteak.length;j++) {
+				prob[j]=urteak[j];
+			}
+			prob[urteak.length]=String.valueOf(i);
+			urteak=prob;
+		}		
+		return urteak;
+	}
+	
+	public static String[] hilakBete() {
+		String[] hilak= new String[0];	
+		for(int i=1;i<=12;i++) {
+			String[] prob= new String[hilak.length+1];
+			for(int j=0;j<hilak.length;j++) {
+				prob[j]=hilak[j];
+			}
+			prob[hilak.length]=String.valueOf(i);
+			hilak=prob;
+		}		
+		return hilak;		
+	}
+	
+	public static String[] egunakBete(int hila) {
+		String[] egunak = new String[0];		
+		for(int i=1;i<=31;i++) {
+			if(i<=28 && hila==2) {
+				String[] prob= new String[egunak.length+1];
+				for(int j=0;j<egunak.length;j++) {
+					prob[j]=egunak[j];
+				}
+				prob[egunak.length]=String.valueOf(i);
+				egunak=prob;				
+			}else if(i<=30 && (hila==4 || hila==6 || hila==9 || hila==11)) {
+				String[] prob= new String[egunak.length+1];
+				for(int j=0;j<egunak.length;j++) {
+					prob[j]=egunak[j];
+				}
+				prob[egunak.length]=String.valueOf(i);
+				egunak=prob;				
+			}else if(hila==1 || hila==3 || hila==5 || hila==7 || hila==8 || hila==10 || hila==12) {
+				String[] prob= new String[egunak.length+1];
+				for(int j=0;j<egunak.length;j++) {
+					prob[j]=egunak[j];
+				}
+				prob[egunak.length]=String.valueOf(i);
+				egunak=prob;				
+			}
+		}		
+		return egunak;
+	}
+	
+	public String[][] ixtekoKontuak(Langilea langilea, String sukurtsala){
+		String[][] kontuak = new String[0][3];
+		//Sukurtsalak arakatu
+		for(int i=0;i<langilea.getSukurtsalak().size();i++) {
+			if(langilea.getSukurtsalak().get(i).getKokalekua().equals(sukurtsala)) {
+				//Kontu bankarioak arakatu
+				for(int j=0;j<langilea.getSukurtsalak().get(i).getKontuBankarioak().size();j++) {
+					if(langilea.getSukurtsalak().get(i).getKontuBankarioak().get(j).getEgoera().equals("ixteko")) {
+						String[][] prob = new String[kontuak.length+1][5];
+						for(int l=0;l<kontuak.length;l++) {
+							for(int h=0;h<kontuak[l].length;h++) {
+								prob[l][h]=kontuak[l][h];
+							}
+						}
+						String iban = langilea.getSukurtsalak().get(i).getKontuBankarioak().get(j).getIban();
+						String iban_ixteko = iban.substring(0,4)+" "+iban.substring(4,8)+" "+iban.substring(8,12)+" "+" "+iban.substring(12,16)+" "+" "+iban.substring(16,20)+" "+" "+iban.substring(20);
+						prob[kontuak.length][0]=iban_ixteko;				
+						prob[kontuak.length][1]=String.valueOf(df.format(langilea.getSukurtsalak().get(i).getKontuBankarioak().get(j).getSaldoa()))+" €";
+						prob[kontuak.length][2]=langilea.getSukurtsalak().get(i).getKontuBankarioak().get(j).getEgoera();
+						kontuak=prob;
+					}
+				}
+			}
+		}		
+		return kontuak;
+	}
+	
 }
