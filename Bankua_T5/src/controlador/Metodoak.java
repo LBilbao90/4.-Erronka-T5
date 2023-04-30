@@ -1,11 +1,18 @@
 package controlador;
 
-
+import java.io.PrintWriter; 
+import java.io.File;
+import java.io.FileWriter;
+import java.io.BufferedWriter;
+import java.io.IOException;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.text.DecimalFormat;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.Calendar;
 
 import com.mysql.jdbc.Connection;
 import com.mysql.jdbc.Statement;
@@ -27,7 +34,7 @@ public class Metodoak {
 	
 	final String url = "jdbc:mysql://localhost:3306/bankua";
 	final String erabiltzaile = "root";
-	final String pass="";
+	final String password="";
 	
 	// EntitateBankario
 	final String entitatebankario = "entitatebankario";
@@ -168,6 +175,26 @@ public class Metodoak {
 		}
 				
 		return login;
+	}
+	
+	public void loginErregistratu(String nan) {
+		File file = new File("src/logs/loginLogs.txt");
+		
+			try {
+				FileWriter fw = new FileWriter(file,true);
+		    	BufferedWriter bw = new BufferedWriter(fw);
+		    	PrintWriter pw = new PrintWriter(bw);
+
+	    	   DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss");  
+	    	   LocalDateTime eguna = LocalDateTime.now();
+		    	
+		    	pw.println("Nan: "+nan.toUpperCase()+" - Data: "+dtf.format(eguna));
+				
+		    	pw.close();
+			
+			} catch (IOException e1) {
+				e1.printStackTrace();
+			}			
 	}
 	
 	/**
@@ -325,7 +352,7 @@ public class Metodoak {
 		Connection conn;					
 		try {
 			//Datu baseari konexioa eta Langilea kargatzeko kontsulta egiten dugu
-			conn = (Connection) DriverManager.getConnection (url,erabiltzaile,pass);
+			conn = (Connection) DriverManager.getConnection (url,erabiltzaile,password);
 			Statement comand1 = (Statement) conn.createStatement();	
 			ResultSet req1 = comand1.executeQuery("select l."+nan+",l."+izena+", l."+abizenak+", l."+jaiotzeData+", l."+sexua+", l."+telefonoa+", l."+pasahitza+", l."+lanpostua+" from "+langile+" l where l."+nan+"='"+nan_langile+"';");
 			
@@ -634,6 +661,25 @@ public class Metodoak {
 		return informazio;		
 	}
 	
+	public boolean langileKontuAldaketak(String kontuEgoera, String limite, String kontu_iban) {
+		boolean aldatuta = false;
+		
+		Connection conn;					
+		try {
+			//Datu baseari konexioa eta Bezeroa logeatzeko kontsulta egiten dugu
+			conn = (Connection) DriverManager.getConnection (url,erabiltzaile,password);
+			Statement comand = (Statement) conn.createStatement();	
+			comand.executeUpdate("Update "+kontuBankario+" set "+egoera+"= '"+kontuEgoera+"', "+hilekoLimitea+"= "+limite+" where "+iban+"= '"+kontu_iban+"';");
+			aldatuta = true;
+			conn.close();
+		}catch(SQLException ex) {
+			System.out.println("SQLException: "+ ex.getMessage());
+			System.out.println("SQLState: "+ ex.getSQLState());
+			System.out.println("ErrorCode: "+ ex.getErrorCode());
+		}		
+		return aldatuta;
+	}
+	
 	public String[][] langileKontuTransfer(Langilea langilea, String iban) {
 		String[][] transfer_info = new String[0][5];
 		//Sukurtsalak arakatu
@@ -647,7 +693,7 @@ public class Metodoak {
 						String[][] transfer_prob = new String[transfer_info.length+1][5];
 						for(int l=0;l<transfer_info.length;l++) {
 							for(int h=0;h<transfer_info[l].length;h++) {
-								transfer_info[l][h]=transfer_info[l][h];
+								transfer_prob[l][h]=transfer_info[l][h];
 							}
 						}
 						transfer_prob[transfer_info.length][0] = df.format(langilea.getSukurtsalak().get(i).getKontuBankarioak().get(j).getTransferentziak().get(k).getKantitatea())+" €";
@@ -778,4 +824,23 @@ public class Metodoak {
 		return kontuak;
 	}
 	
+	public boolean bezeroSortu(String izena, String abizena, String nan, String pass, String urte, String hil, String egun, String genero, String tel){
+		boolean erregistratuta = false;
+		String data = urte+"-"+hil+"-"+egun;
+		
+		Connection conn;					
+		try {
+			//Datu baseari konexioa eta Bezeroa logeatzeko kontsulta egiten dugu
+			conn = (Connection) DriverManager.getConnection (url,erabiltzaile,password);
+			Statement comand = (Statement) conn.createStatement();	
+			comand.executeUpdate("insert into "+bezeroa+" values ('"+nan.toUpperCase()+"','"+izena+"','"+abizena+"','"+data+"','"+genero+"','"+tel+"','"+pass+"');");			
+			erregistratuta=true;
+			conn.close();
+		}catch(SQLException ex) {
+			System.out.println("SQLException: "+ ex.getMessage());
+			System.out.println("SQLState: "+ ex.getSQLState());
+			System.out.println("ErrorCode: "+ ex.getErrorCode());
+		}
+		return erregistratuta;
+	}	
 }
