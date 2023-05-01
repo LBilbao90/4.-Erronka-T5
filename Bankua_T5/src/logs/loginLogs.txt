@@ -1,1 +1,21 @@
 Nan: 12345678G - Data: 2023/04/30 17:57:24
+Nan: 12345678B - Data: 2023/05/01 16:13:43
+Bezeroa-> Nan: 12345678B - Data: 2023/05/01 16:19:05
+Bezeroa-> Nan: 12345678A - Data: 2023/05/01 16:21:05
+Bezeroa-> Nan: 12345678A - Data: 2023/05/01 16:22:48
+Bezeroa-> Nan: 12345678A - Data: 2023/05/01 16:27:26
+Bezeroa-> Nan: 12345678A - Data: 2023/05/01 16:29:04
+Bezeroa-> Nan: 12345678A - Data: 2023/05/01 16:36:23
+Langilea-> Nan: 12345678G - Data: 2023/05/01 17:21:55
+Langilea-> Nan: 12345678G - Data: 2023/05/01 17:24:19
+Langilea-> Nan: 12345678G - Data: 2023/05/01 17:26:08
+Langilea-> Nan: 12345678G - Data: 2023/05/01 17:36:09
+Langilea-> Nan: 12345678G - Data: 2023/05/01 17:40:34
+Langilea-> Nan: 12345678G - Data: 2023/05/01 17:45:32
+Langilea-> Nan: 12345678G - Data: 2023/05/01 17:51:01
+Langilea-> Nan: 12345678G - Data: 2023/05/01 17:51:29
+Langilea-> Nan: 12345678G - Data: 2023/05/01 17:52:29
+Langilea-> Nan: 12345678G - Data: 2023/05/01 17:53:03
+Langilea-> Nan: 12345678G - Data: 2023/05/01 17:54:58
+Langilea-> Nan: 12345678G - Data: 2023/05/01 17:58:34
+Langilea-> Nan: 12345678G - Data: 2023/05/01 17:59:22

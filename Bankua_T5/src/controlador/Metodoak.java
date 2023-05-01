@@ -96,6 +96,7 @@ public class Metodoak {
 	final String ordaindutakoa = "ordaindutakoa";
 	final String hasieraData = "hasieraData";
 	final String amaieraData = "amaieraData";
+	final String epeMuga = "epeMuga";
 	
 	// Txartela
 	final String txartela = "txartela";
@@ -177,7 +178,7 @@ public class Metodoak {
 		return login;
 	}
 	
-	public void loginErregistratu(String nan) {
+	public void loginErregistratu(String nan, String mota) {
 		File file = new File("src/logs/loginLogs.txt");
 		
 			try {
@@ -188,7 +189,7 @@ public class Metodoak {
 	    	   DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss");  
 	    	   LocalDateTime eguna = LocalDateTime.now();
 		    	
-		    	pw.println("Nan: "+nan.toUpperCase()+" - Data: "+dtf.format(eguna));
+		    	pw.println(mota+"-> Nan: "+nan.toUpperCase()+" - Data: "+dtf.format(eguna));
 				
 		    	pw.close();
 			
@@ -228,16 +229,17 @@ public class Metodoak {
 				
 				//Txartelak kargatzeko kontsulta egiten dugu
 				Statement comand2 = (Statement) conn.createStatement();	
-				ResultSet req2 = comand2.executeQuery("select "+segurtasunKodea+","+mota+" from "+txartela+" t join "+kudeatu+" ku on t."+id_Txartela+"=ku."+id_Txartela+" where "+nan+"='"+nan_bezero+"';");
+				ResultSet req2 = comand2.executeQuery("select "+segurtasunKodea+","+mota+",t."+id_Txartela+" from "+txartela+" t join "+kudeatu+" ku on t."+id_Txartela+"=ku."+id_Txartela+" where "+nan+"='"+nan_bezero+"';");
 				//Emaitzik badaude
 				while(req2.next()) {
 					String segur_kode = req2.getString(1);
 					String txartel_mota = req2.getString(2);
+					String id_txartel_bez = req2.getString(3);
 					
 					KontuBankario kontuBank = null;
 					//Kontu Bankarioak kargatzeko kontsulta egiten dugu
 					Statement comand3 = (Statement) conn.createStatement();	
-					ResultSet req3 = comand3.executeQuery("select k."+iban+",k."+saldoa+",k."+hilekoLimitea+",k."+sorreraData+",k."+egoera+" from "+kontuBankario+" k join "+kudeatu+" ku on k."+iban+"=ku."+iban+" where ku."+nan+"='"+nan_bezero+"';");
+					ResultSet req3 = comand3.executeQuery("select k."+iban+",k."+saldoa+",k."+hilekoLimitea+",k."+sorreraData+",k."+egoera+" from "+kontuBankario+" k join "+kudeatu+" ku on k."+iban+"=ku."+iban+" where ku."+id_Txartela+"='"+id_txartel_bez+"';");
 					//Emaitzik badaude
 					if(req3.next()) {
 						String iban_bezero = req3.getString(1);
@@ -281,7 +283,7 @@ public class Metodoak {
 						}
 						//Hipoteka kargatzeko kontsulta egiten dugu
 						Statement comand6 = (Statement) conn.createStatement();	
-						ResultSet req6 = comand6.executeQuery("select h."+kantitatea+",h."+ordaindutakoa+",h."+komisioa+",h."+hasieraData+",h."+amaieraData+",h."+egoera+" from "+hipoteka+" h join "+kontuBankario+"  k on h."+iban+"=k."+iban+" where k."+iban+"='"+iban_bezero+"';");
+						ResultSet req6 = comand6.executeQuery("select h."+kantitatea+",h."+ordaindutakoa+",h."+komisioa+",h."+hasieraData+",h."+amaieraData+",h."+egoera+",h."+epeMuga+" from "+hipoteka+" h join "+kontuBankario+"  k on h."+iban+"=k."+iban+" where k."+iban+"='"+iban_bezero+"';");
 						//Emaitzik badaude
 						while(req6.next()) {
 							double h_kant = req6.getDouble(1);
@@ -290,8 +292,9 @@ public class Metodoak {
 							String h_hasiera = req6.getString(4);
 							String h_amaiera = req6.getString(5);
 							String h_egoera = req6.getString(6);
+							String h_epe = req6.getString(7);
 							//Datuak hipotekan gorde
-							hipoteka_kontu = new Hipoteka(h_kant,h_ordaindu,h_komi,h_hasiera,h_amaiera,h_egoera);
+							hipoteka_kontu = new Hipoteka(h_kant,h_ordaindu,h_komi,h_hasiera,h_amaiera,h_egoera,h_epe);
 						}						
 						//Sukurtsala kargatzeko kontsulta egiten dugu
 						Statement comand7 = (Statement) conn.createStatement();	
@@ -450,7 +453,7 @@ public class Metodoak {
 						}
 						//Hipoteka kargatzeko kontsulta egiten dugu
 						Statement comand7 = (Statement) conn.createStatement();	
-						ResultSet req7 = comand7.executeQuery("select h."+kantitatea+",h."+ordaindutakoa+",h."+komisioa+",h."+hasieraData+",h."+amaieraData+",h."+egoera+" from "+hipoteka+" h join "+kontuBankario+"  k on h."+iban+"=k."+iban+" where k."+iban+"='"+kont_iban+"';");
+						ResultSet req7 = comand7.executeQuery("select h."+kantitatea+",h."+ordaindutakoa+",h."+komisioa+",h."+hasieraData+",h."+amaieraData+",h."+egoera+",h."+epeMuga+" from "+hipoteka+" h join "+kontuBankario+"  k on h."+iban+"=k."+iban+" where k."+iban+"='"+kont_iban+"';");
 						//Emaitzik badaude
 						while(req7.next()) {
 							double h_kant = req7.getDouble(1);
@@ -459,8 +462,9 @@ public class Metodoak {
 							String h_hasiera = req7.getString(4);
 							String h_amaiera = req7.getString(5);
 							String h_egoera = req7.getString(6);
+							String h_epe = req7.getString(7);
 							//Datuak hipotekan gorde
-							hipoteka_kontu = new Hipoteka(h_kant,h_ordaindu,h_komi,h_hasiera,h_amaiera,h_egoera);
+							hipoteka_kontu = new Hipoteka(h_kant,h_ordaindu,h_komi,h_hasiera,h_amaiera,h_egoera,h_epe);
 						}
 						//Txartelak kargatzeko kontsulta egiten dugu
 						Statement comand8 = (Statement) conn.createStatement();	
@@ -843,4 +847,125 @@ public class Metodoak {
 		}
 		return erregistratuta;
 	}	
+
+	public String[][] eskatutakoHipotekak(Langilea langilea, String sukurtsal_izen){
+		String[][] eskatutak = new String [0][5];		
+		//Sukurtsalak arakatu
+		for(int i=0;i<langilea.getSukurtsalak().size();i++) {
+			if(langilea.getSukurtsalak().get(i).getKokalekua().equals(sukurtsal_izen)) {
+				//Kontu bankarioak arakatu
+				for(int j=0;j<langilea.getSukurtsalak().get(i).getKontuBankarioak().size();j++) {
+					if(langilea.getSukurtsalak().get(i).getKontuBankarioak().get(j).getHipoteka()!=null && langilea.getSukurtsalak().get(i).getKontuBankarioak().get(j).getHipoteka().getEgoera().equals("eskatuta")) {
+						String[][] prob = new String[eskatutak.length+1][5];
+						for(int k=0;k<eskatutak.length;k++) {
+							for(int l=0;l<eskatutak[k].length;l++) {
+								prob[k][l]=eskatutak[k][l];
+							}
+						}
+						String iban = langilea.getSukurtsalak().get(i).getKontuBankarioak().get(j).getIban();
+						String iban_eskatuta = iban.substring(0,4)+" "+iban.substring(4,8)+" "+iban.substring(8,12)+" "+" "+iban.substring(12,16)+" "+" "+iban.substring(16,20)+" "+" "+iban.substring(20);
+						prob[eskatutak.length][0]=iban_eskatuta;
+						prob[eskatutak.length][1]= String.valueOf(df.format(langilea.getSukurtsalak().get(i).getKontuBankarioak().get(j).getHipoteka().getKantitatea()))+" €";
+						prob[eskatutak.length][2]= String.valueOf(df.format(langilea.getSukurtsalak().get(i).getKontuBankarioak().get(j).getHipoteka().getKomisioa()))+" %";
+						prob[eskatutak.length][3]= langilea.getSukurtsalak().get(i).getKontuBankarioak().get(j).getHipoteka().getEpeMuga();
+						prob[eskatutak.length][4]= langilea.getSukurtsalak().get(i).getKontuBankarioak().get(j).getHipoteka().getEgoera();
+						eskatutak=prob;
+					}
+				}
+			}
+		}		
+		return eskatutak;
+	}
+	
+	public String[][] onartutakoHipotekak(Langilea langilea, String sukurtsal_izen){
+		String[][] onartutak = new String [0][7];		
+		//Sukurtsalak arakatu
+		for(int i=0;i<langilea.getSukurtsalak().size();i++) {
+			if(langilea.getSukurtsalak().get(i).getKokalekua().equals(sukurtsal_izen)) {
+				//Kontu bankarioak arakatu
+				for(int j=0;j<langilea.getSukurtsalak().get(i).getKontuBankarioak().size();j++) {
+					if(langilea.getSukurtsalak().get(i).getKontuBankarioak().get(j).getHipoteka()!=null && langilea.getSukurtsalak().get(i).getKontuBankarioak().get(j).getHipoteka().getEgoera().equals("onartuta")) {
+						String[][] prob = new String[onartutak.length+1][7];
+						for(int k=0;k<onartutak.length;k++) {
+							for(int l=0;l<onartutak[k].length;l++) {
+								prob[k][l]=onartutak[k][l];
+							}
+						}
+						String iban = langilea.getSukurtsalak().get(i).getKontuBankarioak().get(j).getIban();
+						String iban_eskatuta = iban.substring(0,4)+" "+iban.substring(4,8)+" "+iban.substring(8,12)+" "+" "+iban.substring(12,16)+" "+" "+iban.substring(16,20)+" "+" "+iban.substring(20);
+						prob[onartutak.length][0]=iban_eskatuta;
+						prob[onartutak.length][1]= String.valueOf(df.format(langilea.getSukurtsalak().get(i).getKontuBankarioak().get(j).getHipoteka().getKantitatea()))+" €";
+						prob[onartutak.length][2]= String.valueOf(df.format(langilea.getSukurtsalak().get(i).getKontuBankarioak().get(j).getHipoteka().getOrdaindutakoa()))+ " €";						
+						prob[onartutak.length][3]= String.valueOf(df.format(langilea.getSukurtsalak().get(i).getKontuBankarioak().get(j).getHipoteka().getKomisioa()))+" %";
+						prob[onartutak.length][4]= langilea.getSukurtsalak().get(i).getKontuBankarioak().get(j).getHipoteka().getHasieraData();						
+						prob[onartutak.length][5]= langilea.getSukurtsalak().get(i).getKontuBankarioak().get(j).getHipoteka().getEpeMuga();
+						prob[onartutak.length][6]= langilea.getSukurtsalak().get(i).getKontuBankarioak().get(j).getHipoteka().getEgoera();
+						onartutak=prob;
+					}
+				}
+			}
+		}		
+		return onartutak;
+	}
+
+	public String[][] errefusatutakoHipotekak(Langilea langilea, String sukurtsal_izen){
+		String[][] errefusatutak = new String [0][5];		
+		//Sukurtsalak arakatu
+		for(int i=0;i<langilea.getSukurtsalak().size();i++) {
+			if(langilea.getSukurtsalak().get(i).getKokalekua().equals(sukurtsal_izen)) {
+				//Kontu bankarioak arakatu
+				for(int j=0;j<langilea.getSukurtsalak().get(i).getKontuBankarioak().size();j++) {
+					if(langilea.getSukurtsalak().get(i).getKontuBankarioak().get(j).getHipoteka()!=null && langilea.getSukurtsalak().get(i).getKontuBankarioak().get(j).getHipoteka().getEgoera().equals("errefusatua")) {
+						String[][] prob = new String[errefusatutak.length+1][5];
+						for(int k=0;k<errefusatutak.length;k++) {
+							for(int l=0;l<errefusatutak[k].length;l++) {
+								prob[k][l]=errefusatutak[k][l];
+							}
+						}
+						String iban = langilea.getSukurtsalak().get(i).getKontuBankarioak().get(j).getIban();
+						String iban_eskatuta = iban.substring(0,4)+" "+iban.substring(4,8)+" "+iban.substring(8,12)+" "+" "+iban.substring(12,16)+" "+" "+iban.substring(16,20)+" "+" "+iban.substring(20);
+						prob[errefusatutak.length][0]=iban_eskatuta;
+						prob[errefusatutak.length][1]= String.valueOf(df.format(langilea.getSukurtsalak().get(i).getKontuBankarioak().get(j).getHipoteka().getKantitatea()))+" €";
+						prob[errefusatutak.length][2]= String.valueOf(df.format(langilea.getSukurtsalak().get(i).getKontuBankarioak().get(j).getHipoteka().getKomisioa()))+" %";
+						prob[errefusatutak.length][3]= langilea.getSukurtsalak().get(i).getKontuBankarioak().get(j).getHipoteka().getEpeMuga();
+						prob[errefusatutak.length][4]= langilea.getSukurtsalak().get(i).getKontuBankarioak().get(j).getHipoteka().getEgoera();
+						errefusatutak=prob;
+					}
+				}
+			}
+		}		
+		return errefusatutak;
+	}
+
+	public String[][] itxitakoHipotekak(Langilea langilea, String sukurtsal_izen){
+		String[][] itxitak = new String [0][8];		
+		//Sukurtsalak arakatu
+		for(int i=0;i<langilea.getSukurtsalak().size();i++) {
+			if(langilea.getSukurtsalak().get(i).getKokalekua().equals(sukurtsal_izen)) {
+				//Kontu bankarioak arakatu
+				for(int j=0;j<langilea.getSukurtsalak().get(i).getKontuBankarioak().size();j++) {
+					if(langilea.getSukurtsalak().get(i).getKontuBankarioak().get(j).getHipoteka()!=null && langilea.getSukurtsalak().get(i).getKontuBankarioak().get(j).getHipoteka().getEgoera().equals("itxita")) {
+						String[][] prob = new String[itxitak.length+1][8];
+						for(int k=0;k<itxitak.length;k++) {
+							for(int l=0;l<itxitak[k].length;l++) {
+								prob[k][l]=itxitak[k][l];
+							}
+						}
+						String iban = langilea.getSukurtsalak().get(i).getKontuBankarioak().get(j).getIban();
+						String iban_eskatuta = iban.substring(0,4)+" "+iban.substring(4,8)+" "+iban.substring(8,12)+" "+" "+iban.substring(12,16)+" "+" "+iban.substring(16,20)+" "+" "+iban.substring(20);
+						prob[itxitak.length][0]=iban_eskatuta;
+						prob[itxitak.length][1]= String.valueOf(df.format(langilea.getSukurtsalak().get(i).getKontuBankarioak().get(j).getHipoteka().getKantitatea()))+" €";
+						prob[itxitak.length][2]= String.valueOf(df.format(langilea.getSukurtsalak().get(i).getKontuBankarioak().get(j).getHipoteka().getOrdaindutakoa()))+ " €";						
+						prob[itxitak.length][3]= String.valueOf(df.format(langilea.getSukurtsalak().get(i).getKontuBankarioak().get(j).getHipoteka().getKomisioa()))+" %";
+						prob[itxitak.length][4]= langilea.getSukurtsalak().get(i).getKontuBankarioak().get(j).getHipoteka().getHasieraData();						
+						prob[itxitak.length][5]= langilea.getSukurtsalak().get(i).getKontuBankarioak().get(j).getHipoteka().getAmaieraData();						
+						prob[itxitak.length][6]= langilea.getSukurtsalak().get(i).getKontuBankarioak().get(j).getHipoteka().getEpeMuga();
+						prob[itxitak.length][7]= langilea.getSukurtsalak().get(i).getKontuBankarioak().get(j).getHipoteka().getEgoera();
+						itxitak=prob;
+					}
+				}
+			}
+		}		
+		return itxitak;
+	}
 }

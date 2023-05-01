@@ -63,7 +63,10 @@ public class App extends JFrame {
 	String[] kontuak_lista = {"IBAN","Saldoa","Egoera"};
 	String[] transfer_header = {"Kantitatea","Transferentzia Data","Jasotzaile IBAN","Kontzeptua","Komisioa"};
 	String[] sarrera_header = {"Kantitatea","Transferentzia Data","Jasotzaile IBAN","Kontzeptua"};
-	
+	String[] hipoteka_eskatu_header = {"IBAN","Kantitatea","Komisioa","Epe Muga","Egoera"};
+	String[] hipoteka_onartu_header = {"IBAN","Kantitatea","Ordaindutakoa","Komisioa","Hasiera Data","Epe Muga","Egoera"};
+	String[] hipoteka_itxita_header = {"IBAN","Kantitatea","Ordaindutakoa","Komisioa","Hasiera Data","Amaiera Data","Epe Muga","Egoera"};
+			
 	String[] langile_kontu_info = null;
 	String[][] transferentzia_info = null;
 	String[][] sarrera_info = null;
@@ -106,11 +109,14 @@ public class App extends JFrame {
 	JComboBox cb_eguna = null;
 	JComboBox cb_egoera_kontua = null;
 	JButton btn_kontu_itzi;
+	JButton btn_errefusatu;
+	JButton btn_onartu;
 	JScrollPane kontuak_pane;
 	JLabel lbl_iban_kontua;
 	JLabel lbl_jabeak_kontua;
 	JLabel lbl_saldo_kontua;
 	JScrollPane itxi_pane;
+	JScrollPane pane_hipotekak;
 	private JTextField txt_abizen_erabiltzaile;
 	
 	/**
@@ -295,7 +301,7 @@ public class App extends JFrame {
 				if(metodoak.bezeroLogin(txt_bezero_erabiltzaile.getText(),String.valueOf(passBezero.getPassword()))) {
 					nan_bezero= txt_bezero_erabiltzaile.getText();
 					//Langilearen logina erregistratu
-					metodoak.loginErregistratu(nan_bezero);
+					metodoak.loginErregistratu(nan_bezero,"Bezeroa");
 					
 					bezero=metodoak.bezeroaKargatu(nan_bezero);
 					entitateak = metodoak.botoiakSortu();
@@ -312,8 +318,7 @@ public class App extends JFrame {
 						btn_banco.setOpaque(false);
 						btn_banco.setContentAreaFilled(false);
 						btn_banco.setBorderPainted(false);
-					}
-					
+					}					
 					loginBezero.setVisible(false);
 					bezeroEntitate.setVisible(true);
 				}else {
@@ -332,7 +337,7 @@ public class App extends JFrame {
 				if(lanpostua!=null) {					
 					nan_langile = txt_langile_erabiltzaile.getText();
 					//Langilearen logina erregistratu
-					metodoak.loginErregistratu(nan_langile);
+					metodoak.loginErregistratu(nan_langile,"Langilea");
 					
 					langile = metodoak.langileaKargatu(nan_langile,lanpostua);
 					//Langilearen entitate eta sukurtsalak kargatu
@@ -709,6 +714,12 @@ public class App extends JFrame {
 		hipotekak.add(btn_atzera_17);
 		
 		JButton btn_atzera_18 = new JButton(logo_atzera);
+		btn_atzera_18.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				hipotekaTaulak.setVisible(false);
+				hipotekak.setVisible(true);
+			}
+		});
 		btn_atzera_18.setOpaque(false);
 		btn_atzera_18.setContentAreaFilled(false);
 		btn_atzera_18.setBorderPainted(false);
@@ -1290,6 +1301,7 @@ public class App extends JFrame {
 				itxi_table = new JTable(ixteko_array,kontuak_lista);
 				itxi_pane.setViewportView(itxi_table);
 				itxi_table.getColumnModel().getColumn(0).setPreferredWidth(200);
+				hipotekak_table.getTableHeader().setReorderingAllowed(false);
 				
 				langileMenu.setVisible(false);
 				ixtekoKontuak.setVisible(true);
@@ -1381,6 +1393,7 @@ public class App extends JFrame {
 				transfer_ikusi_table = new JTable(transferentzia_info,transfer_header);
 				transfer_panel.setViewportView(transfer_ikusi_table);
 				transfer_ikusi_table.getColumnModel().getColumn(2).setPreferredWidth(200);
+				hipotekak_table.getTableHeader().setReorderingAllowed(false);
 				
 				infoKontua.setVisible(false);
 				transferentziaIkusi.setVisible(true);
@@ -1397,6 +1410,7 @@ public class App extends JFrame {
 				sarrerak_table = new JTable(sarrera_info,sarrera_header);
 				sarrerak_panel.setViewportView(sarrerak_table);
 				sarrerak_table.getColumnModel().getColumn(2).setPreferredWidth(200);
+				hipotekak_table.getTableHeader().setReorderingAllowed(false);
 				
 				infoKontua.setVisible(false);
 				sarrerak.setVisible(true);
@@ -1619,6 +1633,16 @@ public class App extends JFrame {
 		JButton btn_hipo_eskatu = new JButton("Eskatutako Hipotekak");
 		btn_hipo_eskatu.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				String[][] eskatutako_hipotekak = metodoak.eskatutakoHipotekak(langile, sukurtsal_izen);
+				
+				hipotekak_table = new JTable(eskatutako_hipotekak,hipoteka_eskatu_header);
+				pane_hipotekak.setViewportView(hipotekak_table);
+				hipotekak_table.getColumnModel().getColumn(0).setPreferredWidth(200);
+				hipotekak_table.getTableHeader().setReorderingAllowed(false);
+				
+				btn_errefusatu.setVisible(true);
+				btn_onartu.setVisible(true);
+				
 				hipotekak.setVisible(false);
 				hipotekaTaulak.setVisible(true);
 			}
@@ -1627,43 +1651,84 @@ public class App extends JFrame {
 		hipotekak.add(btn_hipo_eskatu);
 		
 		JButton btn_hipo_onartuta = new JButton("Onartutako Hipotekak");
+		btn_hipo_onartuta.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				String[][] onartutako_hipotekak = metodoak.onartutakoHipotekak(langile, sukurtsal_izen);
+				
+				hipotekak_table = new JTable(onartutako_hipotekak,hipoteka_onartu_header);
+				pane_hipotekak.setViewportView(hipotekak_table);
+				hipotekak_table.getColumnModel().getColumn(0).setPreferredWidth(200);
+				hipotekak_table.getTableHeader().setReorderingAllowed(false);
+
+				btn_errefusatu.setVisible(false);
+				btn_onartu.setVisible(false);
+				
+				hipotekak.setVisible(false);
+				hipotekaTaulak.setVisible(true);
+			}
+		});
 		btn_hipo_onartuta.setBounds(512, 252, 180, 34);
 		hipotekak.add(btn_hipo_onartuta);
 		
-		JButton btn_mugimendu_1 = new JButton("Itxitako Hipotekak");
-		btn_mugimendu_1.addActionListener(new ActionListener() {
+		JButton btn_hipo_itxita = new JButton("Itxitako Hipotekak");
+		btn_hipo_itxita.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				String[][] itxitako_hipotekak = metodoak.itxitakoHipotekak(langile, sukurtsal_izen);
+				
+				hipotekak_table = new JTable(itxitako_hipotekak,hipoteka_itxita_header);
+				pane_hipotekak.setViewportView(hipotekak_table);
+				hipotekak_table.getColumnModel().getColumn(0).setPreferredWidth(200);
+				hipotekak_table.getTableHeader().setReorderingAllowed(false);
+				
+				btn_errefusatu.setVisible(false);
+				btn_onartu.setVisible(false);
+				
+				hipotekak.setVisible(false);
+				hipotekaTaulak.setVisible(true);
 			}
 		});
-		btn_mugimendu_1.setBounds(512, 341, 180, 34);
-		hipotekak.add(btn_mugimendu_1);
+		btn_hipo_itxita.setBounds(512, 341, 180, 34);
+		hipotekak.add(btn_hipo_itxita);
 		
-		JButton btn_hipoteka_1 = new JButton("Errefusatutako Hipoteka");
-		btn_hipoteka_1.setBounds(273, 341, 180, 34);
-		hipotekak.add(btn_hipoteka_1);
+		JButton btn_hipo_errefusatu = new JButton("Errefusatutako Hipoteka");
+		btn_hipo_errefusatu.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				String[][] errefusatutako_hipotekak = metodoak.errefusatutakoHipotekak(langile, sukurtsal_izen);
+				
+				hipotekak_table = new JTable(errefusatutako_hipotekak,hipoteka_eskatu_header);
+				pane_hipotekak.setViewportView(hipotekak_table);
+				hipotekak_table.getColumnModel().getColumn(0).setPreferredWidth(200);
+				hipotekak_table.getTableHeader().setReorderingAllowed(false);
+				
+				btn_errefusatu.setVisible(false);
+				btn_onartu.setVisible(false);
+				
+				hipotekak.setVisible(false);
+				hipotekaTaulak.setVisible(true);
+			}
+		});
+		btn_hipo_errefusatu.setBounds(273, 341, 180, 34);
+		hipotekak.add(btn_hipo_errefusatu);
 		
 		JLabel lbl_hipotekak = new JLabel("HIPOTEKAK");
 		lbl_hipotekak.setFont(new Font("Tahoma", Font.PLAIN, 18));
 		lbl_hipotekak.setBounds(431, 192, 114, 45);
 		hipotekak.add(lbl_hipotekak);
 		
-		JScrollPane pane_hipotekak = new JScrollPane();
-		pane_hipotekak.setBounds(127, 261, 686, 187);
+		pane_hipotekak = new JScrollPane();
+		pane_hipotekak.setBounds(76, 261, 775, 187);
 		hipotekaTaulak.add(pane_hipotekak);
-		
-		hipotekak_table = new JTable();
-		pane_hipotekak.setViewportView(hipotekak_table);
 		
 		JLabel lbl_hipoteka_mota = new JLabel("ESKATUTAKO HIPOTEKAK");
 		lbl_hipoteka_mota.setFont(new Font("Tahoma", Font.PLAIN, 18));
 		lbl_hipoteka_mota.setBounds(337, 205, 249, 45);
 		hipotekaTaulak.add(lbl_hipoteka_mota);
 		
-		JButton btn_errefusatu = new JButton("Errefusatu");
+		btn_errefusatu = new JButton("Errefusatu");
 		btn_errefusatu.setBounds(318, 478, 100, 34);
 		hipotekaTaulak.add(btn_errefusatu);
 		
-		JButton btn_onartu = new JButton("Onartu");
+		btn_onartu = new JButton("Onartu");
 		btn_onartu.setBounds(514, 478, 100, 34);
 		hipotekaTaulak.add(btn_onartu);
 		

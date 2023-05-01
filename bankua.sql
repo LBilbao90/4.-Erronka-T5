@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 29-04-2023 a las 14:32:24
+-- Tiempo de generación: 01-05-2023 a las 18:14:53
 -- Versión del servidor: 10.4.28-MariaDB
 -- Versión de PHP: 8.2.4
 
@@ -44,9 +44,24 @@ CREATE TABLE `bezeroa` (
 --
 
 INSERT INTO `bezeroa` (`NAN`, `izena`, `abizenak`, `jaiotzeData`, `sexua`, `telefonoa`, `pasahitza`) VALUES
-('12345678A', 'Aingeru', 'Siranaula', '2002-10-21', 'gizona', '111222333', '12345678'),
-('12345678B', 'Ibai', 'Alvarez', '2000-08-16', 'gizona', '444555666', '1234'),
-('12345678C', 'Hodei', 'Martinez', '2004-04-16', 'gizona', '777888999', '12345678');
+('12345678A', 'Aingeru', 'Siranaula', '2002-10-21', '', '111222333', '12345678'),
+('12345678B', 'Ibai', 'Alvarez', '2000-08-16', '', '444555666', '1234'),
+('12345678C', 'Hodei', 'Martinez', '2004-04-16', '', '777888999', '12345678');
+
+-- --------------------------------------------------------
+
+--
+-- Estructura Stand-in para la vista `bezeroinfo`
+-- (Véase abajo para la vista actual)
+--
+CREATE TABLE `bezeroinfo` (
+`nan` char(9)
+,`izena` varchar(20)
+,`abizenak` varchar(30)
+,`jaiotzeData` date
+,`sexua` enum('gizona','emakumea')
+,`telefonoa` char(9)
+);
 
 -- --------------------------------------------------------
 
@@ -62,17 +77,6 @@ CREATE TABLE `dirusarrera` (
   `kontzeptua` varchar(40) DEFAULT NULL,
   `IBANJasotzaile` char(24) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
---
--- Volcado de datos para la tabla `dirusarrera`
---
-
-INSERT INTO `dirusarrera` (`idSarrera`, `kantitatea`, `sarreraData`, `igortzaile`, `kontzeptua`, `IBANJasotzaile`) VALUES
-(1, 5000, '2022-12-07', 'ES2598760153921924586673', 'Ordainketa 1', 'ES9723450111545932515164'),
-(2, 2000, '2019-06-23', 'ES3467890500545482067256', 'Ordainketa 2', 'ES9723450002985781118223'),
-(3, 10000, '2016-04-11', 'ES0654320001418753450238', 'Ordainketa 3', 'ES2598760153921924586673'),
-(4, 800, '2020-08-01', 'ES9723450111545932515164', 'Ordainketa 4', 'ES3467890003915285942937'),
-(5, 1500, '2021-12-09', 'ES0654320001418753450238', 'Ordainketa 5', 'ES2598760401403456015845');
 
 -- --------------------------------------------------------
 
@@ -101,6 +105,18 @@ INSERT INTO `entitatebankario` (`id_entitate`, `izena`, `entitateZenbaki`, `url`
 -- --------------------------------------------------------
 
 --
+-- Estructura Stand-in para la vista `entitateinfo`
+-- (Véase abajo para la vista actual)
+--
+CREATE TABLE `entitateinfo` (
+`id_entitate` int(11)
+,`izena` varchar(20)
+,`entitateZenbaki` char(8)
+);
+
+-- --------------------------------------------------------
+
+--
 -- Estructura de tabla para la tabla `hipoteka`
 --
 
@@ -111,20 +127,21 @@ CREATE TABLE `hipoteka` (
   `komisioa` double DEFAULT NULL,
   `hasieraData` date DEFAULT NULL,
   `amaieraData` date DEFAULT NULL,
-  `egoera` enum('eskatuta','onartuta','errefusatuta','itxita') DEFAULT NULL,
-  `IBAN` char(24) DEFAULT NULL
+  `egoera` enum('eskatuta','onartuta','errefusatua','itxita') DEFAULT NULL,
+  `IBAN` char(24) DEFAULT NULL,
+  `epeMuga` enum('3 urte','5 urte','10 urte','15 urte') DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Volcado de datos para la tabla `hipoteka`
 --
 
-INSERT INTO `hipoteka` (`idHipoteka`, `kantitatea`, `ordaindutakoa`, `komisioa`, `hasieraData`, `amaieraData`, `egoera`, `IBAN`) VALUES
-(1, 120000, 10000, 5, '2023-05-01', '2033-05-01', 'onartuta', 'ES3467890003915285942937'),
-(2, 80000, 6000, 3, '2023-06-01', NULL, 'eskatuta', 'ES2598760153921924586673'),
-(3, 150000, 12000, 8, '2023-07-01', '2033-07-01', 'onartuta', 'ES0654320001418753450238'),
-(4, 60000, 5000, 9, '2023-08-01', NULL, 'errefusatuta', 'ES9723450111545932515164'),
-(5, 100000, 8000, 4, '2013-09-01', '2023-03-01', 'itxita', 'ES9723450002985781118223');
+INSERT INTO `hipoteka` (`idHipoteka`, `kantitatea`, `ordaindutakoa`, `komisioa`, `hasieraData`, `amaieraData`, `egoera`, `IBAN`, `epeMuga`) VALUES
+(1, 120000, 10000, 500, '2023-05-01', '2033-05-01', 'onartuta', 'ES3467890003915285942937', '3 urte'),
+(2, 80000, 6000, 300, '2023-06-01', NULL, 'eskatuta', 'ES2598760153921924586673', '10 urte'),
+(3, 150000, 12000, 800, '2023-07-01', '2033-07-01', 'onartuta', 'ES0654320001418753450238', '5 urte'),
+(4, 60000, 5000, 250, '2023-08-01', NULL, 'errefusatua', 'ES9723450111545932515164', '15 urte'),
+(5, 100000, 8000, 400, '2013-09-01', '2023-03-01', 'itxita', 'ES9723450002985781118223', '5 urte');
 
 -- --------------------------------------------------------
 
@@ -156,7 +173,7 @@ INSERT INTO `kontubankario` (`IBAN`, `saldoa`, `hilekoLimitea`, `sorreraData`, `
 ('ES3467890500545482067256', 2000, 1500, '2021-12-15', 'aktiboa', 5),
 ('ES3467895948791937106722', 10000, 5000, '2019-08-23', 'aktiboa', 4),
 ('ES9723450002985781118223', 2000, 1500, '2021-12-15', 'aktiboa', 2),
-('ES9723450016313512172028', 5000, 3000, '2022-03-01', 'ixteko', 3),
+('ES9723450016313512172028', 5000, 3000, '2022-03-01', 'aktiboa', 3),
 ('ES9723450111545932515164', 1500, 1000, '2022-01-01', 'aktiboa', 1);
 
 -- --------------------------------------------------------
@@ -207,8 +224,24 @@ CREATE TABLE `langile` (
 
 INSERT INTO `langile` (`id_langile`, `nan`, `izena`, `abizenak`, `jaiotzeData`, `sexua`, `telefonoa`, `pasahitza`, `lanpostua`, `id_sukurtsal`) VALUES
 (1, '12345678B', 'Ibai', 'Alvarez', '2000-10-21', 'gizona', '111222333', '1234', 'zuzendaria', 1),
-(2, '12345678P', 'Ibai', 'Alvarez', '2000-10-21', 'gizona', '111222333', '1234', 'gerentea', 1),
-(3, '12345678G', 'GOD', 'TU PADRE', '2000-10-21', 'gizona', '000000000', '1234', 'god', 1);
+(2, '12345678G', 'GOD', 'TU PADRE', '2000-10-21', 'gizona', '000000000', '1234', 'god', 1);
+
+-- --------------------------------------------------------
+
+--
+-- Estructura Stand-in para la vista `langileinfo`
+-- (Véase abajo para la vista actual)
+--
+CREATE TABLE `langileinfo` (
+`nan` char(9)
+,`izena` varchar(20)
+,`abizenak` varchar(30)
+,`jaiotzeData` date
+,`sexua` enum('gizona','emakumea')
+,`telefonoa` char(9)
+,`lanpostua` enum('god','zuzendaria','gerentea')
+,`id_sukurtsal` int(11)
+);
 
 -- --------------------------------------------------------
 
@@ -290,6 +323,33 @@ INSERT INTO `txartela` (`id_txartela`, `segurtasunKodea`, `mota`) VALUES
 ('1934679558422571', '9876', 'kredito'),
 ('4534976157268453', '1234', 'kredito'),
 ('9366410728416245', '8765', 'debito');
+
+-- --------------------------------------------------------
+
+--
+-- Estructura para la vista `bezeroinfo`
+--
+DROP TABLE IF EXISTS `bezeroinfo`;
+
+CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `bezeroinfo`  AS SELECT `bezeroa`.`NAN` AS `nan`, `bezeroa`.`izena` AS `izena`, `bezeroa`.`abizenak` AS `abizenak`, `bezeroa`.`jaiotzeData` AS `jaiotzeData`, `bezeroa`.`sexua` AS `sexua`, `bezeroa`.`telefonoa` AS `telefonoa` FROM `bezeroa` ;
+
+-- --------------------------------------------------------
+
+--
+-- Estructura para la vista `entitateinfo`
+--
+DROP TABLE IF EXISTS `entitateinfo`;
+
+CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `entitateinfo`  AS SELECT `entitatebankario`.`id_entitate` AS `id_entitate`, `entitatebankario`.`izena` AS `izena`, `entitatebankario`.`entitateZenbaki` AS `entitateZenbaki` FROM `entitatebankario` ;
+
+-- --------------------------------------------------------
+
+--
+-- Estructura para la vista `langileinfo`
+--
+DROP TABLE IF EXISTS `langileinfo`;
+
+CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `langileinfo`  AS SELECT `langile`.`nan` AS `nan`, `langile`.`izena` AS `izena`, `langile`.`abizenak` AS `abizenak`, `langile`.`jaiotzeData` AS `jaiotzeData`, `langile`.`sexua` AS `sexua`, `langile`.`telefonoa` AS `telefonoa`, `langile`.`lanpostua` AS `lanpostua`, `langile`.`id_sukurtsal` AS `id_sukurtsal` FROM `langile` ;
 
 --
 -- Índices para tablas volcadas
@@ -376,7 +436,7 @@ ALTER TABLE `txartela`
 -- AUTO_INCREMENT de la tabla `dirusarrera`
 --
 ALTER TABLE `dirusarrera`
-  MODIFY `idSarrera` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+  MODIFY `idSarrera` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT de la tabla `entitatebankario`
@@ -394,7 +454,7 @@ ALTER TABLE `hipoteka`
 -- AUTO_INCREMENT de la tabla `langile`
 --
 ALTER TABLE `langile`
-  MODIFY `id_langile` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `id_langile` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT de la tabla `transferentzia`

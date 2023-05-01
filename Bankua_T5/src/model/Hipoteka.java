@@ -9,15 +9,17 @@ public class Hipoteka implements Komisioa{
 	private String hasieraData;
 	private String amaieraData;
 	private String egoera; //eskatuta, onartuta, itxita, errefusatuta
+	private String epeMuga;
 	
 	// Constructors
-	public Hipoteka(double kantitatea, double ordaindutakoa, double komisioa, String hasieraData, String amaieraData, String egoera) {
+	public Hipoteka(double kantitatea, double ordaindutakoa, double komisioa, String hasieraData, String amaieraData, String egoera, String epeMuga) {
 		this.kantitatea = kantitatea;
 		this.ordaindutakoa = ordaindutakoa;
 		this.komisioa = komisioa;
 		this.hasieraData = hasieraData;
 		this.amaieraData = amaieraData;
 		this.egoera=egoera;
+		this.epeMuga=epeMuga;
 	}
 	
 	public Hipoteka() {
@@ -43,6 +45,9 @@ public class Hipoteka implements Komisioa{
 	public String getEgoera() {
 		return egoera;
 	}
+	public String getEpeMuga() {
+		return this.epeMuga;
+	}
 	
 	// Setters
 	public void setKantitatea(double kantitatea) {
@@ -59,6 +64,9 @@ public class Hipoteka implements Komisioa{
 	}
 	public void setEgoera(String egoera) {
 		this.egoera = egoera;
+	}
+	public void setEpeMuga(String epeMuga) {
+		this.epeMuga = epeMuga;
 	}
 	
 	// ToString
