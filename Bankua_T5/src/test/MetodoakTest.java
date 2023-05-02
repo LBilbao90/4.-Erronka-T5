@@ -2,9 +2,15 @@ package test;
 
 import static org.junit.Assert.*;
 
+import java.sql.DriverManager;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
 
 import org.junit.Test;
+
+import com.mysql.jdbc.Connection;
+import com.mysql.jdbc.Statement;
 
 import controlador.Metodoak;
 import model.Bezeroa;
@@ -13,7 +19,7 @@ import model.Langilea;
 
 public class MetodoakTest {
 
-	@Test // mirar
+	@Test
 	public void testBezeroakKargatu() {
 		Metodoak metodoak = new Metodoak();
 		Bezeroa b1 = metodoak.bezeroaKargatu("12345678A");
@@ -189,7 +195,6 @@ public class MetodoakTest {
 	@Test
 	public void testLangileKontuTransfer() {
 		Metodoak metodoak = new Metodoak();
-		
 		Langilea l1 = metodoak.langileaKargatu("12345678B", "zuzendaria");
 		String[][] kontu = metodoak.langileKontuTransfer(l1, "ES9723450111545932515164");
 		
@@ -203,7 +208,6 @@ public class MetodoakTest {
 	@Test
 	public void testLangileKontuSarrerak() {
 		Metodoak metodoak = new Metodoak();
-		
 		Langilea l1 = metodoak.langileaKargatu("12345678B", "zuzendaria");
 		String[][] kontu = metodoak.langileKontuSarrerak(l1, "ES9723450111545932515164");
 		
@@ -211,5 +215,177 @@ public class MetodoakTest {
 		assertEquals("2022-12-07", kontu[0][1]);
 		assertEquals("ES25 9876 0153  9219  2458  6673", kontu[0][2]);
 		assertEquals("Ordainketa 1", kontu[0][3]);
+	}
+	
+	@Test
+	public void testBezeroSortu() {
+		Metodoak metodoak = new Metodoak();
+		
+		String nan = "";
+		String izena = "";
+		String abizena = "";
+		String jaiotzeData = "";
+		String sexua = "";
+		String telefonoa = "";
+		String pasahitza = "";
+		
+		assertTrue(metodoak.bezeroSortu("Juan", "Perez", "12345678Z", "1234", "1999","06", "12", "gizona", "111222333"));
+		Bezeroa b1 = metodoak.bezeroaKargatu("12345678Z");
+		
+		Connection conn;					
+		try {
+			String url = "jdbc:mysql://localhost:3306/bankua";
+			conn = (Connection) DriverManager.getConnection (url, "root","");
+			Statement comando = (Statement) conn.createStatement();	
+			ResultSet request = comando.executeQuery("Select nan, izena, abizenak, jaiotzeData, sexua, telefonoa, pasahitza from bezeroa where nan = '"+ b1.getNan() +"';");
+			
+			while(request.next()) {
+				
+				nan = request.getString(1);
+				izena = request.getString(2);
+				abizena = request.getString(3);
+				jaiotzeData = request.getString(4);
+				String[] data_split = jaiotzeData.split("-");
+				jaiotzeData = data_split[1]+"-"+data_split[2]+"-"+data_split[0];
+				sexua = request.getString(5);
+				telefonoa = request.getString(6);
+				pasahitza = request.getString(7);	
+			}
+			
+			
+			
+			assertEquals(nan, b1.getNan());
+			assertEquals(izena, b1.getIzena());
+			assertEquals(abizena, b1.getAbizena());
+			assertEquals(jaiotzeData, b1.getJaiotzeData());
+			assertEquals(sexua, b1.getSexua());
+			assertEquals(telefonoa, b1.getTelefonoa());
+			assertEquals(pasahitza, b1.getPasahitza());
+			conn.close();
+		}catch(SQLException ex) {
+			System.out.println("SQLException: "+ ex.getMessage());
+			System.out.println("SQLState: "+ ex.getSQLState());
+			System.out.println("ErrorCode: "+ ex.getErrorCode());
+		}
+	}
+	
+	@Test
+	public void testIxtekoKontuak() {
+		Metodoak metodoak = new Metodoak();
+		Langilea l1 = metodoak.langileaKargatu("12345678C", "zuzendaria");
+		String[][] kontuak = metodoak.ixtekoKontuak(l1, "Autonomia Kalea, 18");
+		
+		assertEquals("ES25 9876 0153  9219  2458  6673", kontuak[0][0]);
+		assertEquals("9000,00 €", kontuak[0][1]);
+		assertEquals("ixteko", kontuak[0][2]);
+	}
+	
+	@Test
+	public void testEskatutakoHipotekak() {
+		Metodoak metodoak = new Metodoak();
+		Langilea l1 = metodoak.langileaKargatu("12345678C", "zuzendaria");
+		String[][] hipotekak = metodoak.eskatutakoHipotekak(l1, "Autonomia Kalea, 18");
+		
+		assertEquals("ES25 9876 0153  9219  2458  6673", hipotekak[0][0]);
+		assertEquals("80000,00 €", hipotekak[0][1]);
+		assertEquals("3,00 %", hipotekak[0][2]);
+		assertEquals("10 urte", hipotekak[0][3]);
+		assertEquals("eskatuta", hipotekak[0][4]);
+	}
+	
+	@Test
+	public void testOnartutakoHipotekak() {
+		Metodoak metodoak = new Metodoak();
+		Langilea l1 = metodoak.langileaKargatu("12345678A", "zuzendaria");
+		String[][] hipotekak = metodoak.onartutakoHipotekak(l1, "Alameda de Recalde, 44");
+		
+		assertEquals("ES06 5432 0001  4187  5345  0238", hipotekak[0][0]);
+		assertEquals("150000,00 €", hipotekak[0][1]);
+		assertEquals("12000,00 €", hipotekak[0][2]);
+		assertEquals("8,00 %", hipotekak[0][3]);
+		assertEquals("2023-07-01", hipotekak[0][4]);
+		assertEquals("5 urte", hipotekak[0][5]);
+		assertEquals("onartuta", hipotekak[0][6]);
+	}
+	
+	@Test
+	public void testErrefusatutakoHipotekak() {
+		Metodoak metodoak = new Metodoak();
+		Langilea l1 = metodoak.langileaKargatu("12345678B", "zuzendaria");
+		String[][] hipotekak = metodoak.errefusatutakoHipotekak(l1, "Santutxu, Santutxu Kalea, 27");
+		
+		assertEquals("ES97 2345 0111  5459  3251  5164", hipotekak[0][0]);
+		assertEquals("60000,00 €", hipotekak[0][1]);
+		assertEquals("2,00 %", hipotekak[0][2]);
+		assertEquals("15 urte", hipotekak[0][3]);
+		assertEquals("errefusatuta", hipotekak[0][4]);
+	}
+	
+	@Test
+	public void testItxitakoHipotekak() {
+		Metodoak metodoak = new Metodoak();
+		Langilea l1 = metodoak.langileaKargatu("12345678B", "zuzendaria");
+		String[][] hipotekak = metodoak.itxitakoHipotekak(l1, "Urkixo Zumarkalea, 56");
+		
+		assertEquals("ES97 2345 0002  9857  8111  8223", hipotekak[0][0]);
+		assertEquals("100000,00 €", hipotekak[0][1]);
+		assertEquals("8000,00 €", hipotekak[0][2]);
+		assertEquals("4,00 %", hipotekak[0][3]);
+		assertEquals("2013-09-01", hipotekak[0][4]);
+		assertEquals("2018-03-01", hipotekak[0][5]);
+		assertEquals("5 urte", hipotekak[0][6]);
+		assertEquals("itxita", hipotekak[0][7]);
+	}
+	
+	@Test
+	public void testBezeroarenKontuak() {
+		Metodoak metodoak = new Metodoak();
+		Bezeroa b1 = metodoak.bezeroaKargatu("12345678A");
+		String[][] kontuak = metodoak.bezeroarenKontuak(b1, 1);
+		
+		assertEquals("ES97 2345 0002  9857  8111  8223", kontuak[0][0]);
+		assertEquals("2000,00 €", kontuak[0][1]);
+		assertEquals("aktiboa", kontuak[0][2]);
+	}
+	
+	@Test
+	public void testTransferentziakIkusi() {
+		Metodoak metodoak = new Metodoak();
+		Bezeroa b1 = metodoak.bezeroaKargatu("12345678A");
+		String[][] transferentziak = metodoak.transferentziakIkusi(b1, 1, "ES9723450111545932515164");
+		
+		assertEquals("ES34 6789 0003  9152  8594  2937", transferentziak[0][0]);
+		assertEquals("800.0 €", transferentziak[0][1]);
+		assertEquals("Ordainketa 4", transferentziak[0][2]);
+		assertEquals("2020-08-01", transferentziak[0][3]);
+	}
+	
+	@Test
+	public void testTransferentziaIbanBalidatu() {
+		Metodoak metodoak = new Metodoak();
+		
+		assertTrue(metodoak.transferentziaIbanBalidatu("ES3467895948791937106722"));
+	}
+	
+	@Test
+	public void testTransferentziaSaldoaBalidatu() {
+		Metodoak metodoak = new Metodoak();
+		
+		assertTrue(metodoak.transferentziaSaldoaBalidatu("100", "ES9723450111545932515164"));
+	}
+	
+	@Test
+	public void testSegurtasunKodeaBalidatu() {
+		Metodoak metodoak = new Metodoak();
+		
+		assertTrue(metodoak.segurtasunKodeaBalidatu("5678", "ES9723450111545932515164"));
+	}
+	
+	@Test
+	public void testHipotekaDut() {
+		Metodoak metodoak = new Metodoak();
+		Bezeroa b1 = metodoak.bezeroaKargatu("12345678A");
+		
+		assertFalse(metodoak.hipotekaDut(b1, "ES9723450111545932515164"));
 	}
 }

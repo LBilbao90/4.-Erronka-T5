@@ -22,6 +22,8 @@ public class Bezeroa extends Pertsona{
 		super(nan, izena, abizena, jaiotzeData, sexua, telefonoa, pasahitza);
 	}
 	
+	public Bezeroa () {}
+	
 	//Getters 
 	public ArrayList<Txartela> getTxartelak() {
 		return txartelak;
