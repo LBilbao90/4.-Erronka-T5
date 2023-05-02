@@ -29,7 +29,7 @@ public class GerenteaTest {
 		ArrayList<Transferentzia> transferentziak = new ArrayList<Transferentzia>();
 		transferentziak.add(t1);
 		
-		Hipoteka h1 = new Hipoteka (100000, 50000, 10, "03-12-2010", "06-10-2020", "eskatuta");
+		Hipoteka h1 = new Hipoteka (100000, 50000, 10, "03-12-2010", "06-10-2020", "eskatuta", "10 urte");
 		
 		Bezeroa b1 = new Bezeroa ("12345678A", "Juan", "Perez", "10-21-2002", "gizona", "111222333", "12345678");
 		
@@ -96,6 +96,7 @@ public class GerenteaTest {
 		assertEquals("03-12-2010", g1.getSukurtsalak().get(0).getKontuBankarioak().get(0).getHipoteka().getHasieraData());
 		assertEquals("06-10-2020", g1.getSukurtsalak().get(0).getKontuBankarioak().get(0).getHipoteka().getAmaieraData());
 		assertEquals("eskatuta", g1.getSukurtsalak().get(0).getKontuBankarioak().get(0).getHipoteka().getEgoera());
+		assertEquals("10 urte", g1.getSukurtsalak().get(0).getKontuBankarioak().get(0).getHipoteka().getEpeMuga());
 		
 		assertEquals("455", g1.getSukurtsalak().get(0).getKontuBankarioak().get(0).getTxartelak().get(0).getSegurtasunKodea());
 		assertEquals("debito", g1.getSukurtsalak().get(0).getKontuBankarioak().get(0).getTxartelak().get(0).getMota());
@@ -120,7 +121,7 @@ public class GerenteaTest {
 		ArrayList<Transferentzia> transferentziak = new ArrayList<Transferentzia>();
 		transferentziak.add(t1);
 		
-		Hipoteka h1 = new Hipoteka (100000, 50000, 10, "03-12-2010", "06-10-2020", "eskatuta");
+		Hipoteka h1 = new Hipoteka (100000, 50000, 10, "03-12-2010", "06-10-2020", "eskatuta", "10 urte");
 		
 		Bezeroa b1 = new Bezeroa ("12345678A", "Juan", "Perez", "10-21-2002", "gizona", "111222333", "12345678");
 		
@@ -155,7 +156,7 @@ public class GerenteaTest {
 		ArrayList<Transferentzia> transferentziak2 = new ArrayList<Transferentzia>();
 		transferentziak2.add(t2);
 		
-		Hipoteka h2 = new Hipoteka (200000, 70000, 10, "06-15-2012", "07-11-2022", "onartuta");
+		Hipoteka h2 = new Hipoteka (200000, 70000, 10, "06-15-2011", "07-11-2022", "onartuta", "11 urte");
 		
 		Bezeroa b2 = new Bezeroa("12345678B", "Laura", "Sanchez", "08-19-2002", "emakumea", "444555666", "87654321");
 		
@@ -226,9 +227,10 @@ public class GerenteaTest {
 		assertEquals(200000, g1.getSukurtsalak().get(0).getKontuBankarioak().get(0).getHipoteka().getKantitatea(), 0.01);
 		assertEquals(70000, g1.getSukurtsalak().get(0).getKontuBankarioak().get(0).getHipoteka().getOrdaindutakoa(), 0.01);
 		assertEquals(10, g1.getSukurtsalak().get(0).getKontuBankarioak().get(0).getHipoteka().getKomisioa(), 0.01);
-		assertEquals("06-15-2012", g1.getSukurtsalak().get(0).getKontuBankarioak().get(0).getHipoteka().getHasieraData());
+		assertEquals("06-15-2011", g1.getSukurtsalak().get(0).getKontuBankarioak().get(0).getHipoteka().getHasieraData());
 		assertEquals("07-11-2022", g1.getSukurtsalak().get(0).getKontuBankarioak().get(0).getHipoteka().getAmaieraData());
 		assertEquals("onartuta", g1.getSukurtsalak().get(0).getKontuBankarioak().get(0).getHipoteka().getEgoera());
+		assertEquals("11 urte", g1.getSukurtsalak().get(0).getKontuBankarioak().get(0).getHipoteka().getEpeMuga());
 		
 		assertEquals("860", g1.getSukurtsalak().get(0).getKontuBankarioak().get(0).getTxartelak().get(0).getSegurtasunKodea());
 		assertEquals("kredito", g1.getSukurtsalak().get(0).getKontuBankarioak().get(0).getTxartelak().get(0).getMota());
@@ -253,7 +255,7 @@ public class GerenteaTest {
 		ArrayList<Transferentzia> transferentziak = new ArrayList<Transferentzia>();
 		transferentziak.add(t1);
 		
-		Hipoteka h1 = new Hipoteka (100000, 50000, 10, "03-12-2010", "06-10-2020", "eskatuta");
+		Hipoteka h1 = new Hipoteka (100000, 50000, 10, "03-12-2010", "06-10-2020", "eskatuta", "10 urte");
 		
 		Bezeroa b1 = new Bezeroa ("12345678A", "Juan", "Perez", "10-21-2002", "gizona", "111222333", "12345678");
 		
@@ -294,7 +296,7 @@ public class GerenteaTest {
 		ArrayList<Transferentzia> transferentziak = new ArrayList<Transferentzia>();
 		transferentziak.add(t1);
 		
-		Hipoteka h1 = new Hipoteka (100000, 50000, 10, "03-12-2010", "06-10-2020", "eskatuta");
+		Hipoteka h1 = new Hipoteka (100000, 50000, 10, "03-12-2010", "06-10-2020", "eskatuta", "10 urte");
 		
 		Bezeroa b1 = new Bezeroa ("12345678A", "Juan", "Perez", "10-21-2002", "gizona", "111222333", "12345678");
 		

@@ -23,7 +23,7 @@ public class Hipoteka implements Komisioa{
 	}
 	
 	public Hipoteka() {
-		this.komisioa = 10;
+		this.komisioa = 2.5;
 	}
 
 	// Getters
@@ -72,10 +72,11 @@ public class Hipoteka implements Komisioa{
 	// ToString
 	@Override
 	public String toString() {
-		return "Hipoteka kantitatea=" + kantitatea + ", ordaindutakoa=" + ordaindutakoa
-				+ ", komisioa=" + komisioa + ", hasieraData=" + hasieraData + ", amaieraData=" + amaieraData
-				+ ", egoera=" + egoera;
+		return "Hipoteka kantitatea=" + kantitatea + ", ordaindutakoa=" + ordaindutakoa + ", komisioa=" + komisioa
+				+ ", hasieraData=" + hasieraData + ", amaieraData=" + amaieraData + ", egoera=" + egoera + ", epeMuga="
+				+ epeMuga;
 	}
+	
 	
 	// Equals
 	@Override
@@ -87,7 +88,8 @@ public class Hipoteka implements Komisioa{
 				&& Objects.equals(hasieraData, other.hasieraData)
 				&& Double.doubleToLongBits(kantitatea) == Double.doubleToLongBits(other.kantitatea)
 				&& Double.doubleToLongBits(komisioa) == Double.doubleToLongBits(other.komisioa)
-				&& Double.doubleToLongBits(ordaindutakoa) == Double.doubleToLongBits(other.ordaindutakoa);
+				&& Double.doubleToLongBits(ordaindutakoa) == Double.doubleToLongBits(other.ordaindutakoa)
+				&& Objects.equals(epeMuga, other.epeMuga);
 	}
 
 	@Override

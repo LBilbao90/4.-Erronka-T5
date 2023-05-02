@@ -1,6 +1,7 @@
 package controlador;
 
-import java.io.PrintWriter; 
+import java.io.PrintWriter;
+import java.math.BigInteger;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.BufferedWriter;
@@ -31,7 +32,6 @@ import model.Hipoteka;
 import model.Txartela;
 
 public class Metodoak {
-	
 	final String url = "jdbc:mysql://localhost:3306/bankua";
 	final String erabiltzaile = "root";
 	final String password="";
@@ -110,7 +110,6 @@ public class Metodoak {
 	
 
     private static final DecimalFormat df = new DecimalFormat("0.00");
-    
 	/**
 	 * Bezeroaren logina zuzena edo okerra den esaten du.
 	 * @param nan_bez Bezeroaren NAN
@@ -673,7 +672,7 @@ public class Metodoak {
 			//Datu baseari konexioa eta Bezeroa logeatzeko kontsulta egiten dugu
 			conn = (Connection) DriverManager.getConnection (url,erabiltzaile,password);
 			Statement comand = (Statement) conn.createStatement();	
-			comand.executeUpdate("Update "+kontuBankario+" set "+egoera+"= '"+kontuEgoera+"', "+hilekoLimitea+"= "+limite+" where "+iban+"= '"+kontu_iban+"';");
+			comand.executeUpdate("Update "+kontuBankario+" set "+egoera+"= '"+kontuEgoera+"', "+hilekoLimitea+"= '"+limite+"' where "+iban+"= '"+kontu_iban+"';");
 			aldatuta = true;
 			conn.close();
 		}catch(SQLException ex) {
@@ -967,5 +966,67 @@ public class Metodoak {
 			}
 		}		
 		return itxitak;
+	}
+
+	public static String ibanKalkulatu(Langilea langilea, String sukurtsal_izen) {
+		String iban_kontua = "";
+		String es = "ES";
+		String kontu_zenb ="";
+		
+		for(int i=0;i<langilea.getSukurtsalak().size();i++) {
+			if(langilea.getSukurtsalak().get(i).getKokalekua().equals(sukurtsal_izen)) {
+				String entitate_kod = langilea.getSukurtsalak().get(i).getEntitateBankario().getEntitateZbk();
+				String sukurtsal_kod = langilea.getSukurtsalak().get(i).getKodSukurtsala();
+				for(int j=0;j<10;j++) {
+					kontu_zenb += String.valueOf((int) Math.floor(Math.random() *(9 - 0 + 1) + 0));
+				}
+				String kontrol_zenbakiak = kontrolDigitoak(entitate_kod,sukurtsal_kod,kontu_zenb);
+				
+				String iban_kontrol_zenb=entitate_kod+sukurtsal_kod+kontrol_zenbakiak+kontu_zenb+142800;
+				BigInteger b1= new BigInteger(iban_kontrol_zenb);
+				double zatiketa = Double.parseDouble(iban_kontrol_zenb)/97;
+				double hondarra = zatiketa%1;
+				int emaitza_prob = (int) Math.round(hondarra*97);
+				int emaitza = 98-emaitza_prob;
+				System.out.println(emaitza_prob);
+				System.out.println(emaitza);
+			}
+		}		
+		return iban_kontua;
+	}
+	
+	public static String kontrolDigitoak(String entitateZenb, String sukurtsalZenb, String kontuZenb) {
+		String kontrol_zenbaki = "";
+		int[] biderketaZenb = {1,2,4,8,5,10,9,7,3,6};
+		int gehiketa=0;
+		int zatiketa = 0;
+		
+		//Lehenengo kontrol zenbakia
+		String A_zenbakiak = "00"+entitateZenb+sukurtsalZenb;
+		for(int i=0;i<10;i++) {
+			gehiketa+= biderketaZenb[i]*Character.getNumericValue(A_zenbakiak.charAt(i));
+		}
+		zatiketa = gehiketa%11;
+		if(11-zatiketa==11) {
+			kontrol_zenbaki="0";
+		}else if(11-zatiketa==10){
+			kontrol_zenbaki="1";			
+		}else {
+			kontrol_zenbaki=String.valueOf(11-zatiketa);			
+		}
+		//Bigarren kontrol zenbakia
+		gehiketa=0;
+		for(int i=0;i<kontuZenb.length();i++) {
+			gehiketa+= biderketaZenb[i]*Character.getNumericValue(kontuZenb.charAt(i));
+		}
+		zatiketa = gehiketa%11;
+		if(11-zatiketa==11) {
+			kontrol_zenbaki+="0";
+		}else if(11-zatiketa==10){
+			kontrol_zenbaki+="1";			
+		}else {
+			kontrol_zenbaki+=String.valueOf(11-zatiketa);			
+		}
+		return kontrol_zenbaki;
 	}
 }

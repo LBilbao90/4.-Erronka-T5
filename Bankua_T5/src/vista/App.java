@@ -66,6 +66,7 @@ public class App extends JFrame {
 	String[] hipoteka_eskatu_header = {"IBAN","Kantitatea","Komisioa","Epe Muga","Egoera"};
 	String[] hipoteka_onartu_header = {"IBAN","Kantitatea","Ordaindutakoa","Komisioa","Hasiera Data","Epe Muga","Egoera"};
 	String[] hipoteka_itxita_header = {"IBAN","Kantitatea","Ordaindutakoa","Komisioa","Hasiera Data","Amaiera Data","Epe Muga","Egoera"};
+	
 			
 	String[] langile_kontu_info = null;
 	String[][] transferentzia_info = null;
@@ -1237,7 +1238,12 @@ public class App extends JFrame {
 			public void actionPerformed(ActionEvent e) {	
 				sukurtsal_kontuak=metodoak.langilearenSukurtsalarenKontuak(langile, sukurtsal_izen);
 
-				kontuak_table = new JTable(sukurtsal_kontuak,kontuak_lista);
+				kontuak_table = new JTable(sukurtsal_kontuak,kontuak_lista){
+					private static final long serialVersionUID = 1L;
+			        public boolean isCellEditable(int row, int column) {                
+			                return false;               
+			        };
+			    };
 				kontuak_pane.setViewportView(kontuak_table);
 				
 				langileMenu.setVisible(false);
@@ -1250,6 +1256,7 @@ public class App extends JFrame {
 		JButton btn_kontu_sortu = new JButton("Kontua Sortu");
 		btn_kontu_sortu.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				metodoak.ibanKalkulatu(langile, sukurtsal_izen);
 				langileMenu.setVisible(false);
 				kontuSortu.setVisible(true);
 			}
@@ -1298,10 +1305,15 @@ public class App extends JFrame {
 		btn_kontu_itzi.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				String[][] ixteko_array = metodoak.ixtekoKontuak(langile, sukurtsal_izen);
-				itxi_table = new JTable(ixteko_array,kontuak_lista);
+				itxi_table = new JTable(ixteko_array,kontuak_lista) {
+					private static final long serialVersionUID = 1L;
+			        public boolean isCellEditable(int row, int column) {                
+			                return false;               
+			        };
+			    };
 				itxi_pane.setViewportView(itxi_table);
 				itxi_table.getColumnModel().getColumn(0).setPreferredWidth(200);
-				hipotekak_table.getTableHeader().setReorderingAllowed(false);
+				itxi_table.getTableHeader().setReorderingAllowed(false);
 				
 				langileMenu.setVisible(false);
 				ixtekoKontuak.setVisible(true);
@@ -1390,10 +1402,15 @@ public class App extends JFrame {
 			public void actionPerformed(ActionEvent e) {
 				transferentzia_info=metodoak.langileKontuTransfer(langile, langile_aukeratu_iban);
 				
-				transfer_ikusi_table = new JTable(transferentzia_info,transfer_header);
+				transfer_ikusi_table = new JTable(transferentzia_info,transfer_header){
+					private static final long serialVersionUID = 1L;
+			        public boolean isCellEditable(int row, int column) {                
+			                return false;               
+			        };
+			    };
 				transfer_panel.setViewportView(transfer_ikusi_table);
 				transfer_ikusi_table.getColumnModel().getColumn(2).setPreferredWidth(200);
-				hipotekak_table.getTableHeader().setReorderingAllowed(false);
+				transfer_ikusi_table.getTableHeader().setReorderingAllowed(false);
 				
 				infoKontua.setVisible(false);
 				transferentziaIkusi.setVisible(true);
@@ -1407,7 +1424,12 @@ public class App extends JFrame {
 			public void actionPerformed(ActionEvent e) {
 				sarrera_info=metodoak.langileKontuSarrerak(langile, langile_aukeratu_iban);
 
-				sarrerak_table = new JTable(sarrera_info,sarrera_header);
+				sarrerak_table = new JTable(sarrera_info,sarrera_header){
+					private static final long serialVersionUID = 1L;
+			        public boolean isCellEditable(int row, int column) {                
+			                return false;               
+			        };
+			    };
 				sarrerak_panel.setViewportView(sarrerak_table);
 				sarrerak_table.getColumnModel().getColumn(2).setPreferredWidth(200);
 				hipotekak_table.getTableHeader().setReorderingAllowed(false);
@@ -1635,7 +1657,12 @@ public class App extends JFrame {
 			public void actionPerformed(ActionEvent e) {
 				String[][] eskatutako_hipotekak = metodoak.eskatutakoHipotekak(langile, sukurtsal_izen);
 				
-				hipotekak_table = new JTable(eskatutako_hipotekak,hipoteka_eskatu_header);
+				hipotekak_table = new JTable(eskatutako_hipotekak,hipoteka_eskatu_header){
+					private static final long serialVersionUID = 1L;
+			        public boolean isCellEditable(int row, int column) {                
+			                return false;               
+			        };
+			    };
 				pane_hipotekak.setViewportView(hipotekak_table);
 				hipotekak_table.getColumnModel().getColumn(0).setPreferredWidth(200);
 				hipotekak_table.getTableHeader().setReorderingAllowed(false);
@@ -1655,7 +1682,12 @@ public class App extends JFrame {
 			public void actionPerformed(ActionEvent e) {
 				String[][] onartutako_hipotekak = metodoak.onartutakoHipotekak(langile, sukurtsal_izen);
 				
-				hipotekak_table = new JTable(onartutako_hipotekak,hipoteka_onartu_header);
+				hipotekak_table = new JTable(onartutako_hipotekak,hipoteka_onartu_header){
+					private static final long serialVersionUID = 1L;
+			        public boolean isCellEditable(int row, int column) {                
+			                return false;               
+			        };
+			    };
 				pane_hipotekak.setViewportView(hipotekak_table);
 				hipotekak_table.getColumnModel().getColumn(0).setPreferredWidth(200);
 				hipotekak_table.getTableHeader().setReorderingAllowed(false);
@@ -1675,7 +1707,12 @@ public class App extends JFrame {
 			public void actionPerformed(ActionEvent e) {
 				String[][] itxitako_hipotekak = metodoak.itxitakoHipotekak(langile, sukurtsal_izen);
 				
-				hipotekak_table = new JTable(itxitako_hipotekak,hipoteka_itxita_header);
+				hipotekak_table = new JTable(itxitako_hipotekak,hipoteka_itxita_header){
+					private static final long serialVersionUID = 1L;
+			        public boolean isCellEditable(int row, int column) {                
+			                return false;               
+			        };
+			    };
 				pane_hipotekak.setViewportView(hipotekak_table);
 				hipotekak_table.getColumnModel().getColumn(0).setPreferredWidth(200);
 				hipotekak_table.getTableHeader().setReorderingAllowed(false);
@@ -1695,7 +1732,12 @@ public class App extends JFrame {
 			public void actionPerformed(ActionEvent e) {
 				String[][] errefusatutako_hipotekak = metodoak.errefusatutakoHipotekak(langile, sukurtsal_izen);
 				
-				hipotekak_table = new JTable(errefusatutako_hipotekak,hipoteka_eskatu_header);
+				hipotekak_table = new JTable(errefusatutako_hipotekak,hipoteka_eskatu_header){
+					private static final long serialVersionUID = 1L;
+			        public boolean isCellEditable(int row, int column) {                
+			                return false;               
+			        };
+			    };
 				pane_hipotekak.setViewportView(hipotekak_table);
 				hipotekak_table.getColumnModel().getColumn(0).setPreferredWidth(200);
 				hipotekak_table.getTableHeader().setReorderingAllowed(false);

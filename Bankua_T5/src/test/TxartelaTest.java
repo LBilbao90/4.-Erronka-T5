@@ -50,7 +50,7 @@ public class TxartelaTest {
 		ArrayList<Transferentzia> transferentziak = new ArrayList<Transferentzia>();
 		transferentziak.add(t1);
 		
-		Hipoteka h1 = new Hipoteka (100000, 50000, 10, "03-12-2010", "06-10-2020", "eskatuta");
+		Hipoteka h1 = new Hipoteka (100000, 50000, 10, "03-12-2010", "06-10-2020", "eskatuta", "10 urte");
 		
 		EntitateBankario eb1 = new EntitateBankario ("BBK", "1", "ES25", "0/0/932/130", "src-res-bbk_logo.png");
 		
@@ -87,6 +87,7 @@ public class TxartelaTest {
 		assertEquals("03-12-2010", txartela.getKontuBankario().getHipoteka().getHasieraData());
 		assertEquals("06-10-2020", txartela.getKontuBankario().getHipoteka().getAmaieraData());
 		assertEquals("eskatuta", txartela.getKontuBankario().getHipoteka().getEgoera());
+		assertEquals("10 urte", txartela.getKontuBankario().getHipoteka().getEpeMuga());
 		
 		assertEquals("1",txartela.getKontuBankario().getSukurtsala().getIdSukurtsala());
 		assertEquals("13", txartela.getKontuBankario().getSukurtsala().getKodSukurtsala());
@@ -139,7 +140,7 @@ public class TxartelaTest {
 		ArrayList<Transferentzia> transferentziak = new ArrayList<Transferentzia>();
 		transferentziak.add(t1);
 		
-		Hipoteka h1 = new Hipoteka (100000, 50000, 10, "03-12-2010", "06-10-2020", "eskatuta");
+		Hipoteka h1 = new Hipoteka (100000, 50000, 10, "03-12-2010", "06-10-2020", "eskatuta", "10 urte");
 		
 		EntitateBankario eb1 = new EntitateBankario ("BBK", "1", "ES25", "0/0/932/130", "src-res-bbk_logo.png");
 		
@@ -160,7 +161,7 @@ public class TxartelaTest {
 		ArrayList<Transferentzia> transferentziak2 = new ArrayList<Transferentzia>();
 		transferentziak2.add(t2);
 		
-		Hipoteka h2 = new Hipoteka (200000, 70000, 10, "06-15-2012", "07-11-2022", "onartuta");
+		Hipoteka h2 = new Hipoteka (200000, 70000, 10, "06-15-2011", "07-11-2022", "onartuta", "11 urte");
 		
 		EntitateBankario eb2 = new EntitateBankario ("BBVA", "2", "ES36", "092/567/900/810", "bbva.png");
 		
@@ -196,9 +197,10 @@ public class TxartelaTest {
 		assertEquals(200000, txartela.getKontuBankario().getHipoteka().getKantitatea(), 0.01);
 		assertEquals(70000, txartela.getKontuBankario().getHipoteka().getOrdaindutakoa(), 0.01);
 		assertEquals(10, txartela.getKontuBankario().getHipoteka().getKomisioa(), 0.01);
-		assertEquals("06-15-2012", txartela.getKontuBankario().getHipoteka().getHasieraData());
+		assertEquals("06-15-2011", txartela.getKontuBankario().getHipoteka().getHasieraData());
 		assertEquals("07-11-2022", txartela.getKontuBankario().getHipoteka().getAmaieraData());
 		assertEquals("onartuta", txartela.getKontuBankario().getHipoteka().getEgoera());
+		assertEquals("11 urte", txartela.getKontuBankario().getHipoteka().getEpeMuga());
 		
 		assertEquals("2",txartela.getKontuBankario().getSukurtsala().getIdSukurtsala());
 		assertEquals("11", txartela.getKontuBankario().getSukurtsala().getKodSukurtsala());
