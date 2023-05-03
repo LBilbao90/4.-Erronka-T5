@@ -1,11 +1,11 @@
 -- phpMyAdmin SQL Dump
--- version 5.1.1
+-- version 5.2.0
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 02-05-2023 a las 14:17:23
--- Versión del servidor: 10.4.22-MariaDB
--- Versión de PHP: 8.1.2
+-- Tiempo de generación: 03-05-2023 a las 12:00:32
+-- Versión del servidor: 10.4.27-MariaDB
+-- Versión de PHP: 8.2.0
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -37,7 +37,7 @@ CREATE TABLE `bezeroa` (
   `sexua` enum('gizona','emakumea') DEFAULT NULL,
   `telefonoa` char(9) DEFAULT NULL,
   `pasahitza` varchar(30) DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Volcado de datos para la tabla `bezeroa`
@@ -46,7 +46,8 @@ CREATE TABLE `bezeroa` (
 INSERT INTO `bezeroa` (`NAN`, `izena`, `abizenak`, `jaiotzeData`, `sexua`, `telefonoa`, `pasahitza`) VALUES
 ('12345678A', 'Aingeru', 'Siranaula', '2002-10-21', 'gizona', '111222333', '12345678'),
 ('12345678B', 'Ibai', 'Alvarez', '2000-08-16', 'gizona', '444555666', '1234'),
-('12345678C', 'Hodei', 'Martinez', '2004-04-16', 'gizona', '777888999', '12345678');
+('12345678C', 'Hodei', 'Martinez', '2004-04-16', 'gizona', '777888999', '12345678'),
+('12345678Z', 'Juan', 'Perez', '1999-06-12', 'gizona', '111222333', '1234');
 
 -- --------------------------------------------------------
 
@@ -61,7 +62,7 @@ CREATE TABLE `dirusarrera` (
   `igortzaile` char(24) DEFAULT NULL,
   `kontzeptua` varchar(40) DEFAULT NULL,
   `IBANJasotzaile` char(24) DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Volcado de datos para la tabla `dirusarrera`
@@ -86,7 +87,7 @@ CREATE TABLE `entitatebankario` (
   `entitateZenbaki` char(4) DEFAULT NULL,
   `url` varchar(40) DEFAULT NULL,
   `bounds` varchar(15) DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Volcado de datos para la tabla `entitatebankario`
@@ -114,7 +115,7 @@ CREATE TABLE `hipoteka` (
   `egoera` enum('eskatuta','onartuta','errefusatuta','itxita') DEFAULT NULL,
   `IBAN` char(24) DEFAULT NULL,
   `epeMuga` enum('3 urte','5 urte','10 urte','15 urte') DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Volcado de datos para la tabla `hipoteka`
@@ -140,7 +141,7 @@ CREATE TABLE `kontubankario` (
   `sorreraData` date DEFAULT NULL,
   `egoera` enum('aktiboa','izoztuta','ixteko','itxita') DEFAULT NULL,
   `id_sukurtsal` int(11) DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Volcado de datos para la tabla `kontubankario`
@@ -151,7 +152,7 @@ INSERT INTO `kontubankario` (`IBAN`, `saldoa`, `hilekoLimitea`, `sorreraData`, `
 ('ES0654320078323475235803', 2498, 1500, '2021-12-15', 'aktiboa', 11),
 ('ES0654320091166125485063', 100, 5000, '2010-05-15', 'aktiboa', 10),
 ('ES2598760011153710456683', 5000, 1500, '2006-12-15', 'aktiboa', 8),
-('ES2598760153921924586673', 9000, 3000, '2010-10-26', 'aktiboa', 9),
+('ES2598760153921924586673', 9000, 3000, '2010-10-26', 'ixteko', 9),
 ('ES2598760401403456015845', 10000, 5000, '2019-02-01', 'aktiboa', 7),
 ('ES3467890003915285942937', 5000, 3000, '2018-11-02', 'aktiboa', 6),
 ('ES3467890500545482067256', 2000, 1500, '2021-12-15', 'aktiboa', 5),
@@ -170,7 +171,7 @@ CREATE TABLE `kudeatu` (
   `nan` char(9) NOT NULL,
   `IBAN` char(24) NOT NULL,
   `id_txartela` char(16) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Volcado de datos para la tabla `kudeatu`
@@ -200,7 +201,7 @@ CREATE TABLE `langile` (
   `pasahitza` varchar(20) DEFAULT NULL,
   `lanpostua` enum('god','zuzendaria','gerentea') DEFAULT NULL,
   `id_sukurtsal` int(11) DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Volcado de datos para la tabla `langile`
@@ -208,7 +209,9 @@ CREATE TABLE `langile` (
 
 INSERT INTO `langile` (`id_langile`, `nan`, `izena`, `abizenak`, `jaiotzeData`, `sexua`, `telefonoa`, `pasahitza`, `lanpostua`, `id_sukurtsal`) VALUES
 (1, '12345678B', 'Ibai', 'Alvarez', '2000-10-21', 'gizona', '111222333', '1234', 'zuzendaria', 1),
-(2, '12345678G', 'GOD', 'TU PADRE', '2000-10-21', 'gizona', '000000000', '1234', 'god', 1);
+(2, '12345678G', 'GOD', 'TU PADRE', '2000-10-21', 'gizona', '000000000', '1234', 'god', 1),
+(3, '12345678A', 'Aingeru', 'Siranaula', '2000-10-21', 'gizona', '111222333', '1234', 'zuzendaria', 12),
+(4, '12345678C', 'Hodei', 'Martinez', '2004-04-16', 'gizona', '111222333', '1234', 'zuzendaria', 9);
 
 -- --------------------------------------------------------
 
@@ -221,7 +224,7 @@ CREATE TABLE `sukurtsala` (
   `kokalekua` varchar(30) DEFAULT NULL,
   `id_sukurtsal` int(11) NOT NULL,
   `id_entitate` int(11) DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Volcado de datos para la tabla `sukurtsala`
@@ -255,7 +258,7 @@ CREATE TABLE `transferentzia` (
   `kontzeptua` varchar(50) DEFAULT NULL,
   `komisioa` double DEFAULT NULL,
   `IBANIgortzaile` char(24) DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Volcado de datos para la tabla `transferentzia`
@@ -278,7 +281,7 @@ CREATE TABLE `txartela` (
   `id_txartela` char(16) NOT NULL,
   `segurtasunKodea` char(4) DEFAULT NULL,
   `mota` enum('kredito','debito') DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Volcado de datos para la tabla `txartela`
@@ -394,7 +397,7 @@ ALTER TABLE `hipoteka`
 -- AUTO_INCREMENT de la tabla `langile`
 --
 ALTER TABLE `langile`
-  MODIFY `id_langile` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `id_langile` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- AUTO_INCREMENT de la tabla `transferentzia`

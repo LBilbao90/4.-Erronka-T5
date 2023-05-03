@@ -1,6 +1,7 @@
 package controlador;
 
 import java.io.PrintWriter;
+import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.io.File;
 import java.io.FileWriter;
@@ -14,6 +15,8 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Calendar;
+
+import javax.swing.JOptionPane;
 
 import com.mysql.jdbc.Connection;
 import com.mysql.jdbc.Statement;
@@ -646,7 +649,7 @@ public class Metodoak {
 				//Kontu bankarioak arakatu
 				for(int j=0;j<langilea.getSukurtsalak().get(i).getKontuBankarioak().size();j++) {
 					if(langilea.getSukurtsalak().get(i).getKontuBankarioak().get(j).getIban().equals(iban)) {
-						informazio[0]= iban.substring(0,4)+" "+iban.substring(4,8)+" "+iban.substring(8,12)+" "+" "+iban.substring(12,16)+" "+" "+iban.substring(16,20)+" "+" "+iban.substring(20);
+						informazio[0]= iban.substring(0,4)+" "+iban.substring(4,8)+" "+iban.substring(8,12)+" "+" "+iban.substring(12,14)+" "+" "+iban.substring(14);
 						for(int k=0;k<langilea.getSukurtsalak().get(i).getKontuBankarioak().get(j).getTxartelak().size();k++) {
 							if(k==0) {
 								informazio[1]=langilea.getSukurtsalak().get(i).getKontuBankarioak().get(j).getTxartelak().get(k).getBezeroa().getIzena()+" "+ langilea.getSukurtsalak().get(i).getKontuBankarioak().get(j).getTxartelak().get(k).getBezeroa().getAbizena();
@@ -702,7 +705,7 @@ public class Metodoak {
 						transfer_prob[transfer_info.length][0] = df.format(langilea.getSukurtsalak().get(i).getKontuBankarioak().get(j).getTransferentziak().get(k).getKantitatea())+" €";
 						transfer_prob[transfer_info.length][1] = langilea.getSukurtsalak().get(i).getKontuBankarioak().get(j).getTransferentziak().get(k).getTransferentziaData();
 						String jasotzaile_iban = langilea.getSukurtsalak().get(i).getKontuBankarioak().get(j).getTransferentziak().get(k).getJasotzailea();
-						String iban_jaso = jasotzaile_iban.substring(0,4)+" "+jasotzaile_iban.substring(4,8)+" "+jasotzaile_iban.substring(8,12)+" "+" "+jasotzaile_iban.substring(12,16)+" "+" "+jasotzaile_iban.substring(16,20)+" "+" "+jasotzaile_iban.substring(20);
+						String iban_jaso = jasotzaile_iban.substring(0,4)+" "+jasotzaile_iban.substring(4,8)+" "+jasotzaile_iban.substring(8,12)+" "+" "+jasotzaile_iban.substring(12,14)+" "+" "+jasotzaile_iban.substring(14);
 						transfer_prob[transfer_info.length][2] = iban_jaso;
 						transfer_prob[transfer_info.length][3] = langilea.getSukurtsalak().get(i).getKontuBankarioak().get(j).getTransferentziak().get(k).getKotzeptua();
 						transfer_prob[transfer_info.length][4] = df.format(langilea.getSukurtsalak().get(i).getKontuBankarioak().get(j).getTransferentziak().get(k).getKomisioa())+" %";
@@ -815,7 +818,7 @@ public class Metodoak {
 							}
 						}
 						String iban = langilea.getSukurtsalak().get(i).getKontuBankarioak().get(j).getIban();
-						String iban_ixteko = iban.substring(0,4)+" "+iban.substring(4,8)+" "+iban.substring(8,12)+" "+" "+iban.substring(12,16)+" "+" "+iban.substring(16,20)+" "+" "+iban.substring(20);
+						String iban_ixteko = iban.substring(0,4)+" "+iban.substring(4,8)+" "+iban.substring(8,12)+" "+" "+iban.substring(12,14)+" "+" "+iban.substring(14);
 						prob[kontuak.length][0]=iban_ixteko;				
 						prob[kontuak.length][1]=String.valueOf(df.format(langilea.getSukurtsalak().get(i).getKontuBankarioak().get(j).getSaldoa()))+" €";
 						prob[kontuak.length][2]=langilea.getSukurtsalak().get(i).getKontuBankarioak().get(j).getEgoera();
@@ -862,7 +865,7 @@ public class Metodoak {
 							}
 						}
 						String iban = langilea.getSukurtsalak().get(i).getKontuBankarioak().get(j).getIban();
-						String iban_eskatuta = iban.substring(0,4)+" "+iban.substring(4,8)+" "+iban.substring(8,12)+" "+" "+iban.substring(12,16)+" "+" "+iban.substring(16,20)+" "+" "+iban.substring(20);
+						String iban_eskatuta = iban.substring(0,4)+" "+iban.substring(4,8)+" "+iban.substring(8,12)+" "+" "+iban.substring(12,14)+" "+" "+iban.substring(14);
 						prob[eskatutak.length][0]=iban_eskatuta;
 						prob[eskatutak.length][1]= String.valueOf(df.format(langilea.getSukurtsalak().get(i).getKontuBankarioak().get(j).getHipoteka().getKantitatea()))+" €";
 						prob[eskatutak.length][2]= String.valueOf(df.format(langilea.getSukurtsalak().get(i).getKontuBankarioak().get(j).getHipoteka().getKomisioa()))+" %";
@@ -891,7 +894,7 @@ public class Metodoak {
 							}
 						}
 						String iban = langilea.getSukurtsalak().get(i).getKontuBankarioak().get(j).getIban();
-						String iban_eskatuta = iban.substring(0,4)+" "+iban.substring(4,8)+" "+iban.substring(8,12)+" "+" "+iban.substring(12,16)+" "+" "+iban.substring(16,20)+" "+" "+iban.substring(20);
+						String iban_eskatuta = iban.substring(0,4)+" "+iban.substring(4,8)+" "+iban.substring(8,12)+" "+" "+iban.substring(12,14)+" "+" "+iban.substring(14);
 						prob[onartutak.length][0]=iban_eskatuta;
 						prob[onartutak.length][1]= String.valueOf(df.format(langilea.getSukurtsalak().get(i).getKontuBankarioak().get(j).getHipoteka().getKantitatea()))+" €";
 						prob[onartutak.length][2]= String.valueOf(df.format(langilea.getSukurtsalak().get(i).getKontuBankarioak().get(j).getHipoteka().getOrdaindutakoa()))+ " €";						
@@ -922,7 +925,7 @@ public class Metodoak {
 							}
 						}
 						String iban = langilea.getSukurtsalak().get(i).getKontuBankarioak().get(j).getIban();
-						String iban_eskatuta = iban.substring(0,4)+" "+iban.substring(4,8)+" "+iban.substring(8,12)+" "+" "+iban.substring(12,16)+" "+" "+iban.substring(16,20)+" "+" "+iban.substring(20);
+						String iban_eskatuta = iban.substring(0,4)+" "+iban.substring(4,8)+" "+iban.substring(8,12)+" "+" "+iban.substring(12,14)+" "+" "+iban.substring(14);
 						prob[errefusatutak.length][0]=iban_eskatuta;
 						prob[errefusatutak.length][1]= String.valueOf(df.format(langilea.getSukurtsalak().get(i).getKontuBankarioak().get(j).getHipoteka().getKantitatea()))+" €";
 						prob[errefusatutak.length][2]= String.valueOf(df.format(langilea.getSukurtsalak().get(i).getKontuBankarioak().get(j).getHipoteka().getKomisioa()))+" %";
@@ -951,7 +954,7 @@ public class Metodoak {
 							}
 						}
 						String iban = langilea.getSukurtsalak().get(i).getKontuBankarioak().get(j).getIban();
-						String iban_eskatuta = iban.substring(0,4)+" "+iban.substring(4,8)+" "+iban.substring(8,12)+" "+" "+iban.substring(12,16)+" "+" "+iban.substring(16,20)+" "+" "+iban.substring(20);
+						String iban_eskatuta = iban.substring(0,4)+" "+iban.substring(4,8)+" "+iban.substring(8,12)+" "+" "+iban.substring(12,14)+" "+" "+iban.substring(14);
 						prob[itxitak.length][0]=iban_eskatuta;
 						prob[itxitak.length][1]= String.valueOf(df.format(langilea.getSukurtsalak().get(i).getKontuBankarioak().get(j).getHipoteka().getKantitatea()))+" €";
 						prob[itxitak.length][2]= String.valueOf(df.format(langilea.getSukurtsalak().get(i).getKontuBankarioak().get(j).getHipoteka().getOrdaindutakoa()))+ " €";						
@@ -983,13 +986,11 @@ public class Metodoak {
 				String kontrol_zenbakiak = kontrolDigitoak(entitate_kod,sukurtsal_kod,kontu_zenb);
 				
 				String iban_kontrol_zenb=entitate_kod+sukurtsal_kod+kontrol_zenbakiak+kontu_zenb+142800;
-				BigInteger b1= new BigInteger(iban_kontrol_zenb);
-				double zatiketa = Double.parseDouble(iban_kontrol_zenb)/97;
-				double hondarra = zatiketa%1;
-				int emaitza_prob = (int) Math.round(hondarra*97);
-				int emaitza = 98-emaitza_prob;
-				System.out.println(emaitza_prob);
-				System.out.println(emaitza);
+				
+				BigDecimal b1= new BigDecimal(iban_kontrol_zenb);
+				int hondarra = b1.remainder(new BigDecimal(97)).intValue();
+				int emaitza = 98-((hondarra*97)/100);
+				iban_kontua= es+emaitza+entitate_kod+sukurtsal_kod+kontrol_zenbakiak+kontu_zenb;
 			}
 		}		
 		return iban_kontua;
@@ -1043,7 +1044,7 @@ public class Metodoak {
 					}
 				}
 				String iban =bezeroa.getTxartelak().get(i).getKontuBankario().getIban();
-				kontuak_prob[kontuak.length][0] = iban.substring(0,4)+" "+iban.substring(4,8)+" "+iban.substring(8,12)+" "+" "+iban.substring(12,16)+" "+" "+iban.substring(16,20)+" "+" "+iban.substring(20);
+				kontuak_prob[kontuak.length][0] = iban.substring(0,4)+" "+iban.substring(4,8)+" "+iban.substring(8,12)+" "+" "+iban.substring(12,14)+" "+" "+iban.substring(14);
 				kontuak_prob[kontuak.length][1] = String.valueOf(df.format(bezeroa.getTxartelak().get(i).getKontuBankario().getSaldoa())+" €");
 				kontuak_prob[kontuak.length][2] = bezeroa.getTxartelak().get(i).getKontuBankario().getEgoera();
 				kontuak = kontuak_prob;	
@@ -1052,7 +1053,7 @@ public class Metodoak {
 		return kontuak;
 	}
 	
-	public String[][] transferentziakIkusi(Bezeroa bezeroa, int id_entitea, String iban) {
+	public String[][] transferentziakIkusi(Bezeroa bezeroa, String iban) {
 		String[][] transferentziak = new String [0][4];
 		
 		for(int i = 0; i < bezeroa.getTxartelak().size(); i ++) {
@@ -1065,8 +1066,8 @@ public class Metodoak {
 						}
 					}
 					String ibana = bezeroa.getTxartelak().get(i).getKontuBankario().getTransferentziak().get(j).getJasotzailea();
-					transferentziak_prob[transferentziak.length][0] = ibana.substring(0,4)+" "+ibana.substring(4,8)+" "+ibana.substring(8,12)+" "+" "+ibana.substring(12,16)+" "+" "+ibana.substring(16,20)+" "+" "+ibana.substring(20);
-					transferentziak_prob[transferentziak.length][1] = String.valueOf(bezeroa.getTxartelak().get(i).getKontuBankario().getTransferentziak().get(j).getKantitatea()) + " €";
+					transferentziak_prob[transferentziak.length][0] = ibana.substring(0,4)+" "+ibana.substring(4,8)+" "+ibana.substring(8,12)+" "+" "+ibana.substring(12,14)+" "+" "+ibana.substring(14);
+					transferentziak_prob[transferentziak.length][1] = String.valueOf(df.format(bezeroa.getTxartelak().get(i).getKontuBankario().getTransferentziak().get(j).getKantitatea())) + " €";
 					transferentziak_prob[transferentziak.length][2] = bezeroa.getTxartelak().get(i).getKontuBankario().getTransferentziak().get(j).getKotzeptua();
 					transferentziak_prob[transferentziak.length][3] = bezeroa.getTxartelak().get(i).getKontuBankario().getTransferentziak().get(j).getTransferentziaData();
 					transferentziak = transferentziak_prob;	
@@ -1075,6 +1076,31 @@ public class Metodoak {
 		}
 		
 		return transferentziak;
+	}
+	
+	public String[][] diruSarrerakIkusi(Bezeroa bezeroa,String iban) {
+		String[][] diruSarrerak = new String [0][4];
+		
+		for(int i = 0; i < bezeroa.getTxartelak().size(); i ++) {
+			if(bezeroa.getTxartelak().get(i).getKontuBankario().getIban().equals(iban)) {
+				for(int j = 0; j < bezeroa.getTxartelak().get(i).getKontuBankario().getDiruSarrerak().size(); j ++) {
+					String[][] diruSarrerak_prob = new String[diruSarrerak.length+1][4];
+					for(int k = 0; k < diruSarrerak.length; k ++) {
+						for(int l = 0; l < diruSarrerak[l].length; l ++) {
+							diruSarrerak_prob[k][l] = diruSarrerak[k][l];
+						}
+					}
+					String ibana = bezeroa.getTxartelak().get(i).getKontuBankario().getDiruSarrerak().get(j).getIgortzailea();
+					diruSarrerak_prob[diruSarrerak.length][0] = ibana.substring(0,4)+" "+ibana.substring(4,8)+" "+ibana.substring(8,12)+" "+" "+ibana.substring(12,14)+" "+" "+ibana.substring(14);
+					diruSarrerak_prob[diruSarrerak.length][1] = String.valueOf(df.format(bezeroa.getTxartelak().get(i).getKontuBankario().getDiruSarrerak().get(j).getKantitatea())) + " €";
+					diruSarrerak_prob[diruSarrerak.length][2] = bezeroa.getTxartelak().get(i).getKontuBankario().getDiruSarrerak().get(j).getKontzeptua();
+					diruSarrerak_prob[diruSarrerak.length][3] = bezeroa.getTxartelak().get(i).getKontuBankario().getDiruSarrerak().get(j).getSarreraData();
+					diruSarrerak = diruSarrerak_prob;	
+				}
+			}
+		}
+		
+		return diruSarrerak;
 	}
 	
 	public boolean transferentziaIbanBalidatu(String ibanJasotzaile) {
@@ -1162,5 +1188,224 @@ public class Metodoak {
 		}
 		
 		return zuzena;
+	}
+	
+	public void transferentziakImprimatu(String[][] transferentziak){
+    	Calendar cal = Calendar.getInstance();
+		cal.set(Calendar.AM_PM, Calendar.AM);
+    	String cal_s = cal.get(Calendar.YEAR)+"_"+cal.get(Calendar.MONTH)+"_"+cal.get(Calendar.DAY_OF_MONTH)+"_"+cal.get(Calendar.HOUR)+"_"+cal.get(Calendar.MINUTE);
+		File file = new File("src/movimientos/Transferentziak/"+cal_s+".txt");
+		BufferedWriter fichero;
+		
+		try {
+	    	fichero = new BufferedWriter(new FileWriter(file));
+	    	fichero.write("TRANSFERENTZIAK: \n");
+	    	
+	    	for(int i = 0; i < transferentziak.length; i ++) {
+	    		fichero.write("IBAN: "+transferentziak[i][0]+" ,Kantitatea: "+transferentziak[i][1]+" ,Kontzeptua"+transferentziak[i][2]+" ,Transferetzia-data: "+ transferentziak[i][3] +"\n");
+	    	}
+	    	
+	    	fichero.close();
+		
+		} catch (IOException e1) {
+			e1.printStackTrace();
+		}	
+	}
+	
+	public void diruSarrerakImprimatu(String[][] diruSarrerak){
+    	Calendar cal = Calendar.getInstance();
+		cal.set(Calendar.AM_PM, Calendar.AM);
+    	String cal_s = cal.get(Calendar.YEAR)+"_"+cal.get(Calendar.MONTH)+"_"+cal.get(Calendar.DAY_OF_MONTH)+"_"+cal.get(Calendar.HOUR)+"_"+cal.get(Calendar.MINUTE);
+		File file = new File("src/movimientos/DiruSarrerak/"+cal_s+".txt");
+		BufferedWriter fichero;
+		
+		try {
+	    	fichero = new BufferedWriter(new FileWriter(file));
+	    	fichero.write("DIRU SARRERAK: \n");
+	    	
+	    	for(int i = 0; i < diruSarrerak.length; i ++) {
+	    		fichero.write("IBAN igortzailea: "+diruSarrerak[i][0]+" ,Kantitatea: "+diruSarrerak[i][1]+" ,Kontzeptua"+diruSarrerak[i][2]+" ,Sarrera-data: "+ diruSarrerak[i][3] +"\n");
+	    	}
+	    	
+	    	fichero.close();
+		
+		} catch (IOException e1) {
+			e1.printStackTrace();
+		}	
+	}
+	
+	public void MugimentuakImprimatu(String[][] diruSarrerak, String[][] transferentziak){
+    	Calendar cal = Calendar.getInstance();
+		cal.set(Calendar.AM_PM, Calendar.AM);
+    	String cal_s = cal.get(Calendar.YEAR)+"_"+cal.get(Calendar.MONTH)+"_"+cal.get(Calendar.DAY_OF_MONTH)+"_"+cal.get(Calendar.HOUR)+"_"+cal.get(Calendar.MINUTE);
+		File file = new File("src/movimientos/Mugimenduak/"+cal_s+".txt");
+		BufferedWriter fichero;
+		
+		try {
+	    	fichero = new BufferedWriter(new FileWriter(file));
+	    	fichero.write("DIRU SARRERAK: \n");
+	    	
+	    	for(int i = 0; i < diruSarrerak.length; i ++) {
+	    		fichero.write("IBAN igortzailea: "+diruSarrerak[i][0]+" ,Kantitatea: "+diruSarrerak[i][1]+" ,Kontzeptua"+diruSarrerak[i][2]+" ,Sarrera-data: "+ diruSarrerak[i][3] +"\n");
+	    	}
+	    	
+	    	fichero.write("DIRU SARRERAK: \n");
+	    	
+	    	for(int i = 0; i < diruSarrerak.length; i ++) {
+	    		fichero.write("IBAN igortzailea: "+diruSarrerak[i][0]+" ,Kantitatea: "+diruSarrerak[i][1]+" ,Kontzeptua"+diruSarrerak[i][2]+" ,Sarrera-data: "+ diruSarrerak[i][3] +"\n");
+	    	}
+	    	
+	    	fichero.close();
+		
+		} catch (IOException e1) {
+			e1.printStackTrace();
+		}	
+	}
+
+	public static String sortuTxartelId() {
+		String id = "";
+		
+		for(int i=0;i<16;i++) {
+			id += String.valueOf((int) Math.floor(Math.random() *(9 - 0 + 1) + 0));			
+		}
+		return id;
+	}
+
+	public boolean txartelIdBalidatu(String txartelId) {
+		boolean libre=true;
+		
+		Connection conn;					
+		try {
+			//Datu baseari konexioa eta Langilea logeatzeko kontsulta egiten dugu
+			conn = (Connection) DriverManager.getConnection ("jdbc:mysql://localhost:3306/bankua","root","");
+			Statement comand = (Statement) conn.createStatement();	
+			ResultSet req = comand.executeQuery("select "+id_txartela+" from "+txartela+" where "+id_txartela+"='"+txartelId+"';");
+			//Daturik aurkitzen badu
+			if(req.next()) {
+				libre = false;	
+			}
+			conn.close();
+		}catch(SQLException ex) {
+			System.out.println("SQLException: "+ ex.getMessage());
+			System.out.println("SQLState: "+ ex.getSQLState());
+			System.out.println("ErrorCode: "+ ex.getErrorCode());
+		}
+		
+		return libre;
+	}
+
+	public boolean nanBalidatu(String nan_balidatzeko) {
+		boolean balidoa = false;
+		String[] letrak = {"T","R","W","A","G","M","Y","F","P","D","X","B","N","J","Z","S","Q","V","H","L","C","K","E"};
+		int nan_int = 0;
+		try {
+			nan_int = Integer.parseInt(nan_balidatzeko.substring(0,8));	
+			if(letrak[nan_int%23].equals(nan_balidatzeko.substring(8).toUpperCase())) {
+				balidoa=true;
+			}else{
+				JOptionPane.showMessageDialog(null,"NAN Okerra!","Error!", JOptionPane.ERROR_MESSAGE);			
+			}		
+		}catch(Exception e) {
+			JOptionPane.showMessageDialog(null,"NAN Okerra!","Error!", JOptionPane.ERROR_MESSAGE);			
+		}
+		
+		return balidoa;
+	}
+
+	public static String[][] bezeroGordeArray(String nan_bez,String txartel_id, String pass,String txartel_mota, String[][] bezeroak){
+		String[][] prob= new String[bezeroak.length+1][4];
+		for(int i=0;i<bezeroak.length;i++) {
+			for(int  j=0;j<bezeroak[i].length;j++) {
+				prob[i][j]= bezeroak[i][j];
+			}
+		}
+		prob[bezeroak.length][0]=nan_bez;
+		prob[bezeroak.length][1]=txartel_id;
+		prob[bezeroak.length][2]=pass;	
+		prob[bezeroak.length][3]=txartel_mota;
+		bezeroak=prob;
+		
+		return bezeroak;
+	}
+	
+	public static boolean diruBalidatu(String dirua) {
+		boolean balidoa = false;
+		try {
+			@SuppressWarnings("unused")
+			double balidaketa = Double.parseDouble(dirua);
+			String[] diru_split = dirua.split(",");
+			if(diru_split.length==1 || (diru_split[1].length()<=2 && diru_split.length<=2)) {
+				balidoa = true;				
+			}
+		}catch(Exception e) {
+			JOptionPane.showMessageDialog(null,"Datu okerra!","Error!", JOptionPane.ERROR_MESSAGE);		
+		}
+		return balidoa;
+	}
+
+	public boolean bezeroExistitu(String nan_bez) {
+		boolean existitu = false;
+		Connection conn;					
+		try {
+			//Datu baseari konexioa eta Bezeroa nan kontsulta egiten da
+			conn = (Connection) DriverManager.getConnection ("jdbc:mysql://localhost:3306/bankua","root","");
+			Statement comand = (Statement) conn.createStatement();	
+			ResultSet req = comand.executeQuery("select "+nan+" from "+bezeroa+" where "+nan+"='"+nan_bez+"';");
+			//Daturik aurkitzen badu
+			if(req.next()) {
+				existitu = true;	
+			}else {
+				JOptionPane.showMessageDialog(null,"Bezeroa ez da existitzen!","Error!", JOptionPane.ERROR_MESSAGE);					
+			}
+			conn.close();
+		}catch(SQLException ex) {
+			System.out.println("SQLException: "+ ex.getMessage());
+			System.out.println("SQLState: "+ ex.getSQLState());
+			System.out.println("ErrorCode: "+ ex.getErrorCode());		
+		}		
+		return existitu;
+	}
+
+	public boolean kontuKorronteSortu(Langilea langilea, String iban_sortu,String saldoa_sortu,String hilekoLimite_sortu,String egoera_sortu,String sukurtsal_izen,String[][] bezeroak){
+		boolean sortuta = false;
+		String sukurtsalId_sortu= "";
+		for(int i=0;i<langilea.getSukurtsalak().size();i++) {
+			if(langilea.getSukurtsalak().get(i).getKokalekua().equals(sukurtsal_izen)) {
+				sukurtsalId_sortu = langilea.getSukurtsalak().get(i).getIdSukurtsala();
+			}
+		}
+
+		Calendar c = Calendar.getInstance();
+		String egun,hil, urte;							   
+		egun = Integer.toString(c.get(Calendar.DATE));
+		hil = Integer.toString(c.get(Calendar.MONTH));
+		urte = Integer.toString(c.get(Calendar.YEAR));		
+		String data_sortu= urte + "-" + hil +"-" + egun;
+		Connection conn;					
+		try {
+			//Datu baseari konexioa eta Bezeroa nan kontsulta egiten da
+			conn = (Connection) DriverManager.getConnection ("jdbc:mysql://localhost:3306/bankua","root","");
+			Statement comand = (Statement) conn.createStatement();	
+			//Insert Kontu Bankarioan
+			comand.executeQuery("insert into "+kontuBankario+"  (`"+iban+"`,`"+saldoa+"`,`"+hilekoLimitea+"`,`"+sorreraData+"`,`"+egoera+"`,`"+id_sukurtsal+"`) VALUES ('"+iban_sortu+"','"+saldoa_sortu+"','"+hilekoLimite_sortu+"','"+data_sortu+"','"+egoera_sortu+"','"+sukurtsalId_sortu+"');");
+			//Insert Txartelean
+			for(int i=0;i<bezeroak.length;i++) {
+				comand.executeQuery("insert into "+txartela+" VALUES ('"+bezeroak[i][1]+"','"+bezeroak[i][2]+"','"+bezeroak[i][3]+"');");
+			}
+			//Insert Kudeatu
+			for(int i=0;i<bezeroak.length;i++) {
+				comand.executeQuery("insert into "+kudeatu+" VALUES ('"+bezeroak[i][0]+"','"+iban_sortu+"','"+bezeroak[i][1]+"');");
+			}
+			sortuta = true;
+			conn.close();
+		}catch(SQLException ex) {
+			JOptionPane.showMessageDialog(null,"Errorea datuak insertatzen!","Error!", JOptionPane.ERROR_MESSAGE);	
+			System.out.println("SQLException: "+ ex.getMessage());
+			System.out.println("SQLState: "+ ex.getSQLState());
+			System.out.println("ErrorCode: "+ ex.getErrorCode());		
+		}		
+		
+		
+		return sortuta;
 	}
 }

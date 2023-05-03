@@ -352,9 +352,9 @@ public class MetodoakTest {
 	public void testTransferentziakIkusi() {
 		Metodoak metodoak = new Metodoak();
 		Bezeroa b1 = metodoak.bezeroaKargatu("12345678A");
-		String[][] transferentziak = metodoak.transferentziakIkusi(b1, 1, "ES9723450111545932515164");
+		String[][] transferentziak = metodoak.transferentziakIkusi(b1,"ES9723450111545932515164");
 		
-		assertEquals("ES34 6789 0003  9152  8594  2937", transferentziak[0][0]);
+		assertEquals("ES34 6789 0003  91  5285942937", transferentziak[0][0]);
 		assertEquals("800.0 €", transferentziak[0][1]);
 		assertEquals("Ordainketa 4", transferentziak[0][2]);
 		assertEquals("2020-08-01", transferentziak[0][3]);

@@ -1,5 +1,6 @@
 package model;
 
+import java.util.Calendar;
 import java.util.Objects;
 
 public class Hipoteka implements Komisioa{
@@ -95,5 +96,41 @@ public class Hipoteka implements Komisioa{
 	@Override
 	public double kalkulatuPrezioa() {
 		return 0;
+	}
+	
+	public Langilea hipotekaErrefusatu(Langilea langilea, String sukurtsal_izen,String bezero_iban) {
+		//Sukurtsalak arakatu
+		for(int i=0;i<langilea.getSukurtsalak().size();i++) {
+			if(langilea.getSukurtsalak().get(i).getKokalekua().equals(sukurtsal_izen)) {
+				//Kontu Bankarioak arakatu
+				for(int j=0;j<langilea.getSukurtsalak().get(i).getKontuBankarioak().size();j++) {
+					if(langilea.getSukurtsalak().get(i).getKontuBankarioak().get(j).getIban().equals(bezero_iban)) {
+						langilea.getSukurtsalak().get(i).getKontuBankarioak().get(j).getHipoteka().setEgoera("errefusatua");
+					}
+				}
+			}
+		}		
+		return langilea;
+	}
+	
+	public Langilea hipotekaOnartu(Langilea langilea, String sukurtsal_izen,String bezero_iban) {
+		//Sukurtsalak arakatu
+		for(int i=0;i<langilea.getSukurtsalak().size();i++) {
+			if(langilea.getSukurtsalak().get(i).getKokalekua().equals(sukurtsal_izen)) {
+				//Kontu Bankarioak arakatu
+				for(int j=0;j<langilea.getSukurtsalak().get(i).getKontuBankarioak().size();j++) {
+					if(langilea.getSukurtsalak().get(i).getKontuBankarioak().get(j).getIban().equals(bezero_iban)) {
+						langilea.getSukurtsalak().get(i).getKontuBankarioak().get(j).getHipoteka().setEgoera("onartuta");
+						Calendar c = Calendar.getInstance();
+						String egun,hil, urte;							   
+						egun = Integer.toString(c.get(Calendar.DATE));
+						hil = Integer.toString(c.get(Calendar.MONTH));
+						urte = Integer.toString(c.get(Calendar.YEAR));		
+						langilea.getSukurtsalak().get(i).getKontuBankarioak().get(j).getHipoteka().setHasieraData(urte + "-" + hil +"-" + egun);						
+					}
+				}
+			}
+		}		
+		return langilea;
 	}
 }
