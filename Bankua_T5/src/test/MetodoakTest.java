@@ -2,6 +2,11 @@ package test;
 
 import static org.junit.Assert.*;
 
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.IOException;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -16,35 +21,44 @@ import controlador.Metodoak;
 import model.Bezeroa;
 import model.EntitateBankario;
 import model.Langilea;
+import model.SalbuespenaLogin;
 
 public class MetodoakTest {
 
 	@Test
 	public void testBezeroakKargatu() {
 		Metodoak metodoak = new Metodoak();
-		Bezeroa b1 = metodoak.bezeroaKargatu("12345678A");
+		Bezeroa b1 = metodoak.bezeroaKargatu("78950146R");
 		
-		assertEquals("12345678A", b1.getNan());
+		assertEquals("78950146R", b1.getNan());
 		assertEquals("Aingeru", b1.getIzena());
 		assertEquals("Siranaula", b1.getAbizena());
 		assertEquals("10-21-2002", b1.getJaiotzeData());
 		assertEquals("gizona", b1.getSexua());
 		assertEquals("111222333", b1.getTelefonoa());
-		assertEquals("12345678", b1.getPasahitza());
+		assertEquals("1234", b1.getPasahitza());
 	}
 	
 	@Test
 	public void testBezeroaLogin() {
 		Metodoak metodoak = new Metodoak();
 		
-		assertTrue(metodoak.bezeroLogin("12345678A", "12345678"));
+		try {
+			assertTrue(metodoak.bezeroLogin("78950146R", "1234"));
+		} catch (SalbuespenaLogin e) {
+			e.printStackTrace();
+		}
 	}
 	
 	@Test
 	public void testLangileLogin() {
 		Metodoak metodoak = new Metodoak();
 		
-		assertEquals("zuzendaria", metodoak.langileLogin("12345678B", "1234"));
+		try {
+			assertEquals("zuzendaria", metodoak.langileLogin("78950146R", "1234"));
+		} catch (SalbuespenaLogin e) {
+			e.printStackTrace();
+		}
 	}
 	
 	@Test
@@ -62,9 +76,9 @@ public class MetodoakTest {
 	@Test
 	public void testLangileaKargatu() {
 		Metodoak metodoak = new Metodoak();
-		Langilea l1 = metodoak.langileaKargatu("12345678B", "zuzendaria");
+		Langilea l1 = metodoak.langileaKargatu("79003399D", "zuzendaria");
 		
-		assertEquals("12345678B", l1.getNan());
+		assertEquals("79003399D", l1.getNan());
 		assertEquals("Ibai", l1.getIzena());
 		assertEquals("Alvarez", l1.getAbizena());
 		assertEquals("10-21-2000", l1.getJaiotzeData());
@@ -83,45 +97,45 @@ public class MetodoakTest {
 		assertEquals("218/253/128/45", l1.getSukurtsalak().get(0).getEntitateBankario().getBounds());
 		assertEquals("src/res/bbk_logo.png", l1.getSukurtsalak().get(0).getEntitateBankario().getUrl());
 		
-		assertEquals("ES9723450111545932515164", l1.getSukurtsalak().get(0).getKontuBankarioak().get(0).getIban());
-		assertEquals(1500, l1.getSukurtsalak().get(0).getKontuBankarioak().get(0).getSaldoa(), 0.01);
-		assertEquals(1000, l1.getSukurtsalak().get(0).getKontuBankarioak().get(0).getHilekoLimitea(), 0.01);
-		assertEquals("2022-01-01", l1.getSukurtsalak().get(0).getKontuBankarioak().get(0).getSorreraData());
+		assertEquals("ES9323450111313252003900", l1.getSukurtsalak().get(0).getKontuBankarioak().get(0).getIban());
+		assertEquals(20046.09, l1.getSukurtsalak().get(0).getKontuBankarioak().get(0).getSaldoa(), 0.01);
+		assertEquals(2000, l1.getSukurtsalak().get(0).getKontuBankarioak().get(0).getHilekoLimitea(), 0.01);
+		assertEquals("2003-09-15", l1.getSukurtsalak().get(0).getKontuBankarioak().get(0).getSorreraData());
 		assertEquals("aktiboa", l1.getSukurtsalak().get(0).getKontuBankarioak().get(0).getEgoera());
 		
-		assertEquals(5000, l1.getSukurtsalak().get(0).getKontuBankarioak().get(0).getDiruSarrerak().get(0).getKantitatea(), 0.01);
-		assertEquals("2022-12-07", l1.getSukurtsalak().get(0).getKontuBankarioak().get(0).getDiruSarrerak().get(0).getSarreraData());
-		assertEquals("Ordainketa 1", l1.getSukurtsalak().get(0).getKontuBankarioak().get(0).getDiruSarrerak().get(0).getKontzeptua());
-		assertEquals("ES2598760153921924586673", l1.getSukurtsalak().get(0).getKontuBankarioak().get(0).getDiruSarrerak().get(0).getIgortzailea());
+		assertEquals(100, l1.getSukurtsalak().get(0).getKontuBankarioak().get(0).getDiruSarrerak().get(0).getKantitatea(), 0.01);
+		assertEquals("2023-04-04", l1.getSukurtsalak().get(0).getKontuBankarioak().get(0).getDiruSarrerak().get(0).getSarreraData());
+		assertEquals("dirua", l1.getSukurtsalak().get(0).getKontuBankarioak().get(0).getDiruSarrerak().get(0).getKontzeptua());
+		assertEquals("ES2967890003394765827453", l1.getSukurtsalak().get(0).getKontuBankarioak().get(0).getDiruSarrerak().get(0).getIgortzailea());
 		
-		assertEquals(800, l1.getSukurtsalak().get(0).getKontuBankarioak().get(0).getTransferentziak().get(0).getKantitatea(), 0.01);
-		assertEquals("2020-08-01", l1.getSukurtsalak().get(0).getKontuBankarioak().get(0).getTransferentziak().get(0).getTransferentziaData());
-		assertEquals("Ordainketa 4", l1.getSukurtsalak().get(0).getKontuBankarioak().get(0).getTransferentziak().get(0).getKotzeptua());
-		assertEquals("ES3467890003915285942937", l1.getSukurtsalak().get(0).getKontuBankarioak().get(0).getTransferentziak().get(0).getJasotzailea());
+		assertEquals(100, l1.getSukurtsalak().get(0).getKontuBankarioak().get(0).getTransferentziak().get(0).getKantitatea(), 0.01);
+		assertEquals("2023-04-04", l1.getSukurtsalak().get(0).getKontuBankarioak().get(0).getTransferentziak().get(0).getTransferentziaData());
+		assertEquals("paga", l1.getSukurtsalak().get(0).getKontuBankarioak().get(0).getTransferentziak().get(0).getKotzeptua());
+		assertEquals("ES2267890050608253351724", l1.getSukurtsalak().get(0).getKontuBankarioak().get(0).getTransferentziak().get(0).getJasotzailea());
 		assertEquals(2, l1.getSukurtsalak().get(0).getKontuBankarioak().get(0).getTransferentziak().get(0).getKomisioa(), 0.01);
 		
-		assertEquals(60000, l1.getSukurtsalak().get(0).getKontuBankarioak().get(0).getHipoteka().getKantitatea(), 0.01);
-		assertEquals(5000, l1.getSukurtsalak().get(0).getKontuBankarioak().get(0).getHipoteka().getOrdaindutakoa(), 0.01);
-		assertEquals(2, l1.getSukurtsalak().get(0).getKontuBankarioak().get(0).getHipoteka().getKomisioa(), 0.01);
-		assertEquals("2023-08-01", l1.getSukurtsalak().get(0).getKontuBankarioak().get(0).getHipoteka().getHasieraData());
+		assertEquals(80000, l1.getSukurtsalak().get(0).getKontuBankarioak().get(0).getHipoteka().getKantitatea(), 0.01);
+		assertEquals(0, l1.getSukurtsalak().get(0).getKontuBankarioak().get(0).getHipoteka().getOrdaindutakoa(), 0.01);
+		assertEquals(3.8, l1.getSukurtsalak().get(0).getKontuBankarioak().get(0).getHipoteka().getKomisioa(), 0.01);
+		assertEquals("2023-04-04", l1.getSukurtsalak().get(0).getKontuBankarioak().get(0).getHipoteka().getHasieraData());
 		assertEquals(null, l1.getSukurtsalak().get(0).getKontuBankarioak().get(0).getHipoteka().getAmaieraData());
-		assertEquals("errefusatuta", l1.getSukurtsalak().get(0).getKontuBankarioak().get(0).getHipoteka().getEgoera());
+		assertEquals("eskatuta", l1.getSukurtsalak().get(0).getKontuBankarioak().get(0).getHipoteka().getEgoera());
 		
 		assertEquals("5678", l1.getSukurtsalak().get(0).getKontuBankarioak().get(0).getTxartelak().get(0).getSegurtasunKodea());
-		assertEquals("debito", l1.getSukurtsalak().get(0).getKontuBankarioak().get(0).getTxartelak().get(0).getMota());
-		assertEquals("12345678A",l1.getSukurtsalak().get(0).getKontuBankarioak().get(0).getTxartelak().get(0).getBezeroa().getNan());
+		assertEquals("kredito", l1.getSukurtsalak().get(0).getKontuBankarioak().get(0).getTxartelak().get(0).getMota());
+		assertEquals("78950146R",l1.getSukurtsalak().get(0).getKontuBankarioak().get(0).getTxartelak().get(0).getBezeroa().getNan());
 		assertEquals("Aingeru",l1.getSukurtsalak().get(0).getKontuBankarioak().get(0).getTxartelak().get(0).getBezeroa().getIzena());
 		assertEquals("Siranaula",l1.getSukurtsalak().get(0).getKontuBankarioak().get(0).getTxartelak().get(0).getBezeroa().getAbizena());
 		assertEquals("10-21-2002",l1.getSukurtsalak().get(0).getKontuBankarioak().get(0).getTxartelak().get(0).getBezeroa().getJaiotzeData());
 		assertEquals("gizona",l1.getSukurtsalak().get(0).getKontuBankarioak().get(0).getTxartelak().get(0).getBezeroa().getSexua());
 		assertEquals("111222333",l1.getSukurtsalak().get(0).getKontuBankarioak().get(0).getTxartelak().get(0).getBezeroa().getTelefonoa());
-		assertEquals("12345678",l1.getSukurtsalak().get(0).getKontuBankarioak().get(0).getTxartelak().get(0).getBezeroa().getPasahitza());
+		assertEquals("1234",l1.getSukurtsalak().get(0).getKontuBankarioak().get(0).getTxartelak().get(0).getBezeroa().getPasahitza());
 	}
 	
 	@Test
 	public void testLangilearenEntitateak() {
 		Metodoak metodoak = new Metodoak();
-		Langilea l1 = metodoak.langileaKargatu("12345678B", "zuzendaria");
+		Langilea l1 = metodoak.langileaKargatu("79003399D", "zuzendaria");
 		String[] entitateak = metodoak.langilearenEntitateak(l1);
 		
 		assertEquals("BBK", entitateak[0]);
@@ -130,7 +144,7 @@ public class MetodoakTest {
 	@Test
 	public void testLangilearenSukurtsalak() {
 		Metodoak metodoak = new Metodoak();
-		Langilea l1 = metodoak.langileaKargatu("12345678B", "zuzendaria");
+		Langilea l1 = metodoak.langileaKargatu("79003399D", "zuzendaria");
 		String[] sukurtsalak = metodoak.langilearenSukurtsalak(l1, "BBK");
 		
 		assertEquals("Santutxu, Santutxu Kalea, 27", sukurtsalak[0]);
@@ -164,57 +178,57 @@ public class MetodoakTest {
 	@Test
 	public void testLangilearenSukurtsalarenKontuak() {
 		Metodoak metodoak = new Metodoak();
-		Langilea l1 = metodoak.langileaKargatu("12345678B", "zuzendaria");
+		Langilea l1 = metodoak.langileaKargatu("79003399D", "zuzendaria");
 		String[][] kontuak = metodoak.langilearenSukurtsalarenKontuak(l1, "Santutxu, Santutxu Kalea, 27");
 		
-		assertEquals("ES9723450111545932515164", kontuak[0][0]);
-		assertEquals("1500,00 €", kontuak[0][1]);
+		assertEquals("ES9323450111313252003900", kontuak[0][0]);
+		assertEquals("20046,09 €", kontuak[0][1]);
 		assertEquals("aktiboa", kontuak[0][2]);
 	}
 	
 	@Test
 	public void testLangileKontuInfo() {
 		Metodoak metodoak = new Metodoak();
-		Langilea l1 = metodoak.langileaKargatu("12345678B", "zuzendaria");
-		String[] kontua = metodoak.langileKontuInfo(l1, "ES9723450111545932515164", "Santutxu, Santutxu Kalea, 27");
+		Langilea l1 = metodoak.langileaKargatu("79003399D", "zuzendaria");
+		String[] kontua = metodoak.langileKontuInfo(l1, "ES9323450111313252003900", "Santutxu, Santutxu Kalea, 27");
 		
-		assertEquals("ES97 2345 0111  5459  3251  5164", kontua[0]);
+		assertEquals("ES93 2345 0111  31  3252003900", kontua[0]);
 		assertEquals("Aingeru Siranaula", kontua[1]);
-		assertEquals("1500,00 €", kontua[2]);
+		assertEquals("20046,09 €", kontua[2]);
 		assertEquals("aktiboa", kontua[3]);
-		assertEquals("1000,00", kontua[4]);
+		assertEquals("2000,00", kontua[4]);
 	}
 	
 	@Test
 	public void testLangileKontuAldaketak() {
 		Metodoak metodoak = new Metodoak();
 		
-		assertTrue(metodoak.langileKontuAldaketak("aktiboa", "1000", "ES9723450111545932515164"));
+		assertTrue(metodoak.langileKontuAldaketak("aktiboa", "1000", "ES3454320001655285505955"));
 	}
 	
 	@Test
 	public void testLangileKontuTransfer() {
 		Metodoak metodoak = new Metodoak();
-		Langilea l1 = metodoak.langileaKargatu("12345678B", "zuzendaria");
-		String[][] kontu = metodoak.langileKontuTransfer(l1, "ES9723450111545932515164");
+		Langilea l1 = metodoak.langileaKargatu("79003399D", "zuzendaria");
+		String[][] kontu = metodoak.langileKontuTransfer(l1, "ES9323450111313252003900");
 		
-		assertEquals("800,00 €", kontu[0][0]);
-		assertEquals("2020-08-01", kontu[0][1]);
-		assertEquals("ES34 6789 0003  9152  8594  2937", kontu[0][2]);
-		assertEquals("Ordainketa 4", kontu[0][3]);
+		assertEquals("100,00 €", kontu[0][0]);
+		assertEquals("2023-04-04", kontu[0][1]);
+		assertEquals("ES22 6789 0050  60  8253351724", kontu[0][2]);
+		assertEquals("paga", kontu[0][3]);
 		assertEquals("2,00 %", kontu[0][4]);
 	}
 	
 	@Test
 	public void testLangileKontuSarrerak() {
 		Metodoak metodoak = new Metodoak();
-		Langilea l1 = metodoak.langileaKargatu("12345678B", "zuzendaria");
-		String[][] kontu = metodoak.langileKontuSarrerak(l1, "ES9723450111545932515164");
+		Langilea l1 = metodoak.langileaKargatu("79003399D", "zuzendaria");
+		String[][] kontu = metodoak.langileKontuSarrerak(l1, "ES9323450111313252003900");
 		
-		assertEquals("5000,00 €", kontu[0][0]);
-		assertEquals("2022-12-07", kontu[0][1]);
-		assertEquals("ES25 9876 0153  9219  2458  6673", kontu[0][2]);
-		assertEquals("Ordainketa 1", kontu[0][3]);
+		assertEquals("100,00 €", kontu[0][0]);
+		assertEquals("2023-04-04", kontu[0][1]);
+		assertEquals("ES29 6789 0003  3947  6582  7453", kontu[0][2]);
+		assertEquals("dirua", kontu[0][3]);
 	}
 	
 	@Test
@@ -272,23 +286,23 @@ public class MetodoakTest {
 	@Test
 	public void testIxtekoKontuak() {
 		Metodoak metodoak = new Metodoak();
-		Langilea l1 = metodoak.langileaKargatu("12345678C", "zuzendaria");
-		String[][] kontuak = metodoak.ixtekoKontuak(l1, "Autonomia Kalea, 18");
+		Langilea l1 = metodoak.langileaKargatu("78950146R", "zuzendaria");
+		String[][] kontuak = metodoak.ixtekoKontuak(l1, "C. de Bertendona, 4");
 		
-		assertEquals("ES25 9876 0153  9219  2458  6673", kontuak[0][0]);
-		assertEquals("9000,00 €", kontuak[0][1]);
+		assertEquals("ES22 6789 0050  60  8253351724", kontuak[0][0]);
+		assertEquals("1143,96 €", kontuak[0][1]);
 		assertEquals("ixteko", kontuak[0][2]);
 	}
 	
 	@Test
 	public void testEskatutakoHipotekak() {
 		Metodoak metodoak = new Metodoak();
-		Langilea l1 = metodoak.langileaKargatu("12345678C", "zuzendaria");
-		String[][] hipotekak = metodoak.eskatutakoHipotekak(l1, "Autonomia Kalea, 18");
+		Langilea l1 = metodoak.langileaKargatu("79003399D", "zuzendaria");
+		String[][] hipotekak = metodoak.eskatutakoHipotekak(l1, "Santutxu, Santutxu Kalea, 27");
 		
-		assertEquals("ES25 9876 0153  9219  2458  6673", hipotekak[0][0]);
+		assertEquals("ES93 2345 0111  31  3252003900", hipotekak[0][0]);
 		assertEquals("80000,00 €", hipotekak[0][1]);
-		assertEquals("3,00 %", hipotekak[0][2]);
+		assertEquals("3,80 %", hipotekak[0][2]);
 		assertEquals("10 urte", hipotekak[0][3]);
 		assertEquals("eskatuta", hipotekak[0][4]);
 	}
@@ -296,14 +310,14 @@ public class MetodoakTest {
 	@Test
 	public void testOnartutakoHipotekak() {
 		Metodoak metodoak = new Metodoak();
-		Langilea l1 = metodoak.langileaKargatu("12345678A", "zuzendaria");
-		String[][] hipotekak = metodoak.onartutakoHipotekak(l1, "Alameda de Recalde, 44");
+		Langilea l1 = metodoak.langileaKargatu("79003399D", "zuzendaria");
+		String[][] hipotekak = metodoak.onartutakoHipotekak(l1, "Urkixo Zumarkalea, 56");
 		
-		assertEquals("ES06 5432 0001  4187  5345  0238", hipotekak[0][0]);
-		assertEquals("150000,00 €", hipotekak[0][1]);
-		assertEquals("12000,00 €", hipotekak[0][2]);
-		assertEquals("8,00 %", hipotekak[0][3]);
-		assertEquals("2023-07-01", hipotekak[0][4]);
+		assertEquals("ES70 2345 0002  73  4016972210", hipotekak[0][0]);
+		assertEquals("70000,00 €", hipotekak[0][1]);
+		assertEquals("1000,00 €", hipotekak[0][2]);
+		assertEquals("3,50 %", hipotekak[0][3]);
+		assertEquals("2023-04-04", hipotekak[0][4]);
 		assertEquals("5 urte", hipotekak[0][5]);
 		assertEquals("onartuta", hipotekak[0][6]);
 	}
@@ -311,12 +325,12 @@ public class MetodoakTest {
 	@Test
 	public void testErrefusatutakoHipotekak() {
 		Metodoak metodoak = new Metodoak();
-		Langilea l1 = metodoak.langileaKargatu("12345678B", "zuzendaria");
-		String[][] hipotekak = metodoak.errefusatutakoHipotekak(l1, "Santutxu, Santutxu Kalea, 27");
+		Langilea l1 = metodoak.langileaKargatu("12345678Z", "god");
+		String[][] hipotekak = metodoak.errefusatutakoHipotekak(l1, "Alameda de Recalde, 35");
 		
-		assertEquals("ES97 2345 0111  5459  3251  5164", hipotekak[0][0]);
-		assertEquals("60000,00 €", hipotekak[0][1]);
-		assertEquals("2,00 %", hipotekak[0][2]);
+		assertEquals("ES29 6789 0003  39  4765827453", hipotekak[0][0]);
+		assertEquals("100000,00 €", hipotekak[0][1]);
+		assertEquals("4,00 %", hipotekak[0][2]);
 		assertEquals("15 urte", hipotekak[0][3]);
 		assertEquals("errefusatuta", hipotekak[0][4]);
 	}
@@ -324,68 +338,192 @@ public class MetodoakTest {
 	@Test
 	public void testItxitakoHipotekak() {
 		Metodoak metodoak = new Metodoak();
-		Langilea l1 = metodoak.langileaKargatu("12345678B", "zuzendaria");
-		String[][] hipotekak = metodoak.itxitakoHipotekak(l1, "Urkixo Zumarkalea, 56");
+		Langilea l1 = metodoak.langileaKargatu("12345678Z", "god");
+		String[][] hipotekak = metodoak.itxitakoHipotekak(l1, "C. de Bertendona, 4");
 		
-		assertEquals("ES97 2345 0002  9857  8111  8223", hipotekak[0][0]);
+		assertEquals("ES22 6789 0050  60  8253351724", hipotekak[0][0]);
 		assertEquals("100000,00 €", hipotekak[0][1]);
-		assertEquals("8000,00 €", hipotekak[0][2]);
+		assertEquals("0,00 €", hipotekak[0][2]);
 		assertEquals("4,00 %", hipotekak[0][3]);
-		assertEquals("2013-09-01", hipotekak[0][4]);
-		assertEquals("2018-03-01", hipotekak[0][5]);
-		assertEquals("5 urte", hipotekak[0][6]);
+		assertEquals("2008-04-04", hipotekak[0][4]);
+		assertEquals("2023-05-04", hipotekak[0][5]);
+		assertEquals("15 urte", hipotekak[0][6]);
 		assertEquals("itxita", hipotekak[0][7]);
 	}
 	
 	@Test
 	public void testBezeroarenKontuak() {
 		Metodoak metodoak = new Metodoak();
-		Bezeroa b1 = metodoak.bezeroaKargatu("12345678A");
+		Bezeroa b1 = metodoak.bezeroaKargatu("78950146R");
 		String[][] kontuak = metodoak.bezeroarenKontuak(b1, 1);
 		
-		assertEquals("ES97 2345 0002  9857  8111  8223", kontuak[0][0]);
-		assertEquals("2000,00 €", kontuak[0][1]);
+		assertEquals("ES70 2345 0002  73  4016972210", kontuak[0][0]);
+		assertEquals("3451,98 €", kontuak[0][1]);
 		assertEquals("aktiboa", kontuak[0][2]);
 	}
 	
 	@Test
 	public void testTransferentziakIkusi() {
 		Metodoak metodoak = new Metodoak();
-		Bezeroa b1 = metodoak.bezeroaKargatu("12345678A");
-		String[][] transferentziak = metodoak.transferentziakIkusi(b1,"ES9723450111545932515164");
+		Bezeroa b1 = metodoak.bezeroaKargatu("78950146R");
+		String[][] transferentziak = metodoak.transferentziakIkusi(b1,"ES7023450002734016972210");
 		
-		assertEquals("ES34 6789 0003  91  5285942937", transferentziak[0][0]);
-		assertEquals("800.0 €", transferentziak[0][1]);
-		assertEquals("Ordainketa 4", transferentziak[0][2]);
-		assertEquals("2020-08-01", transferentziak[0][3]);
+		assertEquals("ES51 2345 0002  73  1634074159", transferentziak[0][0]);
+		assertEquals("1230,00 €", transferentziak[0][1]);
+		assertEquals("Zorionak", transferentziak[0][2]);
+		assertEquals("2023-04-04", transferentziak[0][3]);
 	}
 	
 	@Test
 	public void testTransferentziaIbanBalidatu() {
 		Metodoak metodoak = new Metodoak();
 		
-		assertTrue(metodoak.transferentziaIbanBalidatu("ES3467895948791937106722"));
+		assertTrue(metodoak.transferentziaIbanBalidatu("ES7023450002734016972210"));
 	}
 	
 	@Test
 	public void testTransferentziaSaldoaBalidatu() {
 		Metodoak metodoak = new Metodoak();
 		
-		assertTrue(metodoak.transferentziaSaldoaBalidatu("100", "ES9723450111545932515164"));
+		assertTrue(metodoak.transferentziaSaldoaBalidatu("100", "ES7023450002734016972210"));
 	}
 	
 	@Test
 	public void testSegurtasunKodeaBalidatu() {
 		Metodoak metodoak = new Metodoak();
 		
-		assertTrue(metodoak.segurtasunKodeaBalidatu("5678", "ES9723450111545932515164"));
+		assertTrue(metodoak.segurtasunKodeaBalidatu("5678", "ES7023450002734016972210"));
 	}
 	
 	@Test
 	public void testHipotekaDut() {
 		Metodoak metodoak = new Metodoak();
-		Bezeroa b1 = metodoak.bezeroaKargatu("12345678A");
+		Bezeroa b1 = metodoak.bezeroaKargatu("78950146R");
+		Bezeroa b2 = metodoak.bezeroaKargatu("89167975B");
 		
-		assertFalse(metodoak.hipotekaDut(b1, "ES9723450111545932515164"));
+		assertTrue(metodoak.hipotekaDut(b1, "ES7023450002734016972210"));
+		assertFalse(metodoak.hipotekaDut(b2, "ES5123450002731634074159"));
+	}
+	
+	@Test
+	public void testBezeroExistitu() {
+		Metodoak metodoak = new Metodoak();
+		
+		assertTrue(metodoak.bezeroExistitu("78950146R"));
+	}
+	
+	@Test
+	public void testTransferentziakImprimatu() {
+		Metodoak metodoak = new Metodoak();
+		Bezeroa b1 = metodoak.bezeroaKargatu("78950146R");
+		String[][] transferentziak_array = metodoak.transferentziakIkusi(b1, "ES9323450111313252003900"); 
+
+		assertTrue(metodoak.transferentziakImprimatu(transferentziak_array));
+		
+		BufferedReader fichero;
+		File file = new File("src/movimientos/Transferentziak/2023_4_4_9_4.txt");
+		try {
+		fichero = new BufferedReader(new FileReader(file));
+		String linea;
+		String [] transferentziak = new String [0];
+		
+		while(( linea = fichero.readLine()) != null) {
+			String[] transferentziak_prob = new String[transferentziak.length+1];
+			for(int i =0;i<transferentziak.length;i++)
+			{
+				transferentziak_prob[i]=transferentziak[i];
+			}
+			transferentziak_prob[transferentziak.length] = linea;
+			transferentziak = transferentziak_prob;
+		}
+		
+		assertEquals("IBAN: ES22 6789 0050  60  8253351724 ,Kantitatea: 100,00 € ,Kontzeptuapaga ,Transferetzia-data: 2023-04-04", transferentziak[1]);
+		
+		fichero.close();
+		
+		} catch (FileNotFoundException e1) {
+			e1.printStackTrace();
+		} catch (IOException e1) {
+			e1.printStackTrace();
+		}
+	}
+	
+	@Test
+	public void testdiruSarrerakImprimatu() {	
+		Metodoak metodoak = new Metodoak();
+		Bezeroa b1 = metodoak.bezeroaKargatu("78950146R");
+		String[][] diruSarrerak_array = metodoak.diruSarrerakIkusi(b1, "ES9323450111313252003900");
+		assertTrue(metodoak.diruSarrerakImprimatu(diruSarrerak_array));
+		
+		BufferedReader fichero;
+		File file = new File("src/movimientos/DiruSarrerak/2023_4_4_9_4.txt");
+		try {
+		fichero = new BufferedReader(new FileReader(file));
+		String linea;
+		String [] diruSarrerak = new String [0];
+		
+		while(( linea = fichero.readLine()) != null) {
+			String[] diruSarrerak_prob = new String[diruSarrerak.length+1];
+			for(int i =0;i<diruSarrerak.length;i++)
+			{
+				diruSarrerak_prob[i]=diruSarrerak[i];
+			}
+			diruSarrerak_prob[diruSarrerak.length] = linea;
+			diruSarrerak = diruSarrerak_prob;
+		}
+		
+		assertEquals("IBAN igortzailea: ES29 6789 0003  39  4765827453 ,Kantitatea: 100,00 € ,Kontzeptuadirua ,Sarrera-data: 2023-04-04", diruSarrerak[1]);
+		
+		fichero.close();
+		
+		} catch (FileNotFoundException e1) {
+			e1.printStackTrace();
+		} catch (IOException e1) {
+			e1.printStackTrace();
+		}
+	}
+	
+	@Test
+	public void testMugimentuakImprimatu() {
+		Metodoak metodoak = new Metodoak();
+		Bezeroa b1 = metodoak.bezeroaKargatu("78950146R");
+		String[][] diruSarrerak_array = metodoak.diruSarrerakIkusi(b1, "ES9323450111313252003900");
+		String[][] transferentziak_array = metodoak.transferentziakIkusi(b1, "ES9323450111313252003900");
+		assertTrue(metodoak.mugimentuakImprimatu(diruSarrerak_array, transferentziak_array));
+		
+		BufferedReader fichero;
+		File file = new File("src/movimientos/Mugimenduak/2023_4_4_9_4.txt");
+		try {
+		fichero = new BufferedReader(new FileReader(file));
+		String linea;
+		String [] mugimenduak = new String [0];
+		
+		while(( linea = fichero.readLine()) != null) {
+			String[] mugimenduak_prob = new String[mugimenduak.length+1];
+			for(int i =0;i<mugimenduak.length;i++)
+			{
+				mugimenduak_prob[i]=mugimenduak[i];
+			}
+			mugimenduak_prob[mugimenduak.length] = linea;
+			mugimenduak = mugimenduak_prob;
+		}
+		
+		assertEquals("IBAN: ES22 6789 0050  60  8253351724 ,Kantitatea: 100,00 € ,Kontzeptuapaga ,Transferetzia-data: 2023-04-04", mugimenduak[1]);
+		assertEquals("IBAN igortzailea: ES29 6789 0003  39  4765827453 ,Kantitatea: 100,00 € ,Kontzeptuadirua ,Sarrera-data: 2023-04-04", mugimenduak[3]);
+		
+		fichero.close();
+		
+		} catch (FileNotFoundException e1) {
+			e1.printStackTrace();
+		} catch (IOException e1) {
+			e1.printStackTrace();
+		}
+	}
+	
+	@Test
+	public void testNanbalidatu() {
+		Metodoak metodoak = new Metodoak();
+		
+		assertTrue(metodoak.nanBalidatu("78950146R"));
 	}
 }
