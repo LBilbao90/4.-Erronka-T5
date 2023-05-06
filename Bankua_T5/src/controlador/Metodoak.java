@@ -26,7 +26,9 @@ import model.Gerentea;
 import model.God;
 import model.KontuBankario;
 import model.Langilea;
+import model.SalbuespenaErregistro;
 import model.SalbuespenaLogin;
+import model.SalbuespenaLoginBlokeo;
 import model.Sukurtsala;
 import model.Zuzendaria;
 import model.DiruSarrera;
@@ -119,7 +121,7 @@ public class Metodoak {
 	 * @param pas_bez Bezeroaren pasahitza
 	 * @return <b>true</b> login zuzena bada eta <b>false</b> login okerra bada
 	 */
-	public boolean bezeroLogin(String nan_bez, String pas_bez) throws SalbuespenaLogin{
+	public boolean bezeroLogin(String nan_bez, String pas_bez) throws SalbuespenaLogin, SalbuespenaLoginBlokeo{
 		boolean aurkituta = false;
 		
 		Connection conn;					
@@ -127,11 +129,17 @@ public class Metodoak {
 			//Datu baseari konexioa eta Bezeroa logeatzeko kontsulta egiten dugu
 			conn = (Connection) DriverManager.getConnection ("jdbc:mysql://localhost:3306/bankua","root","");
 			Statement comand = (Statement) conn.createStatement();	
-			ResultSet req = comand.executeQuery("select COUNT(*) as kant from "+bezeroa+" where "+nan+"='"+nan_bez+"' and "+pasahitza+"='"+pas_bez+"';");
+			ResultSet req = comand.executeQuery("select "+egoera+" from "+bezeroa+" where "+nan+"='"+nan_bez+"' and "+pasahitza+"='"+pas_bez+"';");
 			
 			if(req.next()) {
-				if(req.getInt("kant")==1) {
+				if(req.getString(1).equals("aktiboa")) {
 					aurkituta=true;
+				}
+				else if(req.getString(1).equals("blokeatuta")) {
+					throw new SalbuespenaLoginBlokeo("Erabiltzaile hau blokeatuta dago.");
+				}
+				else if(!aurkituta) {
+					throw new SalbuespenaLogin("Logina okerra da.");
 				}
 			}
 
@@ -140,9 +148,6 @@ public class Metodoak {
 			System.out.println("SQLException: "+ ex.getMessage());
 			System.out.println("SQLState: "+ ex.getSQLState());
 			System.out.println("ErrorCode: "+ ex.getErrorCode());
-		}
-		if(!aurkituta) {
-			throw new SalbuespenaLogin("Logina okerra da.");
 		}
 		
 		return aurkituta;
@@ -856,7 +861,7 @@ public class Metodoak {
 		return kontuak;
 	}
 	
-	public boolean bezeroSortu(String izena, String abizena, String nan, String pass, String urte, String hil, String egun, String genero, String tel){
+	public boolean bezeroSortu(String izena, String abizena, String nan, String pass, String urte, String hil, String egun, String genero, String tel) throws SalbuespenaErregistro{
 		boolean erregistratuta = false;
 		String data = urte+"-"+hil+"-"+egun;
 		izena = izena.substring(0,1).toUpperCase() + izena.substring(1);
@@ -870,9 +875,7 @@ public class Metodoak {
 			erregistratuta=true;
 			conn.close();
 		}catch(SQLException ex) {
-			System.out.println("SQLException: "+ ex.getMessage());
-			System.out.println("SQLState: "+ ex.getSQLState());
-			System.out.println("ErrorCode: "+ ex.getErrorCode());
+			throw new SalbuespenaErregistro("Erabiltzailea ezin da erregistratu.");
 		}
 		return erregistratuta;
 	}	
@@ -1630,10 +1633,61 @@ public class Metodoak {
 		}		
 		return bezero_info;
 	}
+	
+	public String[] langileInfo(String[][] langileak,String nan) {
+		String[] bezero_info = new String[9];
+		
+		for(int i=0;i<langileak.length;i++) {
+			if(langileak[i][0].equals(nan)) {
+				bezero_info[0]=langileak[i][0];
+				bezero_info[1]=langileak[i][1];
+				bezero_info[2]=langileak[i][2];
+				bezero_info[3]=langileak[i][3];
+				bezero_info[4]=langileak[i][4];
+				bezero_info[5]=langileak[i][5];
+				bezero_info[6]=langileak[i][6];
+				bezero_info[7]=langileak[i][7];
+				bezero_info[8]=langileak[i][8];
+			}
+		}		
+		return bezero_info;
+	}
 
 	public boolean bezeroAldaketakUpdate(String nan_bez,String izen_bez,String abizen_bez,String sexu_bez, String tel_bez,String pass_bez, String egoera_bez) {
-		boolean gordeta = false;
+		boolean aldatuta = false;
 		
-		return gordeta;
+		Connection conn;					
+		try {
+			//Datu baseari konexioa eta Bezeroa logeatzeko kontsulta egiten dugu
+			conn = (Connection) DriverManager.getConnection (url,erabiltzaile,password);
+			Statement comand = (Statement) conn.createStatement();	
+			comand.executeUpdate("Update "+bezeroa+" set "+izena+"= '"+izen_bez+"', "+abizenak+"= '"+abizen_bez+"',"+sexua+"='"+sexu_bez+"',"+telefonoa+"='"+tel_bez+"',"+pasahitza+"='"+pass_bez+"',"+egoera+"='"+egoera_bez+"' where "+nan+"='"+nan_bez+"';");
+			aldatuta = true;
+			conn.close();
+		}catch(SQLException ex) {
+			System.out.println("SQLException: "+ ex.getMessage());
+			System.out.println("SQLState: "+ ex.getSQLState());
+			System.out.println("ErrorCode: "+ ex.getErrorCode());
+		}			
+		return aldatuta;
+	}
+
+	public boolean langileAldaketakUpdate(String nan_lang,String izen_lang,String abizen_lang,String sexu_lang, String tel_lang,String pass_lang, String lanpostu_lang,String id_sukurtsal_lang) {
+boolean aldatuta = false;
+		
+		Connection conn;					
+		try {
+			//Datu baseari konexioa eta Bezeroa logeatzeko kontsulta egiten dugu
+			conn = (Connection) DriverManager.getConnection (url,erabiltzaile,password);
+			Statement comand = (Statement) conn.createStatement();	
+			comand.executeUpdate("Update "+langile+" set "+izena+"= '"+izen_lang+"', "+abizenak+"= '"+abizen_lang+"',"+sexua+"='"+sexu_lang+"',"+telefonoa+"='"+tel_lang+"',"+pasahitza+"='"+pass_lang+"',"+lanpostua+"='"+lanpostu_lang+"',"+id_sukurtsal+"='"+id_sukurtsal_lang+"' where "+nan+"='"+nan_lang+"';");
+			aldatuta = true;
+			conn.close();
+		}catch(SQLException ex) {
+			System.out.println("SQLException: "+ ex.getMessage());
+			System.out.println("SQLState: "+ ex.getSQLState());
+			System.out.println("ErrorCode: "+ ex.getErrorCode());
+		}			
+		return aldatuta;
 	}
 }

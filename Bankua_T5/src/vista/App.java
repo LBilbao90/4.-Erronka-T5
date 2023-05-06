@@ -10,7 +10,9 @@ import controlador.Metodoak;
 import model.Bezeroa;
 import model.EntitateBankario;
 import model.Langilea;
+import model.SalbuespenaErregistro;
 import model.SalbuespenaLogin;
+import model.SalbuespenaLoginBlokeo;
 import model.Transferentzia;
 
 import javax.swing.*;
@@ -78,8 +80,10 @@ public class App extends JFrame {
 	String[][] kontuBankarioak = null;
 	String[][] transferentziak = null;
 	String[][] diruSarrerak = null;
-	String[][] pertsonZerrendaArray = null;
+	String[][] bezeroZerrendaArray = null;
+	String[][] langileZerrendaArray = null;
 	String[] bezeroInfo = null;
+	String[] langileInfo= null;
 	String kontua = null;
 	
 	//Combo Box arrayak
@@ -91,6 +95,7 @@ public class App extends JFrame {
 	String[] egunak_array = null;
 	String[] epemugak_array = {"3 urte", "5 urte", "10 urte", "15 urte"};
 	String[] bezero_egoera = {"aktiboa","blokeatuta"};
+	String[] lanpostu_array = {"gerentea","zuzendaria"};
 	
 	//Kontu sortzeko array
 	String[][] erabiltzaileak =new String[0][3];
@@ -151,6 +156,11 @@ public class App extends JFrame {
 	private JTextField txt_izen_editatu;
 	private JTextField txt_telefono_editatu;
 	private JPasswordField pass_bez_editatu;
+	private JTextField txt_abizen_edizio_lang;
+	private JTextField txt_izen_edizio_lang;
+	private JTextField txt_tel_edizio_lang;
+	private JPasswordField pass_edizio_lang;
+	private JTextField txt_id_sukurtsal;
 	
 	/**
 	 * Launch the application.
@@ -295,6 +305,10 @@ public class App extends JFrame {
 		JPanel bezeroEditatu = new JPanel();
 		contentPane.add(bezeroEditatu, "name_171839961680600");
 		bezeroEditatu.setLayout(null);
+		
+		JPanel langileEditatu = new JPanel();
+		contentPane.add(langileEditatu, "name_1647884240543200");
+		langileEditatu.setLayout(null);
 		//////////////////////////////////
 		// 			  Botoiak 		    //
 		//////////////////////////////////
@@ -388,6 +402,9 @@ public class App extends JFrame {
 				}catch (SalbuespenaLogin s) {
 					metodoak.loginOkerraErregistratu(txt_bezero_erabiltzaile.getText(),"Bezeroa");
 					JOptionPane.showMessageDialog(null,"Login Okerra!","Error!", JOptionPane.ERROR_MESSAGE);
+				}catch (SalbuespenaLoginBlokeo s) {
+					metodoak.loginOkerraErregistratu(txt_bezero_erabiltzaile.getText(),"Bezeroa");
+					JOptionPane.showMessageDialog(null,"Erabiltzaile hau blokeatuta dago!","Error!", JOptionPane.ERROR_MESSAGE);
 				}
 			}
 		});
@@ -623,6 +640,13 @@ public class App extends JFrame {
 		btn_etxea_22.setBorderPainted(false);
 		btn_etxea_22.setBounds(29, 151, 44, 34);
 		bezeroEditatu.add(btn_etxea_22);
+		
+		JButton btn_etxea_23 = new JButton(homeicon);
+		btn_etxea_23.setOpaque(false);
+		btn_etxea_23.setContentAreaFilled(false);
+		btn_etxea_23.setBorderPainted(false);
+		btn_etxea_23.setBounds(29, 151, 44, 34);
+		langileEditatu.add(btn_etxea_23);
 		//////////////////////////////////
 		// 			Aurrera Atzera 		//
 		//////////////////////////////////
@@ -942,6 +966,13 @@ public class App extends JFrame {
 		btn_atzera_21.setBorderPainted(false);
 		btn_atzera_21.setBounds(15, 513, 44, 30);
 		bezeroEditatu.add(btn_atzera_21);
+		
+		JButton btn_atzera_22 = new JButton(logo_atzera);
+		btn_atzera_22.setOpaque(false);
+		btn_atzera_22.setContentAreaFilled(false);
+		btn_atzera_22.setBorderPainted(false);
+		btn_atzera_22.setBounds(15, 513, 44, 30);
+		langileEditatu.add(btn_atzera_22);
 		//////////////////////////////////
 		// 			Label       		//
 		//////////////////////////////////
@@ -1077,6 +1108,10 @@ public class App extends JFrame {
 		JLabel lbl_fondo_editatu = new JLabel(fondo_argazki);
 		lbl_fondo_editatu.setBounds(0, 0, 932, 130);
 		bezeroEditatu.add(lbl_fondo_editatu);
+		
+		JLabel lbl_fondo_editatu_lang = new JLabel(fondo_argazki);
+		lbl_fondo_editatu_lang.setBounds(0, 0, 932, 130);
+		langileEditatu.add(lbl_fondo_editatu_lang);
 		
 		JScrollPane pane_zerrenda = new JScrollPane();
 		pane_zerrenda.setBounds(148, 255, 655, 205);
@@ -1929,18 +1964,15 @@ public class App extends JFrame {
 		JButton btn_sortu_kontu = new JButton("Sortu Kontua");
 		btn_sortu_kontu.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				//registro
 				try {
 					if(metodoak.bezeroSortu(txt_izen_erabiltzaile.getText(),txt_abizen_erabiltzaile	.getText(),txt_nan_sortu.getText(),String.valueOf(pass_bezero_sortu.getPassword()),cb_urtea.getSelectedItem().toString(),cb_hila.getSelectedItem().toString(),cb_eguna.getSelectedItem().toString(),cb_sexua.getSelectedItem().toString(),txt_tel_sortu.getText())) {
 						JOptionPane.showMessageDialog(null, "Erabiltzailea sortu da.","Informazio", JOptionPane.INFORMATION_MESSAGE);
 						erabiltzaileSortu.setVisible(false);
 						langileMenu.setVisible(true);
-					}else {
-						JOptionPane.showMessageDialog(null, "Erabiltzailea ezin izan da sortu.","Error", JOptionPane.ERROR_MESSAGE);					
 					}
-				} catch (Exception e1) {
-					e1.printStackTrace();
-				}
+				} catch (SalbuespenaErregistro s) {
+					JOptionPane.showMessageDialog(null, "Erabiltzailea ezin izan da sortu.","Error", JOptionPane.ERROR_MESSAGE);
+				}				
 			}
 		});
 		btn_sortu_kontu.setBounds(395, 485, 153, 34);
@@ -2346,12 +2378,14 @@ public class App extends JFrame {
 		btn_bezero_zerrenda = new JButton(" Bezero Zerrenda");
 		btn_bezero_zerrenda.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				pertsonZerrendaArray = metodoak.bezeroZerrendaKargatu();
-				zerrenda_table = new JTable(pertsonZerrendaArray,zerrenda_header_bez);
+				bezeroZerrendaArray = metodoak.bezeroZerrendaKargatu();
+				zerrenda_table = new JTable(bezeroZerrendaArray,zerrenda_header_bez);
 				pane_zerrenda.setViewportView(zerrenda_table);
 				zerrenda_table.getColumnModel().getColumn(0).setPreferredWidth(200);
 				zerrenda_table.getTableHeader().setReorderingAllowed(false);
 				lbl_zerrendak.setText("BEZERO ZERRENDA");
+				langileZerrendaArray = null;
+				langileInfo=null;
 				sukurtsalak.setVisible(false);
 				zerrendak.setVisible(true);
 			}
@@ -2362,12 +2396,14 @@ public class App extends JFrame {
 		btn_langile_zerrenda = new JButton("Langile Zerrenda");
 		btn_langile_zerrenda.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				pertsonZerrendaArray = metodoak.langileZerrendaKargatu();
-				zerrenda_table = new JTable(pertsonZerrendaArray,zerrenda_header_lang);
+				langileZerrendaArray = metodoak.langileZerrendaKargatu();
+				zerrenda_table = new JTable(langileZerrendaArray,zerrenda_header_lang);
 				pane_zerrenda.setViewportView(zerrenda_table);
 				zerrenda_table.getColumnModel().getColumn(0).setPreferredWidth(200);
 				zerrenda_table.getTableHeader().setReorderingAllowed(false);
 				lbl_zerrendak.setText("LANGILE ZERRENDA");
+				bezeroZerrendaArray=null;
+				bezeroInfo=null;
 				sukurtsalak.setVisible(false);
 				zerrendak.setVisible(true);
 			}
@@ -2390,10 +2426,10 @@ public class App extends JFrame {
 		lbl_izen_edizio.setBounds(90, 314, 112, 30);
 		bezeroEditatu.add(lbl_izen_edizio);
 		
-		JLabel lbl_kontzeptu_1 = new JLabel("Abizena:");
-		lbl_kontzeptu_1.setFont(new Font("Tahoma", Font.PLAIN, 13));
-		lbl_kontzeptu_1.setBounds(90, 355, 112, 30);
-		bezeroEditatu.add(lbl_kontzeptu_1);
+		JLabel lbl_abizen_bez_edizio = new JLabel("Abizena:");
+		lbl_abizen_bez_edizio.setFont(new Font("Tahoma", Font.PLAIN, 13));
+		lbl_abizen_bez_edizio.setBounds(90, 355, 112, 30);
+		bezeroEditatu.add(lbl_abizen_bez_edizio);
 		
 		txt_abizen_editatu = new JTextField();
 		txt_abizen_editatu.setColumns(10);
@@ -2477,29 +2513,165 @@ public class App extends JFrame {
 		bezeroEditatu.add(cb_egoera_bezero);		
 		
 		JButton btn_gorde_editatu = new JButton("Aldaketak Gorde");
+		btn_gorde_editatu.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				if(metodoak.bezeroAldaketakUpdate(lbl_nan_edizio.getText(), txt_izen_editatu.getText(), txt_abizen_editatu.getText(), cb_sexua_editatu.getSelectedItem().toString(), txt_telefono_editatu.getText(), String.valueOf(pass_bez_editatu.getPassword()), cb_egoera_bezero.getSelectedItem().toString())) {
+					JOptionPane.showMessageDialog(null, "Bezeroaren datuak aldatu dirau.","Alerta", JOptionPane.INFORMATION_MESSAGE);
+					bezeroEditatu.setVisible(false);
+					zerrendak.setVisible(true);
+				}else {
+					JOptionPane.showMessageDialog(null, "Errore bezeroaren datuak aldatzean.","Error", JOptionPane.ERROR_MESSAGE);
+				}
+			}
+		});
 		btn_gorde_editatu.setBounds(386, 483, 161, 34);
 		bezeroEditatu.add(btn_gorde_editatu);
 
+		
+				
+		JLabel lbl_edizio_lang = new JLabel("LANGILE EDITATU");
+		lbl_edizio_lang.setFont(new Font("Tahoma", Font.PLAIN, 18));
+		lbl_edizio_lang.setBounds(379, 164, 193, 45);
+		langileEditatu.add(lbl_edizio_lang);
+		
+		JLabel lbl_nan_lang = new JLabel("NAN:");
+		lbl_nan_lang.setFont(new Font("Tahoma", Font.PLAIN, 13));
+		lbl_nan_lang.setBounds(116, 271, 57, 30);
+		langileEditatu.add(lbl_nan_lang);
+		
+		JLabel lbl_izen_edizio_lang = new JLabel("Izena:");
+		lbl_izen_edizio_lang.setFont(new Font("Tahoma", Font.PLAIN, 13));
+		lbl_izen_edizio_lang.setBounds(116, 316, 112, 30);
+		langileEditatu.add(lbl_izen_edizio_lang);
+		
+		JLabel lbl_abizen_lang = new JLabel("Abizena:");
+		lbl_abizen_lang.setFont(new Font("Tahoma", Font.PLAIN, 13));
+		lbl_abizen_lang.setBounds(116, 357, 112, 30);
+		langileEditatu.add(lbl_abizen_lang);
+		
+		txt_abizen_edizio_lang = new JTextField();
+		txt_abizen_edizio_lang.setColumns(10);
+		txt_abizen_edizio_lang.setBounds(216, 353, 202, 34);
+		langileEditatu.add(txt_abizen_edizio_lang);
+		
+		txt_izen_edizio_lang = new JTextField();
+		txt_izen_edizio_lang.setColumns(10);
+		txt_izen_edizio_lang.setBounds(216, 312, 202, 34);
+		langileEditatu.add(txt_izen_edizio_lang);
+		
+		JLabel lbl_jaiotze_data_langile = new JLabel("Jaiotze Data:");
+		lbl_jaiotze_data_langile.setFont(new Font("Tahoma", Font.PLAIN, 13));
+		lbl_jaiotze_data_langile.setBounds(116, 399, 112, 30);
+		langileEditatu.add(lbl_jaiotze_data_langile);
+		
+		JLabel lbl_sexu_editatu_lang = new JLabel("Sexua:");
+		lbl_sexu_editatu_lang.setFont(new Font("Tahoma", Font.PLAIN, 13));
+		lbl_sexu_editatu_lang.setBounds(515, 272, 112, 30);
+		langileEditatu.add(lbl_sexu_editatu_lang);
+		
+		JLabel lbl_telefono_edizio_lang = new JLabel("Telefonoa:");
+		lbl_telefono_edizio_lang.setFont(new Font("Tahoma", Font.PLAIN, 13));
+		lbl_telefono_edizio_lang.setBounds(515, 317, 112, 30);
+		langileEditatu.add(lbl_telefono_edizio_lang);
+		
+		JLabel lbl_pasahitza_editatu_lang = new JLabel("Pasahitza:");
+		lbl_pasahitza_editatu_lang.setFont(new Font("Tahoma", Font.PLAIN, 13));
+		lbl_pasahitza_editatu_lang.setBounds(515, 358, 112, 30);
+		langileEditatu.add(lbl_pasahitza_editatu_lang);
+		
+		txt_tel_edizio_lang = new JTextField();
+		txt_tel_edizio_lang.setColumns(10);
+		txt_tel_edizio_lang.setBounds(615, 313, 161, 34);
+		langileEditatu.add(txt_tel_edizio_lang);
+		
+		JLabel lbl_lanpostu_lan = new JLabel("Lanpostua:");
+		lbl_lanpostu_lan.setFont(new Font("Tahoma", Font.PLAIN, 13));
+		lbl_lanpostu_lan.setBounds(515, 401, 112, 30);
+		langileEditatu.add(lbl_lanpostu_lan);
+		
+		JLabel lbl_nan_edizio_lang = new JLabel("NAN");
+		lbl_nan_edizio_lang.setFont(new Font("Tahoma", Font.PLAIN, 13));
+		lbl_nan_edizio_lang.setBounds(216, 271, 161, 30);
+		langileEditatu.add(lbl_nan_edizio_lang);
+		
+		JLabel lbl_jaiotze_data_edizio_lang = new JLabel("data");
+		lbl_jaiotze_data_edizio_lang.setFont(new Font("Tahoma", Font.PLAIN, 13));
+		lbl_jaiotze_data_edizio_lang.setBounds(216, 398, 161, 30);
+		langileEditatu.add(lbl_jaiotze_data_edizio_lang);
+		
+		JComboBox cb_sexua_edizio_lang = new JComboBox(sexu_array);
+		cb_sexua_edizio_lang.setBounds(614, 276, 129, 30);
+		langileEditatu.add(cb_sexua_edizio_lang);
+		
+		pass_edizio_lang = new JPasswordField();
+		pass_edizio_lang.setBounds(615, 356, 112, 34);
+		langileEditatu.add(pass_edizio_lang);
+		
+		JComboBox cb_lanpostu = new JComboBox(lanpostu_array);
+		cb_lanpostu.setBounds(615, 404, 129, 30);
+		langileEditatu.add(cb_lanpostu);
+		
+		JButton btn_gorde_editatu_1 = new JButton("Aldaketak Gorde");
+		btn_gorde_editatu_1.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				if(metodoak.langileAldaketakUpdate(lbl_nan_edizio_lang.getText(), txt_izen_edizio_lang.getText(), txt_abizen_edizio_lang.getText(), cb_sexua_edizio_lang.getSelectedItem().toString(), txt_tel_edizio_lang.getText(), String.valueOf(pass_edizio_lang.getPassword()), cb_lanpostu.getSelectedItem().toString(),txt_id_sukurtsal.getText())) {
+					JOptionPane.showMessageDialog(null, "Langilearen datuak aldatu dirau.","Alerta", JOptionPane.INFORMATION_MESSAGE);
+					bezeroEditatu.setVisible(false);
+					zerrendak.setVisible(true);
+				}else {
+					JOptionPane.showMessageDialog(null, "Errore langilearen datuak aldatzean.","Error", JOptionPane.ERROR_MESSAGE);
+				}				
+			}
+		});
+		btn_gorde_editatu_1.setBounds(379, 495, 161, 34);
+		langileEditatu.add(btn_gorde_editatu_1);
+		
+		JLabel lbl_id_sukurtsal = new JLabel("ID Sukurtsal:");
+		lbl_id_sukurtsal.setFont(new Font("Tahoma", Font.PLAIN, 13));
+		lbl_id_sukurtsal.setBounds(515, 444, 112, 30);
+		langileEditatu.add(lbl_id_sukurtsal);
+		
+		txt_id_sukurtsal = new JTextField();
+		txt_id_sukurtsal.setColumns(10);
+		txt_id_sukurtsal.setBounds(615, 440, 96, 34);
+		langileEditatu.add(txt_id_sukurtsal);
+		
 		JButton btn_editatu = new JButton("Editatu");
 		btn_editatu.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				
 				int row = zerrenda_table.getSelectedRow();
 				if(row>=0) {
-					langile_aukeratu_nan=zerrenda_table.getModel().getValueAt(row, 0).toString();
-					bezeroInfo = metodoak.bezeroInfo(pertsonZerrendaArray, langile_aukeratu_nan);
-					lbl_nan_edizio.setText(bezeroInfo[0]);
-					txt_izen_editatu.setText(bezeroInfo[1]);
-					txt_abizen_editatu.setText(bezeroInfo[2]);
-					lbl_jaiotze_data_editatu.setText(bezeroInfo[3]);
-					cb_sexua_editatu.setSelectedItem(bezeroInfo[4]);
-					txt_telefono_editatu.setText(bezeroInfo[5]);
-					pass_bez_editatu.setText(bezeroInfo[6]);
-					cb_egoera_bezero.setSelectedItem(bezeroInfo[7]);
+					if(bezeroZerrendaArray!= null && langileZerrendaArray==null) {
+						langile_aukeratu_nan=zerrenda_table.getModel().getValueAt(row, 0).toString();
+						bezeroInfo = metodoak.bezeroInfo(bezeroZerrendaArray, langile_aukeratu_nan);
+						lbl_nan_edizio.setText(bezeroInfo[0]);
+						txt_izen_editatu.setText(bezeroInfo[1]);
+						txt_abizen_editatu.setText(bezeroInfo[2]);
+						lbl_jaiotze_data_editatu.setText(bezeroInfo[3]);
+						cb_sexua_editatu.setSelectedItem(bezeroInfo[4]);
+						txt_telefono_editatu.setText(bezeroInfo[5]);
+						pass_bez_editatu.setText(bezeroInfo[6]);
+						cb_egoera_bezero.setSelectedItem(bezeroInfo[7]);
+						bezeroEditatu.setVisible(true);
+					}else if(bezeroZerrendaArray==null && langileZerrendaArray!=null) {
+						langile_aukeratu_nan=zerrenda_table.getModel().getValueAt(row, 0).toString();
+						langileInfo = metodoak.langileInfo(langileZerrendaArray, langile_aukeratu_nan);	
+						lbl_nan_edizio_lang.setText(langileInfo[0]);
+						txt_izen_edizio_lang.setText(langileInfo[1]);
+						txt_abizen_edizio_lang.setText(langileInfo[2]);
+						lbl_jaiotze_data_edizio_lang.setText(langileInfo[3]);
+						cb_sexua_edizio_lang.setSelectedItem(	langileInfo[4]);
+						txt_tel_edizio_lang.setText(langileInfo[5]);
+						pass_edizio_lang.setText(langileInfo[6]);
+						cb_lanpostu.setSelectedItem(langileInfo[7]);
+						txt_id_sukurtsal.setText(langileInfo[8]);					
+						
+						langileEditatu.setVisible(true);
+					}
 					zerrendak.setVisible(false);
-					bezeroEditatu.setVisible(true);
 				}else {
-					JOptionPane.showMessageDialog(null, "Bezero bat aukeratu behar duzu.","Alerta", JOptionPane.INFORMATION_MESSAGE);
+					JOptionPane.showMessageDialog(null, "Pertsona bat aukeratu behar duzu.","Alerta", JOptionPane.INFORMATION_MESSAGE);
 				}
 				
 			}
