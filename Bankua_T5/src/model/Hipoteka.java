@@ -105,7 +105,7 @@ public class Hipoteka implements Komisioa{
 				//Kontu Bankarioak arakatu
 				for(int j=0;j<langilea.getSukurtsalak().get(i).getKontuBankarioak().size();j++) {
 					if(langilea.getSukurtsalak().get(i).getKontuBankarioak().get(j).getIban().equals(bezero_iban)) {
-						langilea.getSukurtsalak().get(i).getKontuBankarioak().get(j).getHipoteka().setEgoera("errefusatua");
+						langilea.getSukurtsalak().get(i).getKontuBankarioak().get(j).getHipoteka().setEgoera("errefusatuta");
 					}
 				}
 			}

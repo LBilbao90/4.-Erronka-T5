@@ -1403,7 +1403,7 @@ public class App extends JFrame {
 		btn_hipoteka.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				if(metodoak.hipotekaDut(bezero, kontua)) {
-					hipoteka_info = metodoak.HipotekaEstatus(kontua);
+					hipoteka_info = metodoak.hipotekaEstatus(kontua);
 					lbl_hipoteka_total.setText(hipoteka_info[0] + " €");
 					lbl_hipoteka_hasiera.setText(hipoteka_info[1]);
 					lbl_hipoteka_amaiera.setText(hipoteka_info[2]);
@@ -1526,7 +1526,7 @@ public class App extends JFrame {
 			public void actionPerformed(ActionEvent e) {
 				if(!txt_kantitate_hipoteka.getText().equals("") && !String.valueOf(hipoteka_segurtasun.getPassword()).equals("")) {
 					if(metodoak.segurtasunKodeaBalidatu(String.valueOf(hipoteka_segurtasun.getPassword()), kontua)) {
-						metodoak.HipotekaEskatu(txt_kantitate_hipoteka.getText(), txt_hipoteka_komisio.getText(), kontua, String.valueOf(hipoteka_combo.getSelectedItem()));
+						metodoak.hipotekaEskatu(txt_kantitate_hipoteka.getText(), txt_hipoteka_komisio.getText(), kontua, String.valueOf(hipoteka_combo.getSelectedItem()));
 						JOptionPane.showMessageDialog(null, "Hipoteka eskatu da!.","Informazio", JOptionPane.INFORMATION_MESSAGE);
 						
 						bezeroKontua.setVisible(true);

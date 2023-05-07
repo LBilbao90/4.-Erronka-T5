@@ -21,7 +21,9 @@ import controlador.Metodoak;
 import model.Bezeroa;
 import model.EntitateBankario;
 import model.Langilea;
+import model.SalbuespenaErregistro;
 import model.SalbuespenaLogin;
+import model.SalbuespenaLoginBlokeo;
 
 public class MetodoakTest {
 
@@ -40,24 +42,79 @@ public class MetodoakTest {
 	}
 	
 	@Test
-	public void testBezeroaLogin() {
+	public void testBezeroaLoginAktiboa() throws SalbuespenaLoginBlokeo {
 		Metodoak metodoak = new Metodoak();
 		
 		try {
 			assertTrue(metodoak.bezeroLogin("78950146R", "1234"));
 		} catch (SalbuespenaLogin e) {
-			e.printStackTrace();
+			System.out.println(e);
 		}
 	}
 	
 	@Test
-	public void testLangileLogin() {
+	public void testBezeroaLoginBloqueatuta() throws SalbuespenaLoginBlokeo {
+		Metodoak metodoak = new Metodoak();
+		
+		try {
+			metodoak.bezeroLogin("54821599H", "1234");
+		} catch (SalbuespenaLogin e) {
+			System.out.println(e);
+		}
+	}
+	
+	@Test
+	public void testBezeroaLoginError() throws SalbuespenaLoginBlokeo {
+		Metodoak metodoak = new Metodoak();
+		
+		try {
+			assertFalse(metodoak.bezeroLogin("78950146J", "1234"));
+		} catch (SalbuespenaLogin e) {
+			System.out.println(e);
+		}
+	}
+	
+	@Test
+	public void testLangileLoginZuzendaria() {
 		Metodoak metodoak = new Metodoak();
 		
 		try {
 			assertEquals("zuzendaria", metodoak.langileLogin("78950146R", "1234"));
 		} catch (SalbuespenaLogin e) {
-			e.printStackTrace();
+			System.out.println(e);
+		}
+	}
+	
+	@Test
+	public void testLangileLoginGerentea() {
+		Metodoak metodoak = new Metodoak();
+		
+		try {
+			assertEquals("gerentea", metodoak.langileLogin("90138299B", "1234"));
+		} catch (SalbuespenaLogin e) {
+			System.out.println(e);
+		}
+	}
+	
+	@Test
+	public void testLangileLoginGod() {
+		Metodoak metodoak = new Metodoak();
+		
+		try {
+			assertEquals("god", metodoak.langileLogin("12345678Z", "1234"));
+		} catch (SalbuespenaLogin e) {
+			System.out.println(e);
+		}
+	}
+	
+	@Test
+	public void testLangileLoginFalse() {
+		Metodoak metodoak = new Metodoak();
+		
+		try {
+			assertEquals("god", metodoak.langileLogin("12345678E", "1234"));
+		} catch (SalbuespenaLogin e) {
+			System.out.println(e);
 		}
 	}
 	
@@ -232,7 +289,7 @@ public class MetodoakTest {
 	}
 	
 	@Test
-	public void testBezeroSortu() {
+	public void testBezeroSortu() throws SalbuespenaErregistro {
 		Metodoak metodoak = new Metodoak();
 		
 		String nan = "";
@@ -243,8 +300,8 @@ public class MetodoakTest {
 		String telefonoa = "";
 		String pasahitza = "";
 		
-		assertTrue(metodoak.bezeroSortu("Juan", "Perez", "12345678Z", "1234", "1999","06", "12", "gizona", "111222333"));
-		Bezeroa b1 = metodoak.bezeroaKargatu("12345678Z");
+		assertTrue(metodoak.bezeroSortu("Juan", "Perez", "86460678K", "1234", "1999","06", "12", "gizona", "111222333"));
+		Bezeroa b1 = metodoak.bezeroaKargatu("86460678K");
 		
 		Connection conn;					
 		try {
@@ -406,10 +463,17 @@ public class MetodoakTest {
 	}
 	
 	@Test
-	public void testBezeroExistitu() {
+	public void testBezeroExistituTrue() {
 		Metodoak metodoak = new Metodoak();
 		
 		assertTrue(metodoak.bezeroExistitu("78950146R"));
+	}
+	
+	@Test
+	public void testBezeroExistituFalse() {
+		Metodoak metodoak = new Metodoak();
+		
+		assertFalse(metodoak.bezeroExistitu("78950146J"));
 	}
 	
 	@Test
@@ -525,5 +589,103 @@ public class MetodoakTest {
 		Metodoak metodoak = new Metodoak();
 		
 		assertTrue(metodoak.nanBalidatu("78950146R"));
+	}
+	
+	@Test
+	public void testTxartelIdBalidatuTrue() {
+		Metodoak metodoak = new Metodoak();
+		
+		assertTrue(metodoak.txartelIdBalidatu("8949421198213169"));
+	}
+	
+	@Test
+	public void testTxartelIdBalidatuFalse() {
+		Metodoak metodoak = new Metodoak();
+		
+		assertFalse(metodoak.txartelIdBalidatu("8949467198213169"));
+	}
+	
+	@Test
+	public void testDiruBalidatuTrue() {
+		assertTrue(Metodoak.diruBalidatu("100,12"));
+	}
+	
+	@Test
+	public void testDiruBalidatuFalse() {
+		assertFalse(Metodoak.diruBalidatu("a"));
+	}
+	
+	@Test
+	public void testBezeroZerrendaKargatu() {
+		Metodoak metodoak = new Metodoak();
+		String[][] bezero_zerrenda = metodoak.bezeroZerrendaKargatu();
+		
+		assertEquals("54821599H", bezero_zerrenda[0][0]);
+		assertEquals("Iker", bezero_zerrenda[0][1]);
+		assertEquals("Zuluaga", bezero_zerrenda[0][2]);
+		assertEquals("1994-08-04", bezero_zerrenda[0][3]);
+		assertEquals("gizona", bezero_zerrenda[0][4]);
+		assertEquals("111222333", bezero_zerrenda[0][5]);
+		assertEquals("1234", bezero_zerrenda[0][6]);
+		assertEquals("blokeatuta", bezero_zerrenda[0][7]);
+	}
+	
+	@Test
+	public void testBezeroInfo() {
+		Metodoak metodoak = new Metodoak();
+		String[][] bezero_zerrenda = metodoak.bezeroZerrendaKargatu();
+		String[] bezeroInfo = metodoak.bezeroInfo(bezero_zerrenda, "54821599H");
+		
+		assertEquals("54821599H", bezeroInfo[0]);
+		assertEquals("Iker", bezeroInfo[1]);
+		assertEquals("Zuluaga", bezeroInfo[2]);
+		assertEquals("1994-08-04", bezeroInfo[3]);
+		assertEquals("gizona", bezeroInfo[4]);
+		assertEquals("111222333", bezeroInfo[5]);
+		assertEquals("1234", bezeroInfo[6]);
+		assertEquals("blokeatuta", bezeroInfo[7]);
+	}
+	
+	@Test
+	public void testLangileZerrendaKargatu() {
+		Metodoak metodoak = new Metodoak();
+		String[][] langile_zerrenda = metodoak.langileZerrendaKargatu();
+		
+		assertEquals("79003399D", langile_zerrenda[0][0]);
+		assertEquals("Ibai", langile_zerrenda[0][1]);
+		assertEquals("Alvarez", langile_zerrenda[0][2]);
+		assertEquals("2000-10-21", langile_zerrenda[0][3]);
+		assertEquals("gizona", langile_zerrenda[0][4]);
+		assertEquals("111222333", langile_zerrenda[0][5]);
+		assertEquals("1234", langile_zerrenda[0][6]);
+		assertEquals("zuzendaria", langile_zerrenda[0][7]);
+	}
+	
+	@Test
+	public void testLangileInfo() {
+		Metodoak metodoak = new Metodoak();
+		String[][] langile_zerrenda = metodoak.langileZerrendaKargatu();
+		String[] langileInfo = metodoak.langileInfo(langile_zerrenda, "79003399D");
+		
+		assertEquals("79003399D", langileInfo[0]);
+		assertEquals("Ibai", langileInfo[1]);
+		assertEquals("Alvarez", langileInfo[2]);
+		assertEquals("2000-10-21", langileInfo[3]);
+		assertEquals("gizona", langileInfo[4]);
+		assertEquals("111222333", langileInfo[5]);
+		assertEquals("1234", langileInfo[6]);
+		assertEquals("zuzendaria", langileInfo[7]);
+	}
+	
+	@Test
+	public void testHipotekaEstatus() {
+		Metodoak metodoak = new Metodoak();
+		String[] hipoteka = metodoak.hipotekaEstatus("ES9323450111313252003900");
+		
+		assertEquals("80000", hipoteka[0]);
+		assertEquals("2023-04-04", hipoteka[1]);
+		assertEquals("-----", hipoteka[2]);
+		assertEquals("3.8", hipoteka[3]);
+		assertEquals("0", hipoteka[4]);
 	}
 }

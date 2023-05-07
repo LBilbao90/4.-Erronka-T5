@@ -4,7 +4,9 @@ import static org.junit.Assert.*;
 
 import org.junit.Test;
 
+import controlador.Metodoak;
 import model.Hipoteka;
+import model.Langilea;
 
 public class HipotekaTest {
 
@@ -60,6 +62,42 @@ public class HipotekaTest {
 		// Equals
 		assertTrue(h1.equals(h2));
 		assertFalse(h3.equals(null));
+	}
+	
+	@Test
+	public void testHipotekaErrefusatu() {
+		Metodoak metodoak = new Metodoak();
+		Langilea l1 = metodoak.langileaKargatu("12345678Z", "god");
+		Hipoteka h1 = new Hipoteka (100000, 50000, 10, "03-12-2010", "06-10-2020", "eskatuta", "10 urte");
+		h1.hipotekaErrefusatu(l1, "Santutxu, Santutxu Kalea, 27", "ES9323450111313252003900");
+		
+		for(int i=0;i<l1.getSukurtsalak().size();i++) {
+			if(l1.getSukurtsalak().get(i).getKokalekua().equals("Santutxu, Santutxu Kalea, 27")) {
+				for(int j=0;j<l1.getSukurtsalak().get(i).getKontuBankarioak().size();j++) {
+					if(l1.getSukurtsalak().get(i).getKontuBankarioak().get(j).getIban().equals("ES9323450111313252003900")) {
+						assertEquals("errefusatuta", l1.getSukurtsalak().get(i).getKontuBankarioak().get(j).getHipoteka().getEgoera());
+					}
+				}
+			}
+		}
+	}
+	
+	@Test
+	public void testHipotekaOnartu() {
+		Metodoak metodoak = new Metodoak();
+		Langilea l1 = metodoak.langileaKargatu("12345678Z", "god");
+		Hipoteka h1 = new Hipoteka (100000, 50000, 10, "03-12-2010", "06-10-2020", "eskatuta", "10 urte");
+		h1.hipotekaOnartu(l1, "Santutxu, Santutxu Kalea, 27", "ES9323450111313252003900");
+		
+		for(int i=0;i<l1.getSukurtsalak().size();i++) {
+			if(l1.getSukurtsalak().get(i).getKokalekua().equals("Santutxu, Santutxu Kalea, 27")) {
+				for(int j=0;j<l1.getSukurtsalak().get(i).getKontuBankarioak().size();j++) {
+					if(l1.getSukurtsalak().get(i).getKontuBankarioak().get(j).getIban().equals("ES9323450111313252003900")) {
+						assertEquals("onartuta", l1.getSukurtsalak().get(i).getKontuBankarioak().get(j).getHipoteka().getEgoera());
+					}
+				}
+			}
+		}
 	}
 
 }

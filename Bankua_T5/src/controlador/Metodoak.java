@@ -871,7 +871,7 @@ public class Metodoak {
 			//Datu baseari konexioa eta Bezeroa logeatzeko kontsulta egiten dugu
 			conn = (Connection) DriverManager.getConnection (url,erabiltzaile,password);
 			Statement comand = (Statement) conn.createStatement();	
-			comand.executeUpdate("insert into "+bezeroa+" values ('"+nan.toUpperCase()+"','"+izena+"','"+abizena+"','"+data+"','"+genero+"','"+tel+"','"+pass+"');");			
+			comand.executeUpdate("insert into "+bezeroa+" values ('"+nan.toUpperCase()+"','"+izena+"','"+abizena+"','"+data+"','"+genero+"','"+tel+"','"+pass+"','aktiboa');");			
 			erregistratuta=true;
 			conn.close();
 		}catch(SQLException ex) {
@@ -1407,7 +1407,7 @@ public class Metodoak {
 		return t1;
 	}
 	
-	public void HipotekaEskatu(String kantitatea_hipo, String komisioa_hipo, String iban_hipo, String epemuga_hipo){
+	public void hipotekaEskatu(String kantitatea_hipo, String komisioa_hipo, String iban_hipo, String epemuga_hipo){
 		kantitatea_hipo = kantitatea_hipo.replace(',','.');
 		String[] komisioa_prob = komisioa_hipo.split("%");
 		komisioa_hipo = komisioa_prob[0];
@@ -1433,7 +1433,7 @@ public class Metodoak {
 		}
 	}
 	
-	public String[] HipotekaEstatus(String kontua){
+	public String[] hipotekaEstatus(String kontua){
 		String[] hipoteka_estatus = new String [5];
 		Connection conn;					
 		try {

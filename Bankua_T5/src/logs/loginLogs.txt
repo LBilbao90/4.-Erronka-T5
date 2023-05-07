@@ -304,3 +304,4 @@ Bezeroa-> Nan: 12345678Z - Data: 2023/05/06 18:28:19
 Bezeroa-> Nan: 12345678Z - Data: 2023/05/06 18:29:12
 Bezeroa-> Nan: 12345678Z - Data: 2023/05/06 18:33:07
 Bezeroa-> Nan: 12345678Z - Data: 2023/05/06 18:35:57
+Bezeroa-> Nan: 12345678Z - Data: 2023/05/07 22:01:26
