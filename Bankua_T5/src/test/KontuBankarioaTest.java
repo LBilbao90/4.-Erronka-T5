@@ -30,7 +30,7 @@ public class KontuBankarioaTest {
 		ArrayList<Transferentzia> transferentziak = new ArrayList<Transferentzia>();
 		transferentziak.add(t1);
 		
-		Hipoteka h1 = new Hipoteka (100000, 50000, 10, "03-12-2010", "06-10-2020", "eskatuta", "10 urte");
+		Hipoteka h1 = new Hipoteka (100000, 50000, "10", "03-12-2010", "06-10-2020", "eskatuta", "10 urte");
 		
 		Bezeroa b1 = new Bezeroa ("12345678A", "Juan", "Perez", "10-21-2002", "gizona", "111222333", "12345678");
 		
@@ -57,11 +57,11 @@ public class KontuBankarioaTest {
 		assertEquals("04-23-2008", kb1.getTransferentziak().get(0).getTransferentziaData());
 		assertEquals("proba", kb1.getTransferentziak().get(0).getKotzeptua());
 		assertEquals("ES1245784512346751245124", kb1.getTransferentziak().get(0).getJasotzailea());
-		assertEquals(2, kb1.getTransferentziak().get(0).getKomisioa(), 0.01);
+		assertEquals("1.5", kb1.getTransferentziak().get(0).getKomisioa());
 		
 		assertEquals(100000, kb1.getHipoteka().getKantitatea(), 0.01);
 		assertEquals(50000, kb1.getHipoteka().getOrdaindutakoa(), 0.01);
-		assertEquals(10, kb1.getHipoteka().getKomisioa(), 0.01);
+		assertEquals("10", kb1.getHipoteka().getKomisioa());
 		assertEquals("03-12-2010", kb1.getHipoteka().getHasieraData());
 		assertEquals("06-10-2020", kb1.getHipoteka().getAmaieraData());
 		assertEquals("eskatuta", kb1.getHipoteka().getEgoera());
@@ -91,7 +91,7 @@ public class KontuBankarioaTest {
 		ArrayList<Transferentzia> transferentziak = new ArrayList<Transferentzia>();
 		transferentziak.add(t1);
 		
-		Hipoteka h1 = new Hipoteka (100000, 50000, 10, "03-12-2010", "06-10-2020", "eskatuta", "10 urte");
+		Hipoteka h1 = new Hipoteka (100000, 50000, "10", "03-12-2010", "06-10-2020", "eskatuta", "10 urte");
 		
 		EntitateBankario eb1 = new EntitateBankario ("BBK", "1", "ES25", "0/0/932/130", "src-res-bbk_logo.png");
 		
@@ -115,11 +115,11 @@ public class KontuBankarioaTest {
 		assertEquals("04-23-2008", kb1.getTransferentziak().get(0).getTransferentziaData());
 		assertEquals("proba", kb1.getTransferentziak().get(0).getKotzeptua());
 		assertEquals("ES1245784512346751245124", kb1.getTransferentziak().get(0).getJasotzailea());
-		assertEquals(2, kb1.getTransferentziak().get(0).getKomisioa(), 0.01);
+		assertEquals("1.5", kb1.getTransferentziak().get(0).getKomisioa());
 		
 		assertEquals(100000, kb1.getHipoteka().getKantitatea(), 0.01);
 		assertEquals(50000, kb1.getHipoteka().getOrdaindutakoa(), 0.01);
-		assertEquals(10, kb1.getHipoteka().getKomisioa(), 0.01);
+		assertEquals("10", kb1.getHipoteka().getKomisioa());
 		assertEquals("03-12-2010", kb1.getHipoteka().getHasieraData());
 		assertEquals("06-10-2020", kb1.getHipoteka().getAmaieraData());
 		assertEquals("eskatuta", kb1.getHipoteka().getEgoera());
@@ -149,7 +149,7 @@ public class KontuBankarioaTest {
 		ArrayList<Transferentzia> transferentziak = new ArrayList<Transferentzia>();
 		transferentziak.add(t1);
 		
-		Hipoteka h1 = new Hipoteka (100000, 50000, 10, "03-12-2010", "06-10-2020", "eskatuta", "10 urte");
+		Hipoteka h1 = new Hipoteka (100000, 50000, "10", "03-12-2010", "06-10-2020", "eskatuta", "10 urte");
 		
 		Bezeroa b1 = new Bezeroa ("12345678A", "Juan", "Perez", "10-21-2002", "gizona", "111222333", "12345678");
 		
@@ -171,7 +171,7 @@ public class KontuBankarioaTest {
 		ArrayList<Transferentzia> transferentziak2 = new ArrayList<Transferentzia>();
 		transferentziak2.add(t2);
 		
-		Hipoteka h2 = new Hipoteka (200000, 70000, 10, "06-15-2011", "07-11-2022", "onartuta", "11 urte");
+		Hipoteka h2 = new Hipoteka (200000, 70000, "10", "06-15-2011", "07-11-2022", "onartuta", "11 urte");
 		
 		Bezeroa b2 = new Bezeroa("12345678B", "Laura", "Sanchez", "08-19-2002", "emakumea", "444555666", "87654321");
 		
@@ -207,11 +207,11 @@ public class KontuBankarioaTest {
 		assertEquals("08-17-2023", kb1.getTransferentziak().get(0).getTransferentziaData());
 		assertEquals("proba2", kb1.getTransferentziak().get(0).getKotzeptua());
 		assertEquals("ES1245709142346751245124", kb1.getTransferentziak().get(0).getJasotzailea());
-		assertEquals(2, kb1.getTransferentziak().get(0).getKomisioa(), 0.01);
+		assertEquals("1.5", kb1.getTransferentziak().get(0).getKomisioa());
 		
 		assertEquals(200000, kb1.getHipoteka().getKantitatea(), 0.01);
 		assertEquals(70000, kb1.getHipoteka().getOrdaindutakoa(), 0.01);
-		assertEquals(10, kb1.getHipoteka().getKomisioa(), 0.01);
+		assertEquals("10", kb1.getHipoteka().getKomisioa());
 		assertEquals("06-15-2011", kb1.getHipoteka().getHasieraData());
 		assertEquals("07-11-2022", kb1.getHipoteka().getAmaieraData());
 		assertEquals("onartuta", kb1.getHipoteka().getEgoera());
@@ -241,7 +241,7 @@ public class KontuBankarioaTest {
 		ArrayList<Transferentzia> transferentziak = new ArrayList<Transferentzia>();
 		transferentziak.add(t1);
 		
-		Hipoteka h1 = new Hipoteka (100000, 50000, 10, "03-12-2010", "06-10-2020", "eskatuta", "10 urte");
+		Hipoteka h1 = new Hipoteka (100000, 50000, "10", "03-12-2010", "06-10-2020", "eskatuta", "10 urte");
 		
 		EntitateBankario eb1 = new EntitateBankario ("BBK", "1", "ES25", "0/0/932/130", "src-res-bbk_logo.png");
 		
@@ -260,7 +260,7 @@ public class KontuBankarioaTest {
 		ArrayList<Transferentzia> transferentziak2 = new ArrayList<Transferentzia>();
 		transferentziak2.add(t2);
 		
-		Hipoteka h2 = new Hipoteka (200000, 70000, 10, "06-15-2011", "07-11-2022", "onartuta", "11 urte");
+		Hipoteka h2 = new Hipoteka (200000, 70000, "10", "06-15-2011", "07-11-2022", "onartuta", "11 urte");
 		
 		EntitateBankario eb2 = new EntitateBankario ("BBVA", "2", "ES36", "092/567/900/810", "bbva.png");
 		
@@ -293,11 +293,11 @@ public class KontuBankarioaTest {
 		assertEquals("08-17-2023", kb1.getTransferentziak().get(0).getTransferentziaData());
 		assertEquals("proba2", kb1.getTransferentziak().get(0).getKotzeptua());
 		assertEquals("ES1245709142346751245124", kb1.getTransferentziak().get(0).getJasotzailea());
-		assertEquals(2, kb1.getTransferentziak().get(0).getKomisioa(), 0.01);
+		assertEquals("1.5", kb1.getTransferentziak().get(0).getKomisioa());
 		
 		assertEquals(200000, kb1.getHipoteka().getKantitatea(), 0.01);
 		assertEquals(70000, kb1.getHipoteka().getOrdaindutakoa(), 0.01);
-		assertEquals(10, kb1.getHipoteka().getKomisioa(), 0.01);
+		assertEquals("10", kb1.getHipoteka().getKomisioa());
 		assertEquals("06-15-2011", kb1.getHipoteka().getHasieraData());
 		assertEquals("07-11-2022", kb1.getHipoteka().getAmaieraData());
 		assertEquals("onartuta", kb1.getHipoteka().getEgoera());
@@ -326,7 +326,7 @@ public class KontuBankarioaTest {
 		ArrayList<Transferentzia> transferentziak = new ArrayList<Transferentzia>();
 		transferentziak.add(t1);
 				
-		Hipoteka h1 = new Hipoteka (100000, 50000, 10, "03-12-2010", "06-10-2020", "eskatuta", "10 urte");
+		Hipoteka h1 = new Hipoteka (100000, 50000, "10", "03-12-2010", "06-10-2020", "eskatuta", "10 urte");
 				
 		Bezeroa b1 = new Bezeroa ("12345678A", "Juan", "Perez", "10-21-2002", "gizona", "111222333", "12345678");
 				
@@ -355,7 +355,7 @@ public class KontuBankarioaTest {
 		ArrayList<Transferentzia> transferentziak = new ArrayList<Transferentzia>();
 		transferentziak.add(t1);
 				
-		Hipoteka h1 = new Hipoteka (100000, 50000, 10, "03-12-2010", "06-10-2020", "eskatuta", "10 urte");
+		Hipoteka h1 = new Hipoteka (100000, 50000, "10", "03-12-2010", "06-10-2020", "eskatuta", "10 urte");
 				
 		Bezeroa b1 = new Bezeroa ("12345678A", "Juan", "Perez", "10-21-2002", "gizona", "111222333", "12345678");
 				

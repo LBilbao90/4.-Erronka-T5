@@ -1,19 +1,22 @@
 package model;
 
+import java.text.DecimalFormat;
 import java.util.Calendar;
 import java.util.Objects;
+
+import javax.swing.JOptionPane;
 
 public class Hipoteka implements Komisioa{
 	private double kantitatea;
 	private double ordaindutakoa;
-	private final double komisioa;
+	private final String komisioa;
 	private String hasieraData;
 	private String amaieraData;
 	private String egoera; //eskatuta, onartuta, itxita, errefusatuta
 	private String epeMuga;
 	
 	// Constructors
-	public Hipoteka(double kantitatea, double ordaindutakoa, double komisioa, String hasieraData, String amaieraData, String egoera, String epeMuga) {
+	public Hipoteka(double kantitatea, double ordaindutakoa, String komisioa, String hasieraData, String amaieraData, String egoera, String epeMuga) {
 		this.kantitatea = kantitatea;
 		this.ordaindutakoa = ordaindutakoa;
 		this.komisioa = komisioa;
@@ -24,7 +27,7 @@ public class Hipoteka implements Komisioa{
 	}
 	
 	public Hipoteka() {
-		this.komisioa = 2.5;
+		this.komisioa = "";
 	}
 
 	// Getters
@@ -34,7 +37,7 @@ public class Hipoteka implements Komisioa{
 	public double getOrdaindutakoa() {
 		return ordaindutakoa;
 	}
-	public double getKomisioa() {
+	public String getKomisioa() {
 		return komisioa;
 	}
 	public String getHasieraData() {
@@ -88,14 +91,20 @@ public class Hipoteka implements Komisioa{
 		return Objects.equals(amaieraData, other.amaieraData) && Objects.equals(egoera, other.egoera)
 				&& Objects.equals(hasieraData, other.hasieraData)
 				&& Double.doubleToLongBits(kantitatea) == Double.doubleToLongBits(other.kantitatea)
-				&& Double.doubleToLongBits(komisioa) == Double.doubleToLongBits(other.komisioa)
+				&& komisioa.equals(other.komisioa)
 				&& Double.doubleToLongBits(ordaindutakoa) == Double.doubleToLongBits(other.ordaindutakoa)
 				&& Objects.equals(epeMuga, other.epeMuga);
 	}
 
 	@Override
-	public double kalkulatuPrezioa() {
-		return 0;
+	public double kalkulatuPrezioa(String kantitatea, String komisioa) {
+	    DecimalFormat df = new DecimalFormat("0.00");
+		komisioa=komisioa.replace("%", "");	
+		kantitatea=kantitatea.replace(",",".");	
+		
+		double komisio = Double.parseDouble(komisioa);
+		double kantitate = Double.parseDouble(kantitatea);
+		return ((kantitate*komisio)/100)+kantitate;
 	}
 	
 	public Langilea hipotekaErrefusatu(Langilea langilea, String sukurtsal_izen,String bezero_iban) {
@@ -105,7 +114,8 @@ public class Hipoteka implements Komisioa{
 				//Kontu Bankarioak arakatu
 				for(int j=0;j<langilea.getSukurtsalak().get(i).getKontuBankarioak().size();j++) {
 					if(langilea.getSukurtsalak().get(i).getKontuBankarioak().get(j).getIban().equals(bezero_iban)) {
-						langilea.getSukurtsalak().get(i).getKontuBankarioak().get(j).getHipoteka().setEgoera("errefusatuta");
+						langilea.getSukurtsalak().get(i).getKontuBankarioak().get(j).getHipoteka().setEgoera("errefusatuta");			
+						JOptionPane.showMessageDialog(null, "Hipoteka errefusatu da.","Info", JOptionPane.INFORMATION_MESSAGE);
 					}
 				}
 			}
@@ -127,10 +137,12 @@ public class Hipoteka implements Komisioa{
 						hil = Integer.toString(c.get(Calendar.MONTH));
 						urte = Integer.toString(c.get(Calendar.YEAR));		
 						langilea.getSukurtsalak().get(i).getKontuBankarioak().get(j).getHipoteka().setHasieraData(urte + "-" + hil +"-" + egun);						
+						JOptionPane.showMessageDialog(null, "Hipoteka onartu da.","Info", JOptionPane.INFORMATION_MESSAGE);
 					}
 				}
 			}
 		}		
 		return langilea;
 	}
+
 }

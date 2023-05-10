@@ -7,7 +7,7 @@ public class Transferentzia implements Komisioa{
 	private String transferentziaData;
 	private String kotzeptua;
 	private String jasotzailea;
-	private final double komisioa;
+	private final String komisioa;
 	
 	// Constructors
 	public Transferentzia(double kantitatea, String transferentziaData, String kotzeptua, String jasotzailea) {
@@ -15,11 +15,11 @@ public class Transferentzia implements Komisioa{
 		this.transferentziaData = transferentziaData;
 		this.kotzeptua = kotzeptua;
 		this.jasotzailea = jasotzailea;
-		this.komisioa = 2;
+		this.komisioa = "1.5";
 	}
 	
 	public Transferentzia() {
-		this.komisioa = 2;
+		this.komisioa = "1.5";
 	}
 
 	// Getters
@@ -35,7 +35,7 @@ public class Transferentzia implements Komisioa{
 	public String getJasotzailea() {
 		return jasotzailea;
 	}
-	public double getKomisioa() {
+	public String getKomisioa() {
 		return komisioa;
 	}
 	
@@ -69,14 +69,16 @@ public class Transferentzia implements Komisioa{
 		Transferentzia other = (Transferentzia) obj;
 		return Objects.equals(jasotzailea, other.jasotzailea)
 				&& Double.doubleToLongBits(kantitatea) == Double.doubleToLongBits(other.kantitatea)
-				&& Double.doubleToLongBits(komisioa) == Double.doubleToLongBits(other.komisioa)
+				&& komisioa.equals(other.komisioa)
 				&& Objects.equals(kotzeptua, other.kotzeptua)
 				&& Objects.equals(transferentziaData, other.transferentziaData);
 	}
 
 	// Methods
 	@Override
-	public double kalkulatuPrezioa() {
-		return 0;
+	public double kalkulatuPrezioa(String kantitatea, String komisioa) {
+		kantitatea=kantitatea.replace(",",".");	
+		double kantitate = Double.parseDouble(kantitatea);
+		return ((kantitate*Double.parseDouble(this.komisioa))/100)+kantitate;
 	}
 }

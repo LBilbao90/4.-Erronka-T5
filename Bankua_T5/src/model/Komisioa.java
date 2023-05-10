@@ -2,5 +2,5 @@ package model;
 
 public interface Komisioa {
 	// Methods
-	public double kalkulatuPrezioa();
+	public double kalkulatuPrezioa(String kantitatea, String komisioa);
 }

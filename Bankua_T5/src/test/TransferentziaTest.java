@@ -17,7 +17,7 @@ public class TransferentziaTest {
 		assertEquals("01-20-1999", t1.getTransferentziaData());
 		assertEquals("proba", t1.getKotzeptua());
 		assertEquals("ES1245784512346751245124", t1.getJasotzailea());
-		assertEquals(2, t1.getKomisioa(), 0.01);
+		assertEquals("1.5", t1.getKomisioa());
 	}
 	
 	@Test
@@ -34,7 +34,7 @@ public class TransferentziaTest {
 		assertEquals("08-17-2023", t1.getTransferentziaData());
 		assertEquals("proba2", t1.getKotzeptua());
 		assertEquals("ES1245784512346751247816", t1.getJasotzailea());
-		assertEquals(2, t1.getKomisioa(), 0.01);
+		assertEquals("1.5", t1.getKomisioa());
 	}
 	
 	@Test
@@ -56,6 +56,13 @@ public class TransferentziaTest {
 		// Equals
 		assertTrue(t1.equals(t2));
 		assertFalse(t3.equals(null));
+	}
+	
+	@Test
+	public void testKalkulatuPrezioa() {
+		Transferentzia t1 = new Transferentzia (100, "01-20-1999", "proba", "ES1245784512346751245124");
+		
+		assertEquals(101.5, t1.kalkulatuPrezioa("100", "2,2"), 0.01);
 	}
 
 }

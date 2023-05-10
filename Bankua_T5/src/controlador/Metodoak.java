@@ -29,6 +29,8 @@ import model.Langilea;
 import model.SalbuespenaErregistro;
 import model.SalbuespenaLogin;
 import model.SalbuespenaLoginBlokeo;
+import model.SalbuespenaOrdainketa;
+import model.SalbuespenaTransferentzia;
 import model.Sukurtsala;
 import model.Zuzendaria;
 import model.DiruSarrera;
@@ -38,8 +40,11 @@ import model.Txartela;
 
 public class Metodoak {
 	final String url = "jdbc:mysql://localhost:3306/bankua";
+	final String urlServer = "jdbc:mysql://10.5.14.109:3306/bankua";
 	final String erabiltzaile = "root";
+	final String erabiltzaileServer= "root";
 	final String password="";
+	final String passwordServer= "1234"; 
 	
 	// EntitateBankario
 	final String entitatebankario = "entitatebankario";
@@ -121,15 +126,16 @@ public class Metodoak {
 	 * @param pas_bez Bezeroaren pasahitza
 	 * @return <b>true</b> login zuzena bada eta <b>false</b> login okerra bada
 	 */
-	public boolean bezeroLogin(String nan_bez, String pas_bez) throws SalbuespenaLogin, SalbuespenaLoginBlokeo{
+	public boolean bezeroLogin(String nan_bez, String pass_bez) throws SalbuespenaLogin, SalbuespenaLoginBlokeo{
 		boolean aurkituta = false;
 		
 		Connection conn;					
 		try {
 			//Datu baseari konexioa eta Bezeroa logeatzeko kontsulta egiten dugu
-			conn = (Connection) DriverManager.getConnection ("jdbc:mysql://localhost:3306/bankua","root","");
+			//conn = (Connection) DriverManager.getConnection (urlServer,"B"+nan_bez,"1234");
+			conn = (Connection) DriverManager.getConnection (url,"root","");
 			Statement comand = (Statement) conn.createStatement();	
-			ResultSet req = comand.executeQuery("select "+egoera+" from "+bezeroa+" where "+nan+"='"+nan_bez+"' and "+pasahitza+"='"+pas_bez+"';");
+			ResultSet req = comand.executeQuery("select "+egoera+" from "+bezeroa+" where "+nan+"='"+nan_bez+"' and "+pasahitza+"='"+pass_bez+"';");
 			
 			if(req.next()) {
 				if(req.getString(1).equals("aktiboa")) {
@@ -138,9 +144,8 @@ public class Metodoak {
 				else if(req.getString(1).equals("blokeatuta")) {
 					throw new SalbuespenaLoginBlokeo("Erabiltzaile hau blokeatuta dago.");
 				}
-				else if(!aurkituta) {
-					throw new SalbuespenaLogin("Logina okerra da.");
-				}
+			}else if(!req.next()) {
+				throw new SalbuespenaLogin("Logina okerra da.");
 			}
 
 			conn.close();
@@ -159,24 +164,30 @@ public class Metodoak {
 	 * @param pas_lang Langilearen pasahitza
 	 * @return <b>god</b> langilea GOD erabiltzailea erabiltzean, <b>zuzendaria</b> langilea Zuzendaria erabiltzailea erabiltzean, <b>gerentea</b> langilea Gerentea erabiltzailea erabiltzean eta <b>null</b> logina okerra bada.
 	 */
-	public String langileLogin(String nan_lang, String pas_lang) throws SalbuespenaLogin {
+	public String langileLogin(String nan_lang, String pass_lang) throws SalbuespenaLogin,SalbuespenaLoginBlokeo {
 		String login= null;
 		
 		Connection conn;					
 		try {
 			//Datu baseari konexioa eta Langilea logeatzeko kontsulta egiten dugu
-			conn = (Connection) DriverManager.getConnection ("jdbc:mysql://localhost:3306/bankua","root","");
+			//conn = (Connection) DriverManager.getConnection (urlServer,"L"+nan_lang,pass_lang);
+			conn = (Connection) DriverManager.getConnection (url,"root","");
 			Statement comand = (Statement) conn.createStatement();	
-			ResultSet req = comand.executeQuery("select "+lanpostua+" from "+langile+" where "+nan+"='"+nan_lang+"' and "+pasahitza+"='"+pas_lang+"';");
+			ResultSet req = comand.executeQuery("select "+lanpostua+","+egoera+" from "+langile+" where "+nan+"='"+nan_lang+"' and "+pasahitza+"='"+pass_lang+"';");
 			//Daturik aurkitzen badu
 			if(req.next()) {
-				if(req.getString(1).equals("gerentea")) {
+				if(req.getString(2).equals("blokeatuta")) {
+					throw new SalbuespenaLoginBlokeo("Erabiltzaile hau blokeatuta dago.");
+				}
+				else if(req.getString(1).equals("gerentea")) {
 					login="gerentea";
 				}else if(req.getString(1).equals("zuzendaria")) {
 					login="zuzendaria";
 				}else if(req.getString(1).equals("god")) {
 					login="god";
 				}
+			}else if(!req.next()) {
+				throw new SalbuespenaLogin("Logina okerra da.");
 			}
 			conn.close();
 		}catch(SQLException ex) {
@@ -242,7 +253,8 @@ public class Metodoak {
 		Connection conn;					
 		try {
 			//Datu baseari konexioa eta Bezeroa kargatzeko kontsulta egiten dugu
-			conn = (Connection) DriverManager.getConnection ("jdbc:mysql://localhost:3306/bankua","root","");
+			//conn = (Connection) DriverManager.getConnection (urlServer,"B"+nan_bezero,"1234");
+			conn = (Connection) DriverManager.getConnection (url,"root","");
 			Statement comand1 = (Statement) conn.createStatement();	
 			ResultSet req1 = comand1.executeQuery("select "+nan+","+izena+","+abizenak+","+jaiotzeData+","+sexua+","+telefonoa+","+pasahitza+" from "+bezeroa+" WHERE "+nan+"='"+nan_bezero+"';");
 			//Emaitzik badago
@@ -321,7 +333,7 @@ public class Metodoak {
 						while(req6.next()) {
 							double h_kant = req6.getDouble(1);
 							double h_ordaindu = req6.getDouble(2);
-							double h_komi = req6.getDouble(3);
+							String h_komi = req6.getString(3);
 							String h_hasiera = req6.getString(4);
 							String h_amaiera = req6.getString(5);
 							String h_egoera = req6.getString(6);
@@ -382,13 +394,14 @@ public class Metodoak {
 	 * @param lanpostu Langilearen pasahitza
 	 * @return <b>God</b>, <b>Zuzendaria</b> edo <b>Gerentea</b> objetua kargatuta lanpostuaren arabera
 	 */
-	public Langilea langileaKargatu(String nan_langile, String lanpostu) {
+	public Langilea langileaKargatu(String nan_langile, String lanpostu,String pass_langile) {
 		Langilea langilea = null;
 		
 		Connection conn;					
 		try {
 			//Datu baseari konexioa eta Langilea kargatzeko kontsulta egiten dugu
-			conn = (Connection) DriverManager.getConnection (url,erabiltzaile,password);
+//			conn = (Connection) DriverManager.getConnection (urlServer,"L"+nan_langile,pass_langile);
+			conn = (Connection) DriverManager.getConnection (url,"root","");
 			Statement comand1 = (Statement) conn.createStatement();	
 			ResultSet req1 = comand1.executeQuery("select l."+nan+",l."+izena+", l."+abizenak+", l."+jaiotzeData+", l."+sexua+", l."+telefonoa+", l."+pasahitza+", l."+lanpostua+" from "+langile+" l where l."+nan+"='"+nan_langile+"';");
 			
@@ -491,7 +504,7 @@ public class Metodoak {
 						while(req7.next()) {
 							double h_kant = req7.getDouble(1);
 							double h_ordaindu = req7.getDouble(2);
-							double h_komi = req7.getDouble(3);
+							String h_komi = req7.getString(3);
 							String h_hasiera = req7.getString(4);
 							String h_amaiera = req7.getString(5);
 							String h_egoera = req7.getString(6);
@@ -568,7 +581,8 @@ public class Metodoak {
 		Connection conn;					
 		try {			
 			//Datu baseari konexioa eta Entitateak kargatzeko kontsulta egiten dugu
-			conn = (Connection) DriverManager.getConnection ("jdbc:mysql://localhost:3306/bankua","root","");
+//			conn = (Connection) DriverManager.getConnection (urlServer,"L12345678Z","1234");
+			conn = (Connection) DriverManager.getConnection (url,"root","");
 			Statement comand = (Statement) conn.createStatement();	
 			ResultSet req = comand.executeQuery("select "+id_entitate+","+izena+","+entitateZenbaki+","+urlImg+","+bounds+" from "+entitatebankario+";");
 			//Emaitzik badaude
@@ -591,6 +605,39 @@ public class Metodoak {
 		return entitateak;
 	}
 
+	public String[] bezeroarenEntitateak(Bezeroa bezero) {
+		String[] entitateak = new String[0];
+		
+		for(int i=0;i<bezero.getTxartelak().size();i++) {
+				String ent_id = bezero.getTxartelak().get(i).getKontuBankario().getSukurtsala().getEntitateBankario().getIdEntitatea();
+				boolean aurkituta = false;
+				for(int j=0;j<entitateak.length;j++) {
+					if(entitateak[j].equals(ent_id)) {
+						aurkituta=true;
+					}
+				}			
+				if(!aurkituta) {
+					String[] prob = new String[entitateak.length+1];
+					for(int k=0;k<entitateak.length;k++) {
+						prob[k]=entitateak[k];
+					}
+					prob[entitateak.length]=ent_id;
+					entitateak=prob;
+				}
+		}		
+		return entitateak;
+	}
+	
+	public boolean entitateBalidatu(String[] entitateak, String id_ent) {
+		boolean aurkituta = false;
+		for(int i=0;i<entitateak.length && !aurkituta;i++) {
+			if(entitateak[i].equals(id_ent)) {
+				aurkituta = true;
+			}
+		}
+		return aurkituta;
+	}
+	
 	/**
 	 * Langilearen entitate bankarioak kargatzen ditu
 	 * @param langilea Langilearen objetua
@@ -698,13 +745,14 @@ public class Metodoak {
 		return informazio;		
 	}
 	
-	public boolean langileKontuAldaketak(String kontuEgoera, String limite, String kontu_iban) {
+	public boolean langileKontuAldaketak(String kontuEgoera, String limite, String kontu_iban, String nan_langile, String pass_langile) {
 		boolean aldatuta = false;
 		
 		Connection conn;					
 		try {
-			//Datu baseari konexioa eta Bezeroa logeatzeko kontsulta egiten dugu
-			conn = (Connection) DriverManager.getConnection (url,erabiltzaile,password);
+			//Datu baseari konexioa eta Kontu Bankarioa eguneratzen du
+//			conn = (Connection) DriverManager.getConnection (urlServer,"L"+nan_langile,pass_langile);
+			conn = (Connection) DriverManager.getConnection (url,"root","");
 			Statement comand = (Statement) conn.createStatement();	
 			comand.executeUpdate("Update "+kontuBankario+" set "+egoera+"= '"+kontuEgoera+"', "+hilekoLimitea+"= '"+limite+"' where "+iban+"= '"+kontu_iban+"';");
 			aldatuta = true;
@@ -739,7 +787,7 @@ public class Metodoak {
 						String iban_jaso = jasotzaile_iban.substring(0,4)+" "+jasotzaile_iban.substring(4,8)+" "+jasotzaile_iban.substring(8,12)+" "+" "+jasotzaile_iban.substring(12,14)+" "+" "+jasotzaile_iban.substring(14);
 						transfer_prob[transfer_info.length][2] = iban_jaso;
 						transfer_prob[transfer_info.length][3] = langilea.getSukurtsalak().get(i).getKontuBankarioak().get(j).getTransferentziak().get(k).getKotzeptua();
-						transfer_prob[transfer_info.length][4] = df.format(langilea.getSukurtsalak().get(i).getKontuBankarioak().get(j).getTransferentziak().get(k).getKomisioa())+" %";
+						transfer_prob[transfer_info.length][4] = langilea.getSukurtsalak().get(i).getKontuBankarioak().get(j).getTransferentziak().get(k).getKomisioa()+" %";
 						transfer_info=transfer_prob;
 					}
 				}
@@ -834,6 +882,36 @@ public class Metodoak {
 		return egunak;
 	}
 	
+	public Bezeroa ixtekoKontuAldatu(Bezeroa bezero, String iban_bez) {
+		
+		for(int i=0;i<bezero.getTxartelak().size();i++) {
+			if(bezero.getTxartelak().get(i).getKontuBankario().getIban().equals(iban_bez)) {
+				bezero.getTxartelak().get(i).getKontuBankario().setEgoera("ixteko");
+			}
+		}		
+		return bezero;
+	}
+	
+	public boolean ixtekoKontuUpdate(String iban_bez) {
+		boolean aldatuta = false;
+		
+		Connection conn;					
+		try {
+			//Datu baseari konexioa eta Bezeroa logeatzeko kontsulta egiten dugu
+//			conn = (Connection) DriverManager.getConnection (urlServer,"L12345678Z","1234");
+			conn = (Connection) DriverManager.getConnection (url,"root","");
+			Statement comand = (Statement) conn.createStatement();	
+			comand.executeUpdate("Update "+kontuBankario+" set "+egoera+"='"+"ixteko"+"' where "+iban+"='"+iban_bez+"';");
+			aldatuta = true;
+			conn.close();
+		}catch(SQLException ex) {
+			System.out.println("SQLException: "+ ex.getMessage());
+			System.out.println("SQLState: "+ ex.getSQLState());
+			System.out.println("ErrorCode: "+ ex.getErrorCode());
+		}			
+		return aldatuta;
+	}
+	
 	public String[][] ixtekoKontuak(Langilea langilea, String sukurtsala){
 		String[][] kontuak = new String[0][3];
 		//Sukurtsalak arakatu
@@ -861,7 +939,7 @@ public class Metodoak {
 		return kontuak;
 	}
 	
-	public boolean bezeroSortu(String izena, String abizena, String nan, String pass, String urte, String hil, String egun, String genero, String tel) throws SalbuespenaErregistro{
+	public boolean bezeroSortu(String izena, String abizena, String nan, String pass, String urte, String hil, String egun, String genero, String tel, String nan_langile, String pass_langile) throws SalbuespenaErregistro{
 		boolean erregistratuta = false;
 		String data = urte+"-"+hil+"-"+egun;
 		izena = izena.substring(0,1).toUpperCase() + izena.substring(1);
@@ -869,7 +947,8 @@ public class Metodoak {
 		Connection conn;					
 		try {
 			//Datu baseari konexioa eta Bezeroa logeatzeko kontsulta egiten dugu
-			conn = (Connection) DriverManager.getConnection (url,erabiltzaile,password);
+//			conn = (Connection) DriverManager.getConnection (urlServer,"L"+nan_langile,pass_langile);
+			conn = (Connection) DriverManager.getConnection (url,"root","");
 			Statement comand = (Statement) conn.createStatement();	
 			comand.executeUpdate("insert into "+bezeroa+" values ('"+nan.toUpperCase()+"','"+izena+"','"+abizena+"','"+data+"','"+genero+"','"+tel+"','"+pass+"','aktiboa');");			
 			erregistratuta=true;
@@ -898,7 +977,7 @@ public class Metodoak {
 						String iban_eskatuta = iban.substring(0,4)+" "+iban.substring(4,8)+" "+iban.substring(8,12)+" "+" "+iban.substring(12,14)+" "+" "+iban.substring(14);
 						prob[eskatutak.length][0]=iban_eskatuta;
 						prob[eskatutak.length][1]= String.valueOf(df.format(langilea.getSukurtsalak().get(i).getKontuBankarioak().get(j).getHipoteka().getKantitatea()))+" €";
-						prob[eskatutak.length][2]= String.valueOf(df.format(langilea.getSukurtsalak().get(i).getKontuBankarioak().get(j).getHipoteka().getKomisioa()))+" %";
+						prob[eskatutak.length][2]= langilea.getSukurtsalak().get(i).getKontuBankarioak().get(j).getHipoteka().getKomisioa()+" %";
 						prob[eskatutak.length][3]= langilea.getSukurtsalak().get(i).getKontuBankarioak().get(j).getHipoteka().getEpeMuga();
 						prob[eskatutak.length][4]= langilea.getSukurtsalak().get(i).getKontuBankarioak().get(j).getHipoteka().getEgoera();
 						eskatutak=prob;
@@ -928,7 +1007,7 @@ public class Metodoak {
 						prob[onartutak.length][0]=iban_eskatuta;
 						prob[onartutak.length][1]= String.valueOf(df.format(langilea.getSukurtsalak().get(i).getKontuBankarioak().get(j).getHipoteka().getKantitatea()))+" €";
 						prob[onartutak.length][2]= String.valueOf(df.format(langilea.getSukurtsalak().get(i).getKontuBankarioak().get(j).getHipoteka().getOrdaindutakoa()))+ " €";						
-						prob[onartutak.length][3]= String.valueOf(df.format(langilea.getSukurtsalak().get(i).getKontuBankarioak().get(j).getHipoteka().getKomisioa()))+" %";
+						prob[onartutak.length][3]= langilea.getSukurtsalak().get(i).getKontuBankarioak().get(j).getHipoteka().getKomisioa()+" %";
 						prob[onartutak.length][4]= langilea.getSukurtsalak().get(i).getKontuBankarioak().get(j).getHipoteka().getHasieraData();						
 						prob[onartutak.length][5]= langilea.getSukurtsalak().get(i).getKontuBankarioak().get(j).getHipoteka().getEpeMuga();
 						prob[onartutak.length][6]= langilea.getSukurtsalak().get(i).getKontuBankarioak().get(j).getHipoteka().getEgoera();
@@ -958,7 +1037,7 @@ public class Metodoak {
 						String iban_eskatuta = iban.substring(0,4)+" "+iban.substring(4,8)+" "+iban.substring(8,12)+" "+" "+iban.substring(12,14)+" "+" "+iban.substring(14);
 						prob[errefusatutak.length][0]=iban_eskatuta;
 						prob[errefusatutak.length][1]= String.valueOf(df.format(langilea.getSukurtsalak().get(i).getKontuBankarioak().get(j).getHipoteka().getKantitatea()))+" €";
-						prob[errefusatutak.length][2]= String.valueOf(df.format(langilea.getSukurtsalak().get(i).getKontuBankarioak().get(j).getHipoteka().getKomisioa()))+" %";
+						prob[errefusatutak.length][2]= langilea.getSukurtsalak().get(i).getKontuBankarioak().get(j).getHipoteka().getKomisioa()+" %";
 						prob[errefusatutak.length][3]= langilea.getSukurtsalak().get(i).getKontuBankarioak().get(j).getHipoteka().getEpeMuga();
 						prob[errefusatutak.length][4]= langilea.getSukurtsalak().get(i).getKontuBankarioak().get(j).getHipoteka().getEgoera();
 						errefusatutak=prob;
@@ -988,7 +1067,7 @@ public class Metodoak {
 						prob[itxitak.length][0]=iban_eskatuta;
 						prob[itxitak.length][1]= String.valueOf(df.format(langilea.getSukurtsalak().get(i).getKontuBankarioak().get(j).getHipoteka().getKantitatea()))+" €";
 						prob[itxitak.length][2]= String.valueOf(df.format(langilea.getSukurtsalak().get(i).getKontuBankarioak().get(j).getHipoteka().getOrdaindutakoa()))+ " €";						
-						prob[itxitak.length][3]= String.valueOf(df.format(langilea.getSukurtsalak().get(i).getKontuBankarioak().get(j).getHipoteka().getKomisioa()))+" %";
+						prob[itxitak.length][3]= langilea.getSukurtsalak().get(i).getKontuBankarioak().get(j).getHipoteka().getKomisioa()+" %";
 						prob[itxitak.length][4]= langilea.getSukurtsalak().get(i).getKontuBankarioak().get(j).getHipoteka().getHasieraData();						
 						prob[itxitak.length][5]= langilea.getSukurtsalak().get(i).getKontuBankarioak().get(j).getHipoteka().getAmaieraData();						
 						prob[itxitak.length][6]= langilea.getSukurtsalak().get(i).getKontuBankarioak().get(j).getHipoteka().getEpeMuga();
@@ -1138,7 +1217,8 @@ public class Metodoak {
 		
 		Connection conn;					
 		try {
-			conn = (Connection) DriverManager.getConnection (url,erabiltzaile,password);
+//			conn = (Connection) DriverManager.getConnection (urlServer,"L12345678Z","1234");
+			conn = (Connection) DriverManager.getConnection (url,"root","");
 			Statement comand = (Statement) conn.createStatement();	
 			ResultSet req = comand.executeQuery("Select COUNT(*) as kant from kontubankario where "+iban+"= '"+ibanJasotzaile+"';");
 			
@@ -1157,17 +1237,18 @@ public class Metodoak {
 		return aurkituta;
 	}
 	
-	public boolean transferentziaSaldoaBalidatu(String saldo, String kontua) {
+	public boolean transferentziaSaldoaBalidatu(String diru_kantitate, String kontua, String nan_bezero, String pass_bezero) {
 		boolean zuzena = false;
-		saldo = saldo.replace(',','.');
+		diru_kantitate = diru_kantitate.replace(',','.');
 		Connection conn;					
 		try {
-			conn = (Connection) DriverManager.getConnection (url,erabiltzaile,password);
+			//conn = (Connection) DriverManager.getConnection (urlServer,"B"+nan_bezero,pass_bezero);
+			conn = (Connection) DriverManager.getConnection (url,"root","");
 			Statement comand = (Statement) conn.createStatement();	
 			ResultSet req = comand.executeQuery("Select "+saldoa+" from kontubankario where "+iban+"='"+kontua+"';");
 			
 			if(req.next()) {
-				if(req.getDouble(saldoa) >= Double.parseDouble(saldo)) {
+				if(req.getDouble(saldoa) >= ((Double.parseDouble(diru_kantitate)*1.5)/100)+Double.parseDouble(diru_kantitate)) {
 					zuzena = true;
 				}
 			}
@@ -1181,11 +1262,12 @@ public class Metodoak {
 		return zuzena;
 	}
 	
-	public boolean segurtasunKodeaBalidatu(String kodea, String kontua) {
+	public boolean segurtasunKodeaBalidatu(String kodea, String kontua, String nan_bezero, String pass_bezero) {
 		boolean zuzena = false;
 		Connection conn;					
 		try {
-			conn = (Connection) DriverManager.getConnection (url,erabiltzaile,password);
+//			conn = (Connection) DriverManager.getConnection (urlServer,"B"+nan_bezero,pass_bezero);
+			conn = (Connection) DriverManager.getConnection (url,"root","");
 			Statement comand = (Statement) conn.createStatement();	
 			ResultSet req = comand.executeQuery("Select COUNT(*) as kant from kontubankario kon join kudeatu ku on kon."+ iban +"= ku."+ iban +" join txartela t on ku."+ id_txartela+"= t."+ id_txartela +" where ku."+iban+"='"+kontua+"' and "+ segurtasunKodea +"='"+ kodea +"';");
 			
@@ -1204,20 +1286,18 @@ public class Metodoak {
 		return zuzena;
 	}
 	
-	public boolean hipotekaDut(Bezeroa bezeroa, String iban) {
-		boolean zuzena = false;
+	public String hipotekaDut(Bezeroa bezeroa, String iban) {
+		String  egoera = "";
 
 		for(int i = 0; i < bezeroa.getTxartelak().size(); i ++) {
 			if(bezeroa.getTxartelak().get(i).getKontuBankario().getIban().equals(iban)) {
 				if(bezeroa.getTxartelak().get(i).getKontuBankario().getHipoteka() != null) {
-					if(bezeroa.getTxartelak().get(i).getKontuBankario().getHipoteka().getEgoera().equals("eskatuta") || bezeroa.getTxartelak().get(i).getKontuBankario().getHipoteka().getEgoera().equals("onartuta")) {
-						zuzena = true;
-					}
+					egoera = bezeroa.getTxartelak().get(i).getKontuBankario().getHipoteka().getEgoera();					
 				}
 			}
 		}
 		
-		return zuzena;
+		return egoera;
 	}
 
 	public static String sortuTxartelId() {
@@ -1235,7 +1315,8 @@ public class Metodoak {
 		Connection conn;					
 		try {
 			//Datu baseari konexioa eta Langilea logeatzeko kontsulta egiten dugu
-			conn = (Connection) DriverManager.getConnection ("jdbc:mysql://localhost:3306/bankua","root","");
+//			conn = (Connection) DriverManager.getConnection (urlServer,"L12345678Z","1234");
+			conn = (Connection) DriverManager.getConnection (url,"root","");
 			Statement comand = (Statement) conn.createStatement();	
 			ResultSet req = comand.executeQuery("select "+id_txartela+" from "+txartela+" where "+id_txartela+"='"+txartelId+"';");
 			//Daturik aurkitzen badu
@@ -1309,7 +1390,8 @@ public class Metodoak {
 		Connection conn;					
 		try {
 			//Datu baseari konexioa eta Bezeroa nan kontsulta egiten da
-			conn = (Connection) DriverManager.getConnection ("jdbc:mysql://localhost:3306/bankua","root","");
+//			conn = (Connection) DriverManager.getConnection (urlServer,"L12345678Z","1234");
+			conn = (Connection) DriverManager.getConnection (url,"root","");
 			Statement comand = (Statement) conn.createStatement();	
 			ResultSet req = comand.executeQuery("select "+nan+" from "+bezeroa+" where "+nan+"='"+nan_bez+"';");
 			//Daturik aurkitzen badu
@@ -1327,7 +1409,7 @@ public class Metodoak {
 		return existitu;
 	}
 
-	public boolean kontuKorronteSortu(Langilea langilea, String iban_sortu,String saldoa_sortu,String hilekoLimite_sortu,String egoera_sortu,String sukurtsal_izen,String[][] bezeroak){
+	public boolean kontuKorronteSortu(Langilea langilea, String iban_sortu,String saldoa_sortu,String hilekoLimite_sortu,String egoera_sortu,String sukurtsal_izen,String[][] bezeroak, String nan_langile, String pass_langile){
 		boolean sortuta = false;
 		String sukurtsalId_sortu= "";
 		for(int i=0;i<langilea.getSukurtsalak().size();i++) {
@@ -1345,7 +1427,8 @@ public class Metodoak {
 		Connection conn;					
 		try {
 			//Datu baseari konexioa eta Bezeroa nan kontsulta egiten da
-			conn = (Connection) DriverManager.getConnection ("jdbc:mysql://localhost:3306/bankua","root","");
+//			conn = (Connection) DriverManager.getConnection (urlServer,"L"+nan_langile,pass_langile);
+			conn = (Connection) DriverManager.getConnection (url,"root","");
 			Statement comand = (Statement) conn.createStatement();	
 			//Insert Kontu Bankarioan
 			comand.executeUpdate("insert into "+kontuBankario+"  ("+iban+","+saldoa+","+hilekoLimitea+","+sorreraData+","+egoera+","+id_sukurtsal+") VALUES ('"+iban_sortu+"',"+saldoa_sortu+","+hilekoLimite_sortu+",'"+data_sortu+"','"+egoera_sortu+"',"+sukurtsalId_sortu+")");
@@ -1370,11 +1453,12 @@ public class Metodoak {
 		return sortuta;
 	}
 	
-	public Transferentzia transferentziaEgin(String ibanigortzaile, String ibanjasotzaile, String kantitatea_trans, String kontzeptua_trans, String komisioa_trans, String segurtasunKodea_trans, String[][] transferentziak){
-		kantitatea_trans = kantitatea_trans.replace(',','.');
-		String[] komisioa_prob = komisioa_trans.split("%");
-		komisioa_trans = komisioa_prob[0];
-		komisioa_trans = komisioa_trans.replace(',','.');
+	public boolean transferentziaEgin(String ibanigortzaile, String ibanjasotzaile, String kantitatea_trans, String kontzeptua_trans, String komisioa_trans, String segurtasunKodea_trans, String[][] transferentziak) throws SalbuespenaTransferentzia{
+		boolean transferituta = false;
+
+		kantitatea_trans=kantitatea_trans.replace(",",".");	
+		komisioa_trans=komisioa_trans.replace(",",".");	
+		komisioa_trans=komisioa_trans.replace("%","");	
 		Calendar c = Calendar.getInstance();
 		String egun,hil, urte;							   
 		egun = Integer.toString(c.get(Calendar.DATE));
@@ -1382,20 +1466,21 @@ public class Metodoak {
 		urte = Integer.toString(c.get(Calendar.YEAR));		
 		String data_sortu= urte + "-" + hil +"-" + egun;
 		
-		Transferentzia t1 = new Transferentzia ();
 		Connection conn;					
 		try {
-			conn = (Connection) DriverManager.getConnection ("jdbc:mysql://localhost:3306/bankua","root","");
+//			conn = (Connection) DriverManager.getConnection (urlServer,"L12345678Z","1234");
+			conn = (Connection) DriverManager.getConnection (url,"root","");
 			Statement comand = (Statement) conn.createStatement();
-			comand.executeUpdate("insert into "+transferentzia+" ("+kantitatea+","+transferentziaData+","+jasotzailea+","+kontzeptua+","+ibanIgortzaile+","+komisioa+") values ("+kantitatea_trans+",'"+data_sortu+"','"+ibanjasotzaile+"','"+kontzeptua_trans+"','"+ibanigortzaile+"',"+komisioa_trans+")");
-			comand.executeUpdate("insert into "+diruSarrera+" ("+kantitatea+","+sarreraData+","+igortzaile+","+kontzeptua+","+ibanJasotzaile+") values ("+kantitatea_trans+",'"+data_sortu+"','"+ibanigortzaile+"','"+kontzeptua_trans+"','"+ibanjasotzaile+"')");
-			comand.executeUpdate("update "+kontuBankario+" set "+saldoa+" = "+saldoa+" - "+kantitatea_trans+" where "+iban+" = '"+ibanigortzaile+"'");
-			comand.executeUpdate("update "+kontuBankario+" set "+saldoa+" = "+saldoa+" + "+kantitatea_trans+" where "+iban+" = '"+ibanjasotzaile+"'");
-			
-			t1.setJasotzailea(ibanjasotzaile);
-			t1.setKantitatea(Integer.parseInt(kantitatea_trans));
-			t1.setKotzeptua(kontzeptua_trans);
-			t1.setTransferentziaData(data_sortu);
+			ResultSet req = comand.executeQuery("select "+egoera+" from "+kontuBankario+" where "+iban+"='"+ibanjasotzaile+"';");
+			if(req.next() && req.getString(1).equals("aktiboa")) {
+				comand.executeUpdate("insert into "+transferentzia+" ("+kantitatea+","+transferentziaData+","+jasotzailea+","+kontzeptua+","+ibanIgortzaile+","+komisioa+") values ("+kantitatea_trans+",'"+data_sortu+"','"+ibanjasotzaile+"','"+kontzeptua_trans+"','"+ibanigortzaile+"',"+komisioa_trans+");");
+				comand.executeUpdate("insert into "+diruSarrera+" ("+kantitatea+","+sarreraData+","+igortzaile+","+kontzeptua+","+ibanJasotzaile+") values ("+kantitatea_trans+",'"+data_sortu+"','"+ibanigortzaile+"','"+kontzeptua_trans+"','"+ibanjasotzaile+"');");
+				comand.executeUpdate("update "+kontuBankario+" set "+saldoa+" = "+saldoa+" - "+kantitatea_trans+" where "+iban+" = '"+ibanigortzaile+"';");
+				comand.executeUpdate("update "+kontuBankario+" set "+saldoa+" = "+saldoa+" + "+kantitatea_trans+" where "+iban+" = '"+ibanjasotzaile+"';");
+				transferituta = true;
+			}else {
+				throw new SalbuespenaTransferentzia("Jasotzailearen kontua ezin ditu transferentziak jaso.");
+			}
 			
 			conn.close();
 		}catch(SQLException ex) {
@@ -1404,10 +1489,57 @@ public class Metodoak {
 			System.out.println("SQLState: "+ ex.getSQLState());
 			System.out.println("ErrorCode: "+ ex.getErrorCode());		
 		}
-		return t1;
+		return transferituta;
 	}
 	
-	public void hipotekaEskatu(String kantitatea_hipo, String komisioa_hipo, String iban_hipo, String epemuga_hipo){
+	public Bezeroa diruaKendu(Bezeroa bezero, String iban_bez, String kantitate_kendu, String komisio_kendu, String iban_jasotzaile) {
+
+		kantitate_kendu=kantitate_kendu.replace(",",".");	
+		komisio_kendu=komisio_kendu.replace(",",".");
+
+		Calendar c = Calendar.getInstance();
+		String egun,hil, urte;							   
+		egun = Integer.toString(c.get(Calendar.DATE));
+		hil = Integer.toString(c.get(Calendar.MONTH));
+		urte = Integer.toString(c.get(Calendar.YEAR));		
+		String data_sortu= urte + "-" + hil +"-" + egun;
+		
+		Transferentzia t1 = new Transferentzia ();
+
+		t1.setJasotzailea(iban_jasotzaile);
+		t1.setKantitatea(Integer.parseInt(kantitate_kendu));
+		t1.setKotzeptua(komisio_kendu);
+		t1.setTransferentziaData(data_sortu);
+		
+		for(int i=0;i<bezero.getTxartelak().size();i++) {
+			if(bezero.getTxartelak().get(i).getKontuBankario().getIban().equals(iban_bez)) {
+				bezero.getTxartelak().get(i).getKontuBankario().setSaldoa(bezero.getTxartelak().get(i).getKontuBankario().getSaldoa()-t1.kalkulatuPrezioa(kantitate_kendu, komisio_kendu));;
+			}
+		}
+		return bezero;
+	}
+	
+	public Bezeroa hipotekaSortu(Bezeroa bezero,String bezero_iban_kontua ,String kantitatea_hipo, String komisioa_hipo, String epemuga_hipo) {
+		kantitatea_hipo = kantitatea_hipo.replace(",",".");
+		Calendar c = Calendar.getInstance();
+		String egun,hil, urte;							   
+		egun = Integer.toString(c.get(Calendar.DATE));
+		hil = Integer.toString(c.get(Calendar.MONTH)+1);
+		urte = Integer.toString(c.get(Calendar.YEAR));		
+		String data_sortu= urte + "-" + hil +"-" + egun;
+		for(int i=0;i<bezero.getTxartelak().size();i++) {
+			if(bezero.getTxartelak().get(i).getKontuBankario().getIban().equals(bezero_iban_kontua)) {
+				Hipoteka hipoteka = new Hipoteka(Double.parseDouble(kantitatea_hipo),0.0,komisioa_hipo,data_sortu,"","eskatuta",epemuga_hipo);
+				bezero.getTxartelak().get(i).getKontuBankario().setHipoteka(hipoteka);
+				double saldo_prob = bezero.getTxartelak().get(i).getKontuBankario().getHipoteka().kalkulatuPrezioa(kantitatea_hipo, komisioa_hipo);
+				bezero.getTxartelak().get(i).getKontuBankario().getHipoteka().setKantitatea(Math.round(saldo_prob * 100.0) / 100.0);
+			}
+		}		
+		return bezero;
+	}
+	
+	public boolean hipotekaEskatu(String kantitatea_hipo, String komisioa_hipo, String iban_hipo, String epemuga_hipo,String nan_bezero, String pass_bezero){
+		boolean eskatuta = false;
 		kantitatea_hipo = kantitatea_hipo.replace(',','.');
 		String[] komisioa_prob = komisioa_hipo.split("%");
 		komisioa_hipo = komisioa_prob[0];
@@ -1415,15 +1547,16 @@ public class Metodoak {
 		Calendar c = Calendar.getInstance();
 		String egun,hil, urte;							   
 		egun = Integer.toString(c.get(Calendar.DATE));
-		hil = Integer.toString(c.get(Calendar.MONTH));
+		hil = Integer.toString(c.get(Calendar.MONTH)+1);
 		urte = Integer.toString(c.get(Calendar.YEAR));		
 		String data_sortu= urte + "-" + hil +"-" + egun;
 		Connection conn;					
 		try {
-			conn = (Connection) DriverManager.getConnection ("jdbc:mysql://localhost:3306/bankua","root","");
+//			conn = (Connection) DriverManager.getConnection (urlServer,"B"+nan_bezero,pass_bezero);
+			conn = (Connection) DriverManager.getConnection (url,"root","");
 			Statement comand = (Statement) conn.createStatement();
-			comand.executeUpdate("insert into "+hipoteka+" ( "+kantitatea+","+komisioa+","+hasieraData+","+iban+","+epeMuga+") values ( "+kantitatea_hipo+","+komisioa_hipo+",'"+data_sortu+"','"+iban_hipo+"','"+epemuga_hipo+"')");
-			
+			comand.executeUpdate("insert into "+hipoteka+" ("+kantitatea+","+komisioa+","+hasieraData+","+iban+","+epeMuga+") values ( "+Math.round(Double.parseDouble(kantitatea_hipo) * 100.0) / 100.0+","+komisioa_hipo+",'"+data_sortu+"','"+iban_hipo+"','"+epemuga_hipo+"')");
+			eskatuta = true;
 			conn.close();
 		}catch(SQLException ex) {
 			JOptionPane.showMessageDialog(null,"Errorea hipoteka eskatzean!","Error!", JOptionPane.ERROR_MESSAGE);	
@@ -1431,35 +1564,79 @@ public class Metodoak {
 			System.out.println("SQLState: "+ ex.getSQLState());
 			System.out.println("ErrorCode: "+ ex.getErrorCode());		
 		}
+		return eskatuta;
 	}
 	
-	public String[] hipotekaEstatus(String kontua){
-		String[] hipoteka_estatus = new String [5];
+	public String[] hipotekaEstatus(Bezeroa bezero, String iban_bez){
+		String[] hipoteka_estatus = new String [6];
+		
+		for(int i=0;i<bezero.getTxartelak().size();i++) {
+			if(bezero.getTxartelak().get(i).getKontuBankario().getIban().equals(iban_bez)) {
+				hipoteka_estatus[0] = String.valueOf(bezero.getTxartelak().get(i).getKontuBankario().getHipoteka().getKantitatea());
+				hipoteka_estatus[1] = bezero.getTxartelak().get(i).getKontuBankario().getHipoteka().getHasieraData();
+				if(bezero.getTxartelak().get(i).getKontuBankario().getHipoteka().getAmaieraData()==null || bezero.getTxartelak().get(i).getKontuBankario().getHipoteka().getAmaieraData().equals("")) {
+					hipoteka_estatus[2]="- - -";
+				}else {
+					hipoteka_estatus[2]=bezero.getTxartelak().get(i).getKontuBankario().getHipoteka().getAmaieraData();
+				}
+				hipoteka_estatus[3] = String.valueOf(bezero.getTxartelak().get(i).getKontuBankario().getHipoteka().getKomisioa());
+				hipoteka_estatus[4] = String.valueOf(bezero.getTxartelak().get(i).getKontuBankario().getHipoteka().getOrdaindutakoa());
+				hipoteka_estatus[5] = String.valueOf(bezero.getTxartelak().get(i).getKontuBankario().getHipoteka().getEgoera());
+			}
+		}				
+			
+		return hipoteka_estatus;
+	}
+
+	public Bezeroa hipotekaOrdaindu(Bezeroa bezero, String iban_bez, String kantitatea) throws SalbuespenaOrdainketa {
+		
+		for(int i=0;i<bezero.getTxartelak().size();i++) {
+			if(bezero.getTxartelak().get(i).getKontuBankario().getIban().equals(iban_bez)) {
+				if(bezero.getTxartelak().get(i).getKontuBankario().getSaldoa()>=Double.parseDouble(kantitatea) && bezero.getTxartelak().get(i).getKontuBankario().getHipoteka().getKantitatea()-bezero.getTxartelak().get(i).getKontuBankario().getHipoteka().getOrdaindutakoa()>= Double.parseDouble(kantitatea)) {
+					bezero.getTxartelak().get(i).getKontuBankario().getHipoteka().setOrdaindutakoa(bezero.getTxartelak().get(i).getKontuBankario().getHipoteka().getOrdaindutakoa()+Double.parseDouble(kantitatea));
+					bezero.getTxartelak().get(i).getKontuBankario().setSaldoa(bezero.getTxartelak().get(i).getKontuBankario().getSaldoa()-Double.parseDouble(kantitatea));
+					
+					if(bezero.getTxartelak().get(i).getKontuBankario().getHipoteka().getOrdaindutakoa()==bezero.getTxartelak().get(i).getKontuBankario().getHipoteka().getKantitatea()) {
+						bezero.getTxartelak().get(i).getKontuBankario().getHipoteka().setEgoera("itxita");
+						Calendar c = Calendar.getInstance();						
+						String egun,hil, urte;							   
+						egun = Integer.toString(c.get(Calendar.DATE));
+						hil = Integer.toString(c.get(Calendar.MONTH)+1);
+						urte = Integer.toString(c.get(Calendar.YEAR));		
+						String data_sortu= urte + "-" + hil +"-" + egun;
+						bezero.getTxartelak().get(i).getKontuBankario().getHipoteka().setAmaieraData(data_sortu);
+					}
+				}else {
+					throw new SalbuespenaOrdainketa("Ordainketa okerra.");
+				}
+			}
+		}		
+		return bezero;
+	}
+	
+	public boolean hipotekaUpdate(Bezeroa bezero, String iban_bez, String pass_bezero) {
+		boolean aldatuta = false;
+		
 		Connection conn;					
 		try {
-			conn = (Connection) DriverManager.getConnection ("jdbc:mysql://localhost:3306/bankua","root","");
-			Statement comand = (Statement) conn.createStatement();
-			ResultSet req = comand.executeQuery("select "+kantitatea+","+hasieraData+","+amaieraData+","+komisioa+","+ordaindutakoa+" from "+hipoteka+" where "+iban+" = '"+kontua+"'");
-			
-			if(req.next()) {
-				hipoteka_estatus[0] = req.getString(1);
-				hipoteka_estatus[1] = req.getString(2);
-				if(req.getString(3) == null) {
-					hipoteka_estatus[2] = "-----";
-				}else {
-					hipoteka_estatus[2] = req.getString(3);
+			//Datu baseari konexioa eta Bezeroa logeatzeko kontsulta egiten dugu
+//			conn = (Connection) DriverManager.getConnection (urlServer,"B"+bezero.getNan(),pass_bezero);
+			conn = (Connection) DriverManager.getConnection (url,"root","");
+			Statement comand = (Statement) conn.createStatement();	
+			for(int i=0;i<bezero.getTxartelak().size();i++) {
+				if(bezero.getTxartelak().get(i).getKontuBankario().getIban().equals(iban_bez)) {
+					comand.executeUpdate("Update "+hipoteka+" set "+ordaindutakoa+"= '"+bezero.getTxartelak().get(i).getKontuBankario().getHipoteka().getOrdaindutakoa()+"', "+amaieraData+"= '"+bezero.getTxartelak().get(i).getKontuBankario().getHipoteka().getAmaieraData()+"',"+egoera+"='"+bezero.getTxartelak().get(i).getKontuBankario().getHipoteka().getEgoera()+"' where "+iban+"='"+iban_bez+"';");
+					comand.executeUpdate("Update "+kontuBankario+" set "+saldoa+"= "+bezero.getTxartelak().get(i).getKontuBankario().getSaldoa()+" where "+iban+"='"+iban_bez+"';");
 				}
-				hipoteka_estatus[3] = req.getString(4);
-				hipoteka_estatus[4] = req.getString(5);
 			}
-			
+			aldatuta = true;
 			conn.close();
 		}catch(SQLException ex) {
 			System.out.println("SQLException: "+ ex.getMessage());
 			System.out.println("SQLState: "+ ex.getSQLState());
-			System.out.println("ErrorCode: "+ ex.getErrorCode());		
-		}
-		return hipoteka_estatus;
+			System.out.println("ErrorCode: "+ ex.getErrorCode());
+		}			
+		return aldatuta;
 	}
 	
 	public boolean transferentziakImprimatu(String[][] transferentziak){
@@ -1549,7 +1726,8 @@ public class Metodoak {
 		Connection conn;					
 		try {
 			//Datu baseari konexioa eta Bezeroa logeatzeko kontsulta egiten dugu
-			conn = (Connection) DriverManager.getConnection ("jdbc:mysql://localhost:3306/bankua","root","");
+//			conn = (Connection) DriverManager.getConnection (urlServer,"L12345678Z","1234");
+			conn = (Connection) DriverManager.getConnection (url,"root","");
 			Statement comand = (Statement) conn.createStatement();	
 			ResultSet req = comand.executeQuery("select "+nan+","+izena+","+abizenak+","+jaiotzeData+","+sexua+","+telefonoa+","+pasahitza+","+egoera+" from "+bezeroa);
 			
@@ -1580,17 +1758,18 @@ public class Metodoak {
 	}
 
 	public String[][] langileZerrendaKargatu(){
-		String[][] langileak = new String[0][9];		
+		String[][] langileak = new String[0][10];		
 		
 		Connection conn;					
 		try {
 			//Datu baseari konexioa eta Bezeroa logeatzeko kontsulta egiten dugu
-			conn = (Connection) DriverManager.getConnection ("jdbc:mysql://localhost:3306/bankua","root","");
+//			conn = (Connection) DriverManager.getConnection (urlServer,"L12345678Z","1234");
+			conn = (Connection) DriverManager.getConnection (url,"root","");
 			Statement comand = (Statement) conn.createStatement();	
-			ResultSet req = comand.executeQuery("select "+nan+","+izena+","+abizenak+","+jaiotzeData+","+sexua+","+telefonoa+","+pasahitza+","+lanpostua+","+id_sukurtsal+" from "+langile);
+			ResultSet req = comand.executeQuery("select "+nan+","+izena+","+abizenak+","+jaiotzeData+","+sexua+","+telefonoa+","+pasahitza+","+lanpostua+","+id_sukurtsal+","+egoera+" from "+langile);
 			
 			while(req.next()) {
-				String[][] langile_prob = new String[langileak.length+1][9];
+				String[][] langile_prob = new String[langileak.length+1][10];
 				for(int i=0;i<langileak.length;i++) {
 					for(int j=0;j<langileak[i].length;j++) {
 						langile_prob[i][j]=langileak[i][j];
@@ -1605,6 +1784,7 @@ public class Metodoak {
 				langile_prob[langileak.length][6]=req.getString(7);
 				langile_prob[langileak.length][7]=req.getString(8);
 				langile_prob[langileak.length][8]=req.getString(9);
+				langile_prob[langileak.length][9]=req.getString(10);
 				langileak=langile_prob;
 			}
 			conn.close();
@@ -1635,7 +1815,7 @@ public class Metodoak {
 	}
 	
 	public String[] langileInfo(String[][] langileak,String nan) {
-		String[] bezero_info = new String[9];
+		String[] bezero_info = new String[10];
 		
 		for(int i=0;i<langileak.length;i++) {
 			if(langileak[i][0].equals(nan)) {
@@ -1648,6 +1828,7 @@ public class Metodoak {
 				bezero_info[6]=langileak[i][6];
 				bezero_info[7]=langileak[i][7];
 				bezero_info[8]=langileak[i][8];
+				bezero_info[9]=langileak[i][9];
 			}
 		}		
 		return bezero_info;
@@ -1659,7 +1840,8 @@ public class Metodoak {
 		Connection conn;					
 		try {
 			//Datu baseari konexioa eta Bezeroa logeatzeko kontsulta egiten dugu
-			conn = (Connection) DriverManager.getConnection (url,erabiltzaile,password);
+//			conn = (Connection) DriverManager.getConnection (urlServer,"L12345678Z","1234");
+			conn = (Connection) DriverManager.getConnection (url,"root","");
 			Statement comand = (Statement) conn.createStatement();	
 			comand.executeUpdate("Update "+bezeroa+" set "+izena+"= '"+izen_bez+"', "+abizenak+"= '"+abizen_bez+"',"+sexua+"='"+sexu_bez+"',"+telefonoa+"='"+tel_bez+"',"+pasahitza+"='"+pass_bez+"',"+egoera+"='"+egoera_bez+"' where "+nan+"='"+nan_bez+"';");
 			aldatuta = true;
@@ -1672,15 +1854,16 @@ public class Metodoak {
 		return aldatuta;
 	}
 
-	public boolean langileAldaketakUpdate(String nan_lang,String izen_lang,String abizen_lang,String sexu_lang, String tel_lang,String pass_lang, String lanpostu_lang,String id_sukurtsal_lang) {
-boolean aldatuta = false;
+	public boolean langileAldaketakUpdate(String nan_lang,String izen_lang,String abizen_lang,String sexu_lang, String tel_lang,String pass_lang, String lanpostu_lang,String id_sukurtsal_lang, String egoera_lang) {
+		boolean aldatuta = false;
 		
 		Connection conn;					
 		try {
 			//Datu baseari konexioa eta Bezeroa logeatzeko kontsulta egiten dugu
-			conn = (Connection) DriverManager.getConnection (url,erabiltzaile,password);
+//			conn = (Connection) DriverManager.getConnection (urlServer,"L12345678Z","1234");
+			conn = (Connection) DriverManager.getConnection (url,"root","");
 			Statement comand = (Statement) conn.createStatement();	
-			comand.executeUpdate("Update "+langile+" set "+izena+"= '"+izen_lang+"', "+abizenak+"= '"+abizen_lang+"',"+sexua+"='"+sexu_lang+"',"+telefonoa+"='"+tel_lang+"',"+pasahitza+"='"+pass_lang+"',"+lanpostua+"='"+lanpostu_lang+"',"+id_sukurtsal+"='"+id_sukurtsal_lang+"' where "+nan+"='"+nan_lang+"';");
+			comand.executeUpdate("Update "+langile+" set "+izena+"= '"+izen_lang+"', "+abizenak+"= '"+abizen_lang+"',"+sexua+"='"+sexu_lang+"',"+telefonoa+"='"+tel_lang+"',"+pasahitza+"='"+pass_lang+"',"+lanpostua+"='"+lanpostu_lang+"',"+id_sukurtsal+"='"+id_sukurtsal_lang+"',"+egoera+"='"+egoera_lang+"' where "+nan+"='"+nan_lang+"';");
 			aldatuta = true;
 			conn.close();
 		}catch(SQLException ex) {
@@ -1689,5 +1872,104 @@ boolean aldatuta = false;
 			System.out.println("ErrorCode: "+ ex.getErrorCode());
 		}			
 		return aldatuta;
+	}
+
+	public Langilea kontuItxi(Langilea langilea, String iban_itxi, String suk_izen) {
+		//Sukurtsalaka arakatu
+		for(int i=0;i<langilea.getSukurtsalak().size();i++) {
+			if(langilea.getSukurtsalak().get(i).getKokalekua().equals(suk_izen)) {
+				//Kontu Bankarioak arakatu
+				for(int j=0;j<langilea.getSukurtsalak().get(i).getKontuBankarioak().size();j++) {
+					if(langilea.getSukurtsalak().get(i).getKontuBankarioak().get(j).getIban().equals(iban_itxi)) {
+						langilea.getSukurtsalak().get(i).getKontuBankarioak().remove(j);
+					}
+				}
+			}
+		}		
+		return langilea;
+	}
+	
+	public boolean kontuItxiDelete(String iban_itxi,String nan_lang,String pass_lang) {
+		boolean ezabatuta = false;
+		
+		Connection conn;					
+		try {
+			//Datu baseari konexioa eta Kontu Bankarioa ezabatzeko kontsulta
+//			conn = (Connection) DriverManager.getConnection (urlServer,"L"+nan_lang,pass_lang);
+			conn = (Connection) DriverManager.getConnection (url,"root","");
+			Statement comand = (Statement) conn.createStatement();	
+			comand.executeUpdate("Delete from "+kontuBankario+" where "+iban+"='"+iban_itxi+"';");
+			ezabatuta = true;
+			conn.close();
+		}catch(SQLException ex) {
+			System.out.println("SQLException: "+ ex.getMessage());
+			System.out.println("SQLState: "+ ex.getSQLState());
+			System.out.println("ErrorCode: "+ ex.getErrorCode());
+		}
+		
+		return ezabatuta;
+	}
+
+	public boolean langileErregistratu(String nan_lang, String izen_lang, String abizen_lang, String urte,String hil, String egun, String egoera_lang, String sexu_lang, String tel_lang, String pass_lang, String lanpostu_lang, String id_suk) {
+		boolean erregistratuta=false;
+		
+		Connection conn;					
+		try {
+			//Datu baseari konexioa eta Kontu Bankarioa ezabatzeko kontsulta
+//			conn = (Connection) DriverManager.getConnection (urlServer,"L"+nan_lang,pass_lang);
+			conn = (Connection) DriverManager.getConnection (url,"root","");
+			Statement comand = (Statement) conn.createStatement();	
+			comand.executeUpdate("insert into "+langile+" ("+nan+","+izena+","+abizenak+","+jaiotzeData+","+sexua+","+telefonoa+","+pasahitza+","+lanpostua+","+id_sukurtsal+","+egoera+") values ('"+nan_lang+"','"+izen_lang+"','"+abizen_lang+"','"+urte+"-"+hil+"-"+egun+"','"+sexu_lang+"','"+tel_lang+"','"+pass_lang+"','"+lanpostu_lang+"',"+id_suk+",'"+egoera_lang+"');");
+			erregistratuta = true;
+			conn.close();
+		}catch(SQLException ex) {
+			System.out.println("SQLException: "+ ex.getMessage());
+			System.out.println("SQLState: "+ ex.getSQLState());
+			System.out.println("ErrorCode: "+ ex.getErrorCode());
+		}			
+		return erregistratuta;
+	}
+	
+	public boolean erabiltzaileEzabatu(String nan_bez) {
+		boolean ezabatuta = false;
+		
+		Connection conn;					
+		try {
+			//Datu baseari konexioa eta Kontu Bankarioa ezabatzeko kontsulta
+//			conn = (Connection) DriverManager.getConnection (urlServer,"L"+nan_lang,pass_lang);
+			conn = (Connection) DriverManager.getConnection (url,"root","");
+			Statement comand = (Statement) conn.createStatement();	
+			ResultSet req = comand.executeQuery("select bezeroEzabaketa('"+nan_bez+"');");
+			if(req.next()) {
+				ezabatuta = true;
+			}
+			conn.close();
+		}catch(SQLException ex) {
+			System.out.println("SQLException: "+ ex.getMessage());
+			System.out.println("SQLState: "+ ex.getSQLState());
+			System.out.println("ErrorCode: "+ ex.getErrorCode());
+		}		
+		return ezabatuta;
+	}
+
+	public boolean langileKaleratu(String nan_lang) {
+		boolean kaleratuta = false;
+		
+		Connection conn;					
+		try {
+			//Datu baseari konexioa eta Kontu Bankarioa ezabatzeko kontsulta
+//			conn = (Connection) DriverManager.getConnection (urlServer,"L"+nan_lang,pass_lang);
+			conn = (Connection) DriverManager.getConnection (url,"root","");
+			Statement comand = (Statement) conn.createStatement();	
+			comand.executeUpdate("Delete from "+langile+" where "+nan+"='"+nan_lang+"';");
+			kaleratuta = true;
+			conn.close();
+		}catch(SQLException ex) {
+			System.out.println("SQLException: "+ ex.getMessage());
+			System.out.println("SQLState: "+ ex.getSQLState());
+			System.out.println("ErrorCode: "+ ex.getErrorCode());
+		}		
+		
+		return kaleratuta;
 	}
 }

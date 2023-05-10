@@ -12,7 +12,7 @@ public class HipotekaTest {
 
 	@Test
 	public void testHipotekaConsGet() {		
-		Hipoteka h1 = new Hipoteka (100000, 50000, 10, "03-12-2010", "06-10-2020", "eskatuta", "10 urte");
+		Hipoteka h1 = new Hipoteka (100000, 50000, "10", "03-12-2010", "06-10-2020", "eskatuta", "10 urte");
 		
 		// Getters
 		assertEquals(100000, h1.getKantitatea(), 0.01);
@@ -25,7 +25,7 @@ public class HipotekaTest {
 	
 	@Test
 	public void testHipotekaSet() {		
-		Hipoteka h1 = new Hipoteka (100000, 50000, 10, "03-12-2010", "06-10-2020", "eskatuta", "10 urte");
+		Hipoteka h1 = new Hipoteka (100000, 50000, "10", "03-12-2010", "06-10-2020", "eskatuta", "10 urte");
 		
 		// Setters
 		h1.setKantitatea(2000000);
@@ -45,7 +45,7 @@ public class HipotekaTest {
 	
 	@Test
 	public void testHipotekaToString() {
-		Hipoteka h1 = new Hipoteka (100000, 50000, 10, "03-12-2010", "06-10-2020", "eskatuta", "10 urte");
+		Hipoteka h1 = new Hipoteka (100000, 50000, "10", "03-12-2010", "06-10-2020", "eskatuta", "10 urte");
 		
 		// ToString
 		assertEquals("Hipoteka kantitatea=" + h1.getKantitatea() + ", ordaindutakoa=" + h1.getOrdaindutakoa()
@@ -55,8 +55,8 @@ public class HipotekaTest {
 	
 	@Test
 	public void testHipotekaEquals() {
-		Hipoteka h1 = new Hipoteka (100000, 50000, 10, "03-12-2010", "06-10-2020", "eskatuta", "10 urte");
-		Hipoteka h2 = new Hipoteka (100000, 50000, 10, "03-12-2010", "06-10-2020", "eskatuta", "10 urte");
+		Hipoteka h1 = new Hipoteka (100000, 50000, "10", "03-12-2010", "06-10-2020", "eskatuta", "10 urte");
+		Hipoteka h2 = new Hipoteka (100000, 50000, "10", "03-12-2010", "06-10-2020", "eskatuta", "10 urte");
 		Hipoteka h3 = new Hipoteka ();
 		
 		// Equals
@@ -67,8 +67,8 @@ public class HipotekaTest {
 	@Test
 	public void testHipotekaErrefusatu() {
 		Metodoak metodoak = new Metodoak();
-		Langilea l1 = metodoak.langileaKargatu("12345678Z", "god");
-		Hipoteka h1 = new Hipoteka (100000, 50000, 10, "03-12-2010", "06-10-2020", "eskatuta", "10 urte");
+		Langilea l1 = metodoak.langileaKargatu("12345678Z", "god", "1234");
+		Hipoteka h1 = new Hipoteka (100000, 50000, "10", "03-12-2010", "06-10-2020", "eskatuta", "10 urte");
 		h1.hipotekaErrefusatu(l1, "Santutxu, Santutxu Kalea, 27", "ES9323450111313252003900");
 		
 		for(int i=0;i<l1.getSukurtsalak().size();i++) {
@@ -85,8 +85,8 @@ public class HipotekaTest {
 	@Test
 	public void testHipotekaOnartu() {
 		Metodoak metodoak = new Metodoak();
-		Langilea l1 = metodoak.langileaKargatu("12345678Z", "god");
-		Hipoteka h1 = new Hipoteka (100000, 50000, 10, "03-12-2010", "06-10-2020", "eskatuta", "10 urte");
+		Langilea l1 = metodoak.langileaKargatu("12345678Z", "god", "1234");
+		Hipoteka h1 = new Hipoteka (100000, 50000, "10", "03-12-2010", "06-10-2020", "eskatuta", "10 urte");
 		h1.hipotekaOnartu(l1, "Santutxu, Santutxu Kalea, 27", "ES9323450111313252003900");
 		
 		for(int i=0;i<l1.getSukurtsalak().size();i++) {

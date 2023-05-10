@@ -1,0 +1,8 @@
+TRANSFERENTZIAK: 
+IBAN: ES22 6789 0050  60  8253351724 ,Kantitatea: 100,00 € ,Kontzeptuapaga ,Transferetzia-data: 2023-04-04
+IBAN: ES51 2345 0002  73  1634074159 ,Kantitatea: 100,00 € ,Kontzeptuaproba ,Transferetzia-data: 2023-04-05
+IBAN: ES51 2345 0002  73  1634074159 ,Kantitatea: 100,00 € ,Kontzeptuaproba2 ,Transferetzia-data: 2023-04-05
+IBAN: ES51 2345 0002  73  1634074159 ,Kantitatea: 1000,00 € ,KontzeptuaSorpresa ,Transferetzia-data: 2023-04-05
+IBAN: ES51 2345 0002  73  1634074159 ,Kantitatea: 300,00 € ,Kontzeptuakk ,Transferetzia-data: 2023-04-05
+DIRU SARRERAK: 
+IBAN igortzailea: ES29 6789 0003  39  4765827453 ,Kantitatea: 100,00 € ,Kontzeptuadirua ,Sarrera-data: 2023-04-04
