@@ -104,8 +104,7 @@ public class DatuBaseUpdate {
 		Connection conn;					
 		try {
 			//Datu baseari konexioa eta Bezeroa logeatzeko kontsulta egiten dugu
-//			conn = (Connection) DriverManager.getConnection (urlServer,"B"+bezero.getNan(),pass_bezero);
-			conn = (Connection) DriverManager.getConnection (url,"root","");
+			conn = (Connection) DriverManager.getConnection (url,erabiltzaile,password);
 			Statement comand = (Statement) conn.createStatement();
 			ResultSet req = comand.executeQuery("Select "+kantitatea+" from "+hipoteka+" where iban = '"+iban_bez+"';");
 			
@@ -152,8 +151,7 @@ public class DatuBaseUpdate {
 		Connection conn;					
 		try {
 			//Datu baseari konexioa eta Bezeroa logeatzeko kontsulta egiten dugu
-//			conn = (Connection) DriverManager.getConnection (urlServer,"L12345678Z","1234");
-			conn = (Connection) DriverManager.getConnection (url,"root","");
+			conn = (Connection) DriverManager.getConnection (url,erabiltzaile,password);
 			Statement comand = (Statement) conn.createStatement();	
 			comand.executeUpdate("Update "+bezeroa+" set "+izena+"= '"+izen_bez+"', "+abizenak+"= '"+abizen_bez+"',"+sexua+"='"+sexu_bez+"',"+telefonoa+"='"+tel_bez+"',"+pasahitza+"='"+pass_bez+"',"+egoera+"='"+egoera_bez+"' where "+nan+"='"+nan_bez+"';");
 			aldatuta = true;
@@ -181,8 +179,7 @@ public class DatuBaseUpdate {
 		Connection conn;					
 		try {
 			//Datu baseari konexioa eta Kontu Bankarioa eguneratzen du
-//			conn = (Connection) DriverManager.getConnection (urlServer,"L"+nan_langile,pass_langile);
-			conn = (Connection) DriverManager.getConnection (url,"root","");
+			conn = (Connection) DriverManager.getConnection (url,erabiltzaile,password);
 			Statement comand = (Statement) conn.createStatement();	
 			comand.executeUpdate("Update "+kontuBankario+" set "+egoera+"= '"+kontuEgoera+"', "+hilekoLimitea+"= '"+limite+"' where "+iban+"= '"+kontu_iban+"';");
 			aldatuta = true;
@@ -206,8 +203,7 @@ public class DatuBaseUpdate {
 		Connection conn;					
 		try {
 			//Datu baseari konexioa eta Bezeroa logeatzeko kontsulta egiten dugu
-//			conn = (Connection) DriverManager.getConnection (urlServer,"L12345678Z","1234");
-			conn = (Connection) DriverManager.getConnection (url,"root","");
+			conn = (Connection) DriverManager.getConnection (url,erabiltzaile,password);
 			Statement comand = (Statement) conn.createStatement();	
 			comand.executeUpdate("Update "+kontuBankario+" set "+egoera+"='"+"ixteko"+"' where "+iban+"='"+iban_bez+"';");
 			aldatuta = true;
@@ -238,8 +234,7 @@ public class DatuBaseUpdate {
 		Connection conn;					
 		try {
 			//Datu baseari konexioa eta Bezeroa logeatzeko kontsulta egiten dugu
-//			conn = (Connection) DriverManager.getConnection (urlServer,"L12345678Z","1234");
-			conn = (Connection) DriverManager.getConnection (url,"root","");
+			conn = (Connection) DriverManager.getConnection (url,erabiltzaile,password);
 			Statement comand = (Statement) conn.createStatement();	
 			comand.executeUpdate("Update "+langile+" set "+izena+"= '"+izen_lang+"', "+abizenak+"= '"+abizen_lang+"',"+sexua+"='"+sexu_lang+"',"+telefonoa+"='"+tel_lang+"',"+pasahitza+"='"+pass_lang+"',"+lanpostua+"='"+lanpostu_lang+"',"+id_sukurtsal+"='"+id_sukurtsal_lang+"',"+egoera+"='"+egoera_lang+"' where "+nan+"='"+nan_lang+"';");
 			aldatuta = true;

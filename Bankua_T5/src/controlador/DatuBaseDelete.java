@@ -100,8 +100,7 @@ public class DatuBaseDelete {
 		Connection conn;					
 		try {
 			//Datu baseari konexioa eta Kontu Bankarioa ezabatzeko kontsulta
-//			conn = (Connection) DriverManager.getConnection (urlServer,"L"+nan_lang,pass_lang);
-			conn = (Connection) DriverManager.getConnection (url,"root","");
+			conn = (Connection) DriverManager.getConnection (url,erabiltzaile,password);
 			Statement comand = (Statement) conn.createStatement();	
 			comand.executeUpdate("Delete from "+kontuBankario+" where "+iban+"='"+iban_itxi+"';");
 			ezabatuta = true;
@@ -126,8 +125,7 @@ public class DatuBaseDelete {
 		Connection conn;					
 		try {
 			//Datu baseari konexioa eta Kontu Bankarioa ezabatzeko kontsulta
-//			conn = (Connection) DriverManager.getConnection (urlServer,"L"+nan_lang,pass_lang);
-			conn = (Connection) DriverManager.getConnection (url,"root","");
+			conn = (Connection) DriverManager.getConnection (url,erabiltzaile,password);
 			Statement comand = (Statement) conn.createStatement();	
 			comand.executeUpdate("Delete from "+bezeroa+" where "+nan+"='"+nan_bez+"';");
 			ezabatuta = true;
@@ -152,8 +150,7 @@ public class DatuBaseDelete {
 		Connection conn;					
 		try {
 			//Datu baseari konexioa eta Kontu Bankarioa ezabatzeko kontsulta
-//			conn = (Connection) DriverManager.getConnection (urlServer,"L"+nan_lang,pass_lang);
-			conn = (Connection) DriverManager.getConnection (url,"root","");
+			conn = (Connection) DriverManager.getConnection (url,erabiltzaile,password);
 			Statement comand = (Statement) conn.createStatement();	
 			comand.executeUpdate("Delete from "+langile+" where "+nan+"='"+nan_lang+"';");
 			kaleratuta = true;
