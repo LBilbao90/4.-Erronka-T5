@@ -1,4 +1,0 @@
-TRANSFERENTZIAK: 
-IBAN: ES22 6789 0050  60  8253351724 ,Kantitatea: 100,00 € ,Kontzeptuapaga ,Transferetzia-data: 2023-04-04
-DIRU SARRERAK: 
-IBAN igortzailea: ES29 6789 0003  39  4765827453 ,Kantitatea: 100,00 € ,Kontzeptuadirua ,Sarrera-data: 2023-04-04

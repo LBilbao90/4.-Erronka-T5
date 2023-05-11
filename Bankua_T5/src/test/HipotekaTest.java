@@ -4,7 +4,7 @@ import static org.junit.Assert.*;
 
 import org.junit.Test;
 
-import controlador.Metodoak;
+import controlador.PertsonakKargatu;
 import model.Hipoteka;
 import model.Langilea;
 
@@ -66,8 +66,8 @@ public class HipotekaTest {
 	
 	@Test
 	public void testHipotekaErrefusatu() {
-		Metodoak metodoak = new Metodoak();
-		Langilea l1 = metodoak.langileaKargatu("12345678Z", "god", "1234");
+		PertsonakKargatu pertsonakKargatu = new PertsonakKargatu();
+		Langilea l1 = pertsonakKargatu.langileaKargatu("12345678Z", "god", "1234");
 		Hipoteka h1 = new Hipoteka (100000, 50000, "10", "03-12-2010", "06-10-2020", "eskatuta", "10 urte");
 		h1.hipotekaErrefusatu(l1, "Santutxu, Santutxu Kalea, 27", "ES9323450111313252003900");
 		
@@ -84,8 +84,8 @@ public class HipotekaTest {
 	
 	@Test
 	public void testHipotekaOnartu() {
-		Metodoak metodoak = new Metodoak();
-		Langilea l1 = metodoak.langileaKargatu("12345678Z", "god", "1234");
+		PertsonakKargatu pertsonakKargatu = new PertsonakKargatu();
+		Langilea l1 = pertsonakKargatu.langileaKargatu("12345678Z", "god", "1234");
 		Hipoteka h1 = new Hipoteka (100000, 50000, "10", "03-12-2010", "06-10-2020", "eskatuta", "10 urte");
 		h1.hipotekaOnartu(l1, "Santutxu, Santutxu Kalea, 27", "ES9323450111313252003900");
 		

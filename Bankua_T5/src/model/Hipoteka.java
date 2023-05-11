@@ -1,6 +1,5 @@
 package model;
 
-import java.text.DecimalFormat;
 import java.util.Calendar;
 import java.util.Objects;
 
@@ -98,7 +97,6 @@ public class Hipoteka implements Komisioa{
 
 	@Override
 	public double kalkulatuPrezioa(String kantitatea, String komisioa) {
-	    DecimalFormat df = new DecimalFormat("0.00");
 		komisioa=komisioa.replace("%", "");	
 		kantitatea=kantitatea.replace(",",".");	
 		

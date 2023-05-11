@@ -31,15 +31,7 @@ public class Bezeroa extends Pertsona{
 		this.txartelak = txartelak;
 	}
 
-	// Methods
-	public void hipotekaOrdaindu() {}
-	
-	public void itxiKontua() {}
-	
-	public void transferentziaEgin(){}
-	
-	public void hipotekaEskatu() {}
-	
+	// Methods	
 	public int adinaKalkulatu() {
 		SimpleDateFormat df = new SimpleDateFormat("MM-dd-yyyy", Locale.ENGLISH);
 		

@@ -9,11 +9,4 @@ public class Zuzendaria extends Langilea{
 	}
 	public Zuzendaria() {
 	}
-	
-	// Methods
-	public void hipotekaSortu() {}
-	
-	public void kontuaItxi() {}
-	
-	public void kontuaIzoztu() {}
 }

@@ -11,7 +11,4 @@ public class Gerentea extends Langilea{
 	public Gerentea() {
 	}
 	
-	// Methods
-	public void kontuaSortu() {}
-	
 }

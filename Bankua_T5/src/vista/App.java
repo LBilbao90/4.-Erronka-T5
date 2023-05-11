@@ -6,7 +6,18 @@ import java.awt.Toolkit;
 
 import javax.swing.border.EmptyBorder;
 
-import controlador.Metodoak;
+import controlador.ObjetuMetodoak;
+import controlador.DatuBaseSelect;
+import controlador.DatuBaseInsert;
+import controlador.DatuBaseUpdate;
+import controlador.DatuBaseDelete;
+import controlador.TxtIdatzi;
+import controlador.ArrayMetodoak;
+import controlador.BooleanMetodoak;
+import controlador.StringMetodoak;
+import controlador.PertsonakKargatu;
+import controlador.TaulaMetodoak;
+
 import model.Bezeroa;
 import model.EntitateBankario;
 import model.Langilea;
@@ -27,16 +38,25 @@ import java.awt.Font;
 
 public class App extends JFrame {
 
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = 1L;
 	private JPanel contentPane;
 	private JTextField txt_bezero_erabiltzaile;
 	private JPasswordField passBezero;
 	private JTextField txt_langile_erabiltzaile;
 	private JPasswordField passLangile;
-	Metodoak metodoak = new Metodoak();
+	//Kontroladore paketeko klaseak importatu
+	ObjetuMetodoak metodoakObjetu = new ObjetuMetodoak();
+	DatuBaseSelect metodoakSelect = new DatuBaseSelect();
+	DatuBaseInsert metodoakInsert = new DatuBaseInsert();
+	DatuBaseUpdate metodoakUpdate = new DatuBaseUpdate();
+	DatuBaseDelete metodoakDelete = new DatuBaseDelete();
+	ArrayMetodoak metodoakArray = new ArrayMetodoak();
+	BooleanMetodoak metodoakBoolean = new BooleanMetodoak();
+	StringMetodoak metodoakString = new StringMetodoak();
+	PertsonakKargatu metodoakKargatu = new PertsonakKargatu();
+	TaulaMetodoak metodoakTaulak = new TaulaMetodoak();
+	TxtIdatzi metodoakTxt = new TxtIdatzi();
+	
 	final ImageIcon homeicon = new ImageIcon(new ImageIcon("src/res/casa.png").getImage().getScaledInstance(44, 34,Image.SCALE_DEFAULT));
 	final ImageIcon logouticon = new ImageIcon(new ImageIcon("src/res/logout.png").getImage().getScaledInstance(44, 34,Image.SCALE_DEFAULT));
 	final ImageIcon logo_atzera = new ImageIcon(new ImageIcon("src/res/flecha_atras.png").getImage().getScaledInstance(44,30,Image.SCALE_DEFAULT));
@@ -225,9 +245,9 @@ public class App extends JFrame {
 		// 			Datuak Kargatu	    //
 		//////////////////////////////////		
 
-		urteak_array = Metodoak.urteakBete();
-		hilak_array = Metodoak.hilakBete();
-		egunak_array = Metodoak.egunakBete(1);
+		urteak_array = metodoakArray.urteakBete();
+		hilak_array = metodoakArray.hilakBete();
+		egunak_array = metodoakArray.egunakBete(1);
 		
 		//////////////////////////////////
 		// 			 Panelak 		    //
@@ -387,16 +407,16 @@ public class App extends JFrame {
 			public void actionPerformed(ActionEvent e) {
 				
 				try {
-					if(metodoak.bezeroLogin(txt_bezero_erabiltzaile.getText(),String.valueOf(passBezero.getPassword()))) {
+					if(metodoakSelect.bezeroLogin(txt_bezero_erabiltzaile.getText(),String.valueOf(passBezero.getPassword()))) {
 						nan_bezero= txt_bezero_erabiltzaile.getText();
 						pass_bezero = String.valueOf(passBezero.getPassword());
 						//Langilearen logina erregistratu
-						metodoak.loginErregistratu(nan_bezero, "Bezeroa");
+						metodoakTxt.loginErregistratu(nan_bezero, "Bezeroa");
 						
-						bezero = metodoak.bezeroaKargatu(nan_bezero);
-						bezero_entitate = metodoak.bezeroarenEntitateak(bezero);
+						bezero = metodoakKargatu.bezeroaKargatu(nan_bezero);
+						bezero_entitate = metodoakArray.bezeroarenEntitateak(bezero);
 						
-						entitateak = metodoak.botoiakSortu();
+						entitateak = metodoakSelect.botoiakSortu();
 
 						//Entitateen botoiak sortzen dira
 						for(int i=0;i<entitateak.size();i++) {		
@@ -406,10 +426,10 @@ public class App extends JFrame {
 							btn_banco.setToolTipText(String.valueOf(i+1));
 							btn_banco.addActionListener(new ActionListener(){
 								public void actionPerformed(ActionEvent e) {
-									if(metodoak.entitateBalidatu(bezero_entitate, btn_banco.getToolTipText())) {
+									if(metodoakBoolean.entitateBalidatu(bezero_entitate, btn_banco.getToolTipText())) {
 										id_entitate = Character.getNumericValue(btn_banco.getToolTipText().charAt(0));
 										
-										kontuBankarioak = metodoak.bezeroarenKontuak(bezero, id_entitate);
+										kontuBankarioak = metodoakTaulak.bezeroarenKontuak(bezero, id_entitate);
 										
 										table_entitateKont = new JTable(kontuBankarioak,kontuBankario_header) {
 											private static final long serialVersionUID = 1L;
@@ -440,10 +460,10 @@ public class App extends JFrame {
 						bezeroEntitate.setVisible(true);
 					}
 				}catch (SalbuespenaLogin s) {
-					metodoak.loginOkerraErregistratu(txt_bezero_erabiltzaile.getText(),"Bezeroa");
+					metodoakTxt.loginOkerraErregistratu(txt_bezero_erabiltzaile.getText(),"Bezeroa");
 					JOptionPane.showMessageDialog(null,"Login Okerra!","Error!", JOptionPane.ERROR_MESSAGE);
 				}catch (SalbuespenaLoginBlokeo s) {
-					metodoak.loginOkerraErregistratu(txt_bezero_erabiltzaile.getText(),"Bezeroa");
+					metodoakTxt.loginOkerraErregistratu(txt_bezero_erabiltzaile.getText(),"Bezeroa");
 					JOptionPane.showMessageDialog(null,"Erabiltzaile hau blokeatuta dago!","Error!", JOptionPane.ERROR_MESSAGE);
 				}
 			}
@@ -457,7 +477,7 @@ public class App extends JFrame {
 			public void actionPerformed(ActionEvent e) {
 				
 				try {
-					lanpostua = metodoak.langileLogin(txt_langile_erabiltzaile.getText(),String.valueOf(passLangile.getPassword()));				
+					lanpostua = metodoakSelect.langileLogin(txt_langile_erabiltzaile.getText(),String.valueOf(passLangile.getPassword()));				
 					if(lanpostua!=null) {	
 						if(lanpostua.equals("god")) {
 							btn_bezero_zerrenda.setVisible(true);
@@ -471,12 +491,12 @@ public class App extends JFrame {
 						nan_langile = txt_langile_erabiltzaile.getText();
 						pass_langile = String.valueOf(passLangile.getPassword());
 						//Langilearen logina erregistratu
-						metodoak.loginErregistratu(nan_langile, "Bezeroa");
+						metodoakTxt.loginErregistratu(nan_langile, "Bezeroa");
 						
-						langile = metodoak.langileaKargatu(nan_langile,lanpostua,pass_langile);
+						langile = metodoakKargatu.langileaKargatu(nan_langile,lanpostua,pass_langile);
 						//Langilearen entitate eta sukurtsalak kargatu
-						entitate_izen = metodoak.langilearenEntitateak(langile);		
-						sukurtsal_kok = metodoak.langilearenSukurtsalak(langile, langile.getSukurtsalak().get(0).getEntitateBankario().getIzena());
+						entitate_izen = metodoakArray.langilearenEntitateak(langile);		
+						sukurtsal_kok = metodoakArray.langilearenSukurtsalak(langile, langile.getSukurtsalak().get(0).getEntitateBankario().getIzena());
 						
 						cb_sukurtsala = new JComboBox(sukurtsal_kok);
 						cb_sukurtsala.setBounds(412, 317, 230, 30);
@@ -485,7 +505,7 @@ public class App extends JFrame {
 						JComboBox cb_entitate = new JComboBox(entitate_izen);
 						cb_entitate.addActionListener (new ActionListener () {
 							public void actionPerformed(ActionEvent e) {
-								sukurtsal_kok = metodoak.langilearenSukurtsalak(langile, cb_entitate.getSelectedItem().toString());
+								sukurtsal_kok = metodoakArray.langilearenSukurtsalak(langile, cb_entitate.getSelectedItem().toString());
 								cb_sukurtsala.removeAllItems();
 								DefaultComboBoxModel sukurtsal_kokapena = new DefaultComboBoxModel(sukurtsal_kok);
 								cb_sukurtsala.setModel(sukurtsal_kokapena);
@@ -498,10 +518,10 @@ public class App extends JFrame {
 						sukurtsalak.setVisible(true);
 					}
 				}catch (SalbuespenaLogin s) {
-					metodoak.loginOkerraErregistratu(txt_langile_erabiltzaile.getText(),"Langilea");
+					metodoakTxt.loginOkerraErregistratu(txt_langile_erabiltzaile.getText(),"Langilea");
 					JOptionPane.showMessageDialog(null,"Login Okerra!","Error!", JOptionPane.ERROR_MESSAGE);
 				} catch (SalbuespenaLoginBlokeo sb) {
-					metodoak.loginOkerraErregistratu(txt_langile_erabiltzaile.getText(),"Langilea");
+					metodoakTxt.loginOkerraErregistratu(txt_langile_erabiltzaile.getText(),"Langilea");
 					JOptionPane.showMessageDialog(null,"Erabiltzaile hau blokeatuta dago!","Error!", JOptionPane.ERROR_MESSAGE);
 				}			
 			}
@@ -901,7 +921,7 @@ public class App extends JFrame {
 				int row = kontuak_table.getSelectedRow();
 				if(row>=0) {
 					langile_aukeratu_iban=kontuak_table.getModel().getValueAt(row, 0).toString(); 
-					langile_kontu_info = metodoak.langileKontuInfo(langile, langile_aukeratu_iban, sukurtsal_izen);
+					langile_kontu_info = metodoakArray.langileKontuInfo(langile, langile_aukeratu_iban, sukurtsal_izen);
 					lbl_iban_kontua.setText(langile_kontu_info[0]);
 					lbl_jabeak_kontua.setText(langile_kontu_info[1]);
 					lbl_saldo_kontua.setText(langile_kontu_info[2]);
@@ -1168,7 +1188,7 @@ public class App extends JFrame {
 			public void actionPerformed(ActionEvent e) {				
 				int erantzuna = JOptionPane.showOptionDialog(null, "Ziur zaude erabiltzailea EZABATU nahi duzula?","Berrespena", JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE, null, aukerak,aukerak[1]);
 				if(erantzuna == JOptionPane.YES_OPTION) {
-					metodoak.erabiltzaileEzabatu(nan_bezero);
+					metodoakDelete.erabiltzaileEzabatu(nan_bezero);
 					JOptionPane.showMessageDialog(null, "Erabiltzailea ezabatu da, eskerrik asko gure zerbitzuak erabiltzeagaitik!","Informazio", JOptionPane.INFORMATION_MESSAGE);
 					bezeroEntitate.setVisible(false);
 					loginBezero.setVisible(true);
@@ -1364,7 +1384,7 @@ public class App extends JFrame {
 		JButton btn_print_2 = new JButton("Imprimatu");
 		btn_print_2.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				metodoak.diruSarrerakImprimatu(diruSarrerak);
+				metodoakTxt.diruSarrerakImprimatu(diruSarrerak);
 				JOptionPane.showMessageDialog(null,"Diru sarrerak inprimatu dira!","Informazio", JOptionPane.INFORMATION_MESSAGE);
 			}
 		});
@@ -1431,13 +1451,13 @@ public class App extends JFrame {
 		btn_transferitu.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				if(!txt_jasotzaile.getText().equals("") && !txt_kantitate.getText().equals("") && !txt_kontzeptu.getText().equals("") && !String.valueOf(transferentzia_segurtasun.getPassword()).equals("")) {
-					if(txt_jasotzaile.getText().length() == 24 && metodoak.transferentziaIbanBalidatu(txt_jasotzaile.getText())) {
+					if(txt_jasotzaile.getText().length() == 24 && metodoakSelect.transferentziaIbanBalidatu(txt_jasotzaile.getText())) {
 						if(!txt_jasotzaile.getText().equals(bezero_iban_kontua)) {
-							if(metodoak.transferentziaSaldoaBalidatu(txt_kantitate.getText(),txt_jasotzaile.getText(),nan_bezero,pass_bezero)) {
-								if(metodoak.segurtasunKodeaBalidatu(String.valueOf(transferentzia_segurtasun.getPassword()), bezero_iban_kontua,nan_bezero,pass_bezero)) {
+							if(metodoakSelect.transferentziaSaldoaBalidatu(txt_kantitate.getText(),txt_jasotzaile.getText(),nan_bezero,pass_bezero)) {
+								if(metodoakSelect.segurtasunKodeaBalidatu(String.valueOf(transferentzia_segurtasun.getPassword()), bezero_iban_kontua,nan_bezero,pass_bezero)) {
 									try {
-										if(metodoak.transferentziaEgin(bezero_iban_kontua, txt_jasotzaile.getText(), txt_kantitate.getText(), txt_kontzeptu.getText(), txt_komisio_transfer.getText(), String.valueOf(transferentzia_segurtasun.getPassword()), transferentziak)) {
-											bezero = metodoak.diruaKendu(bezero, bezero_iban_kontua, txt_kantitate.getText().toString(), txt_komisio_transfer.getText().toString(), txt_jasotzaile.getText().toString());
+										if(metodoakInsert.transferentziaEgin(bezero_iban_kontua, txt_jasotzaile.getText(), txt_kantitate.getText(), txt_kontzeptu.getText(), txt_komisio_transfer.getText(), String.valueOf(transferentzia_segurtasun.getPassword()), transferentziak)) {
+											bezero = metodoakObjetu.diruaKendu(bezero, bezero_iban_kontua, txt_kantitate.getText().toString(), txt_komisio_transfer.getText().toString(), txt_jasotzaile.getText().toString());
 											for(int i = 0; i < bezero.getTxartelak().size(); i ++) {
 												if(bezero.getTxartelak().get(i).getKontuBankario().getIban().equals(bezero_iban_kontua)) {
 													bezero.getTxartelak().get(i).getKontuBankario().getTransferentziak().add(trans);
@@ -1498,7 +1518,7 @@ public class App extends JFrame {
 		JButton btn_print_1 = new JButton("Imprimatu");
 		btn_print_1.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				metodoak.transferentziakImprimatu(transferentziak);
+				metodoakTxt.transferentziakImprimatu(transferentziak);
 				JOptionPane.showMessageDialog(null,"Transferentziak inprimatu dira!","Informazio", JOptionPane.INFORMATION_MESSAGE);
 			}
 		});
@@ -1508,7 +1528,7 @@ public class App extends JFrame {
 		JButton btn_transfer_ikusi = new JButton("Transferentziak Ikusi");
 		btn_transfer_ikusi.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				transferentziak = metodoak.transferentziakIkusi(bezero, bezero_iban_kontua);			
+				transferentziak = metodoakTaulak.transferentziakIkusi(bezero, bezero_iban_kontua);			
 				
 				transfer_ikusi_table = new JTable(transferentziak, transferentziak_header) {
 					private static final long serialVersionUID = 1L;
@@ -1561,7 +1581,7 @@ public class App extends JFrame {
 		JButton btn_sarrerak = new JButton("Diru Sarrerak");
 		btn_sarrerak.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				diruSarrerak = metodoak.diruSarrerakIkusi(bezero, bezero_iban_kontua);
+				diruSarrerak = metodoakTaulak.diruSarrerakIkusi(bezero, bezero_iban_kontua);
 				
 				sarrerak_table = new JTable(diruSarrerak, diruSarrerak_header) {
 					private static final long serialVersionUID = 1L;
@@ -1584,15 +1604,15 @@ public class App extends JFrame {
 		btn_hipoteka = new JButton("Hipoteka");
 		btn_hipoteka.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				if(!metodoak.hipotekaDut(bezero, bezero_iban_kontua).equals("")) {
-					hipoteka_info = metodoak.hipotekaEstatus(bezero,bezero_iban_kontua);
+				if(!metodoakString.hipotekaDut(bezero, bezero_iban_kontua).equals("")) {
+					hipoteka_info = metodoakArray.hipotekaEstatus(bezero,bezero_iban_kontua);
 					lbl_hipoteka_total.setText(hipoteka_info[0] + " €");
 					lbl_hipoteka_hasiera.setText(hipoteka_info[1]);
 					lbl_hipoteka_amaiera.setText(hipoteka_info[2]);
 					lbl_hipoteka_komisio_ikusi.setText(hipoteka_info[3]);
 					lbl_hipoteka_ordainduta.setText(hipoteka_info[4] + " €");
 					lbl_hipo_egoera.setText(hipoteka_info[5]);
-					if(!metodoak.hipotekaDut(bezero, bezero_iban_kontua).equals("onartuta")){
+					if(!metodoakString.hipotekaDut(bezero, bezero_iban_kontua).equals("onartuta")){
 						btn_ordaindu.setVisible(false);
 					}
 					bezeroKontua.setVisible(false);
@@ -1609,7 +1629,7 @@ public class App extends JFrame {
 		JButton btn_mugimendu = new JButton("Mugimenduak");
 		btn_mugimendu.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				transferentziak = metodoak.transferentziakIkusi(bezero, bezero_iban_kontua);
+				transferentziak = metodoakTaulak.transferentziakIkusi(bezero, bezero_iban_kontua);
 				
 				transfer_table = new JTable(transferentziak, transferentziak_header) {
 					private static final long serialVersionUID = 1L;
@@ -1622,7 +1642,7 @@ public class App extends JFrame {
 				transfer_table.getTableHeader().setReorderingAllowed(false);
 				transfer_pane.setViewportView(transfer_table);
 				
-				diruSarrerak = metodoak.diruSarrerakIkusi(bezero, bezero_iban_kontua);
+				diruSarrerak = metodoakTaulak.diruSarrerakIkusi(bezero, bezero_iban_kontua);
 				
 				sarrera_table = new JTable(diruSarrerak, diruSarrerak_header) {
 					private static final long serialVersionUID = 1L;
@@ -1648,13 +1668,13 @@ public class App extends JFrame {
 				String[] options = new String[] {"Eskudirua Jaso", "Txeke jaso", "Ez itxi"};
 			    int erantzuna = JOptionPane.showOptionDialog(null,"Ziur zaude kontua itxi nahi duzula?","Berrespena",JOptionPane.DEFAULT_OPTION, JOptionPane.PLAIN_MESSAGE,null, options, options[0]);
 				if(erantzuna == 0) {
-					bezero = metodoak.ixtekoKontuAldatu(bezero, bezero_iban_kontua);
-					if(metodoak.ixtekoKontuUpdate(bezero_iban_kontua)) {
+					bezero = metodoakObjetu.ixtekoKontuAldatu(bezero, bezero_iban_kontua);
+					if(metodoakUpdate.ixtekoKontuUpdate(bezero_iban_kontua)) {
 						JOptionPane.showMessageDialog(null, "Kontua ixteko eskatu da! Dirua prestatzen dago.","Informazio", JOptionPane.INFORMATION_MESSAGE);
 					}
 				}else if(erantzuna == 1) {
-					bezero = metodoak.ixtekoKontuAldatu(bezero, bezero_iban_kontua);
-					if(metodoak.ixtekoKontuUpdate(bezero_iban_kontua)) {
+					bezero = metodoakObjetu.ixtekoKontuAldatu(bezero, bezero_iban_kontua);
+					if(metodoakUpdate.ixtekoKontuUpdate(bezero_iban_kontua)) {
 						JOptionPane.showMessageDialog(null, "Kontua ixteko eskatu da! Txekea egiten gaude.","Informazio", JOptionPane.INFORMATION_MESSAGE);
 					}
 				}else if(erantzuna == 2) {
@@ -1756,12 +1776,12 @@ public class App extends JFrame {
 		btn_eskatu.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				if(!txt_kantitate_hipoteka.getText().equals("") && String.valueOf(hipoteka_segurtasun.getPassword()).length()==4) {
-					if(metodoak.segurtasunKodeaBalidatu(String.valueOf(hipoteka_segurtasun.getPassword()), bezero_iban_kontua,nan_bezero,pass_bezero)) {
+					if(metodoakSelect.segurtasunKodeaBalidatu(String.valueOf(hipoteka_segurtasun.getPassword()), bezero_iban_kontua,nan_bezero,pass_bezero)) {
 												
 						int erantzuna = JOptionPane.showOptionDialog(null, "Ziur zaude "+txt_kantitate_hipoteka.getText()+" € ko hipoteka eskatu nahi duzula "+txt_hipoteka_komisio.getText()+" ko komisioarekin?","Berrespena", JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE, null, aukerak,aukerak[1]);
 						if(erantzuna == JOptionPane.YES_OPTION) {
-							bezero = metodoak.hipotekaSortu(bezero, bezero_iban_kontua, txt_kantitate_hipoteka.getText(), txt_hipoteka_komisio.getText(), String.valueOf(hipoteka_combo.getSelectedItem()));
-							metodoak.hipotekaEskatu(txt_kantitate_hipoteka.getText(), txt_hipoteka_komisio.getText(), bezero_iban_kontua, String.valueOf(hipoteka_combo.getSelectedItem()),nan_bezero,pass_bezero);
+							bezero = metodoakObjetu.hipotekaSortu(bezero, bezero_iban_kontua, txt_kantitate_hipoteka.getText(), txt_hipoteka_komisio.getText(), String.valueOf(hipoteka_combo.getSelectedItem()));
+							metodoakInsert.hipotekaEskatu(txt_kantitate_hipoteka.getText(), txt_hipoteka_komisio.getText(), bezero_iban_kontua, String.valueOf(hipoteka_combo.getSelectedItem()),nan_bezero,pass_bezero);
 							JOptionPane.showMessageDialog(null, "Hipoteka eskatu da!.","Informazio", JOptionPane.INFORMATION_MESSAGE);
 						}else if(erantzuna==JOptionPane.NO_OPTION) {
 							txt_kantitate_hipoteka.setText("");
@@ -1858,9 +1878,9 @@ public class App extends JFrame {
 		btn_ordaindu_hipo.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				try {
-					bezero = metodoak.hipotekaOrdaindu(bezero, bezero_iban_kontua, txt_kant_ordaindu.getText());
-					metodoak.hipotekaUpdate(bezero, bezero_iban_kontua,pass_bezero);
-					hipoteka_info = metodoak.hipotekaEstatus(bezero,bezero_iban_kontua);
+					bezero = metodoakObjetu.hipotekaOrdaindu(bezero, bezero_iban_kontua, txt_kant_ordaindu.getText());
+					metodoakUpdate.hipotekaUpdate(bezero, bezero_iban_kontua,pass_bezero);
+					hipoteka_info = metodoakArray.hipotekaEstatus(bezero,bezero_iban_kontua);
 					lbl_hipoteka_total.setText(hipoteka_info[0] + " €");
 					lbl_hipoteka_hasiera.setText(hipoteka_info[1]);
 					lbl_hipoteka_amaiera.setText(hipoteka_info[2]);
@@ -1906,7 +1926,7 @@ public class App extends JFrame {
 		JButton btn_imprimatu_mugi = new JButton("Mugimenduak Imprimatu");
 		btn_imprimatu_mugi.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				metodoak.mugimentuakImprimatu(diruSarrerak, transferentziak);
+				metodoakTxt.mugimentuakImprimatu(diruSarrerak, transferentziak);
 				JOptionPane.showMessageDialog(null,"Mugimenduak guztiak inprimatu dira!","Informazio", JOptionPane.INFORMATION_MESSAGE);
 			}
 		});
@@ -1926,7 +1946,7 @@ public class App extends JFrame {
 		JButton btn_kontu_ikusi = new JButton("Kontuak Ikusi");
 		btn_kontu_ikusi.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {	
-				sukurtsal_kontuak=metodoak.langilearenSukurtsalarenKontuak(langile, sukurtsal_izen);
+				sukurtsal_kontuak=metodoakTaulak.langilearenSukurtsalarenKontuak(langile, sukurtsal_izen);
 
 				kontuak_table = new JTable(sukurtsal_kontuak,kontuak_lista){
 					private static final long serialVersionUID = 1L;
@@ -1947,10 +1967,10 @@ public class App extends JFrame {
 		btn_kontu_sortu.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				do {
-					id_txartel_random = Metodoak.sortuTxartelId();
+					id_txartel_random = metodoakString.sortuTxartelId();
 					txartel_id = id_txartel_random.substring(0,4)+" "+id_txartel_random.substring(4,8)+" "+id_txartel_random.substring(8,12)+" "+id_txartel_random.substring(12,16);
 					lbl_txartelid.setText(txartel_id);
-				}while(!metodoak.txartelIdBalidatu(id_txartel_random));
+				}while(!metodoakSelect.txartelIdBalidatu(id_txartel_random));
 				langileMenu.setVisible(false);
 				kontuSortu.setVisible(true);
 			}
@@ -1979,7 +1999,7 @@ public class App extends JFrame {
 				cb_hila = new JComboBox(hilak_array);
 				cb_hila.addActionListener (new ActionListener () {
 					public void actionPerformed(ActionEvent e) {
-						egunak_array= metodoak.egunakBete(Integer.parseInt(cb_hila.getSelectedItem().toString()));
+						egunak_array= metodoakArray.egunakBete(Integer.parseInt(cb_hila.getSelectedItem().toString()));
 						cb_eguna.removeAllItems();
 						DefaultComboBoxModel egunak_model = new DefaultComboBoxModel(egunak_array);
 						cb_eguna.setModel(egunak_model);
@@ -1998,7 +2018,7 @@ public class App extends JFrame {
 		btn_kontu_itzi = new JButton("Ixteko Kontuak");
 		btn_kontu_itzi.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				String[][] ixteko_array = metodoak.ixtekoKontuak(langile, sukurtsal_izen);
+				String[][] ixteko_array = metodoakTaulak.ixtekoKontuak(langile, sukurtsal_izen);
 				itxi_table = new JTable(ixteko_array,kontuak_lista) {
 					private static final long serialVersionUID = 1L;
 			        public boolean isCellEditable(int row, int column) {                
@@ -2079,7 +2099,7 @@ public class App extends JFrame {
 		JButton btn_gorde_aldaketak = new JButton("Gorde Aldaketak");
 		btn_gorde_aldaketak.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				if(metodoak.langileKontuAldaketak(cb_egoera_kontua.getSelectedItem().toString(), txt_limite_kontua.getText(), langile_aukeratu_iban,nan_langile,pass_langile)) {
+				if(metodoakUpdate.langileKontuAldaketak(cb_egoera_kontua.getSelectedItem().toString(), txt_limite_kontua.getText(), langile_aukeratu_iban,nan_langile,pass_langile)) {
 					JOptionPane.showMessageDialog(null, "Aldaketak gorde dira.","Informazio", JOptionPane.INFORMATION_MESSAGE);		
 					infoKontua.setVisible(false);
 					langileMenu.setVisible(true);
@@ -2094,7 +2114,7 @@ public class App extends JFrame {
 		JButton btn_transferentziak_ikusi = new JButton("Transferentziak Ikusi");
 		btn_transferentziak_ikusi.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				transferentzia_info=metodoak.langileKontuTransfer(langile, langile_aukeratu_iban);
+				transferentzia_info= metodoakTaulak.langileKontuTransfer(langile, langile_aukeratu_iban);
 				
 				transfer_ikusi_table = new JTable(transferentzia_info,transfer_header){
 					private static final long serialVersionUID = 1L;
@@ -2116,7 +2136,7 @@ public class App extends JFrame {
 		JButton btn_dirusarrerak_ikusi = new JButton("Diru Sarrerak Ikusi");
 		btn_dirusarrerak_ikusi.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				sarrera_info=metodoak.langileKontuSarrerak(langile, langile_aukeratu_iban);
+				sarrera_info= metodoakTaulak.langileKontuSarrerak(langile, langile_aukeratu_iban);
 
 				sarrerak_table = new JTable(sarrera_info,sarrera_header){
 					private static final long serialVersionUID = 1L;
@@ -2229,7 +2249,7 @@ public class App extends JFrame {
 		btn_sortu_kontu.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				try {
-					if(metodoak.bezeroSortu(txt_izen_erabiltzaile.getText(),txt_abizen_erabiltzaile	.getText(),txt_nan_sortu.getText(),String.valueOf(pass_bezero_sortu.getPassword()),cb_urtea.getSelectedItem().toString(),cb_hila.getSelectedItem().toString(),cb_eguna.getSelectedItem().toString(),cb_sexua.getSelectedItem().toString(),txt_tel_sortu.getText(),nan_langile,pass_langile)) {
+					if(metodoakInsert.bezeroSortu(txt_izen_erabiltzaile.getText(),txt_abizen_erabiltzaile	.getText(),txt_nan_sortu.getText(),String.valueOf(pass_bezero_sortu.getPassword()),cb_urtea.getSelectedItem().toString(),cb_hila.getSelectedItem().toString(),cb_eguna.getSelectedItem().toString(),cb_sexua.getSelectedItem().toString(),txt_tel_sortu.getText(),nan_langile,pass_langile)) {
 						JOptionPane.showMessageDialog(null, "Erabiltzailea sortu da.","Informazio", JOptionPane.INFORMATION_MESSAGE);
 						txt_izen_erabiltzaile.setText("");
 						txt_abizen_erabiltzaile.setText("");
@@ -2325,9 +2345,11 @@ public class App extends JFrame {
 		btn_jarraitu.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				String nan_kontu_sortu =  txt_kontu_sortu_nan.getText();
-				if(metodoak.nanBalidatu(nan_kontu_sortu) && metodoak.bezeroExistitu(nan_kontu_sortu) && String.valueOf(pass_segurtasunkode_kontu.getPassword()).length()==4) {	
-					erabiltzaileak = Metodoak.bezeroGordeArray(nan_kontu_sortu, id_txartel_random, String.valueOf(pass_segurtasunkode_kontu.getPassword()),cb_txartel_mota.getSelectedItem().toString() ,erabiltzaileak);
-					iban_sortu= Metodoak.ibanKalkulatu(langile, sukurtsal_izen);
+				if(metodoakBoolean.nanBalidatu(nan_kontu_sortu) && metodoakSelect.bezeroExistitu(nan_kontu_sortu) && String.valueOf(pass_segurtasunkode_kontu.getPassword()).length()==4) {	
+					erabiltzaileak = metodoakTaulak.bezeroGordeArray(nan_kontu_sortu, id_txartel_random, String.valueOf(pass_segurtasunkode_kontu.getPassword()),cb_txartel_mota.getSelectedItem().toString() ,erabiltzaileak);
+					do {					
+						iban_sortu= metodoakString.ibanKalkulatu(langile, sukurtsal_izen);
+					}while(!metodoakSelect.ibanBalidatu(iban_sortu));
 					lbl_kontusortu_iban.setText(iban_sortu.substring(0,4)+" "+iban_sortu.substring(4,8)+" "+iban_sortu.substring(8,12)+" "+iban_sortu.substring(12,14)+" "+iban_sortu.substring(14));				
 					txt_kontu_sortu_nan.setText("");
 					pass_segurtasunkode_kontu.setText("");
@@ -2346,13 +2368,13 @@ public class App extends JFrame {
 		btn_gehitu_erabiltzaile.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				String nan_kontu_sortu =  txt_kontu_sortu_nan.getText();
-				if(metodoak.nanBalidatu(nan_kontu_sortu)  && metodoak.bezeroExistitu(nan_kontu_sortu) && String.valueOf(pass_segurtasunkode_kontu.getPassword()).length()==4) {
-					erabiltzaileak = Metodoak.bezeroGordeArray(nan_kontu_sortu, id_txartel_random,String.valueOf(pass_segurtasunkode_kontu.getPassword()),cb_txartel_mota.getSelectedItem().toString(), erabiltzaileak);
+				if(metodoakBoolean.nanBalidatu(nan_kontu_sortu)  && metodoakSelect.bezeroExistitu(nan_kontu_sortu) && String.valueOf(pass_segurtasunkode_kontu.getPassword()).length()==4) {
+					erabiltzaileak = metodoakTaulak.bezeroGordeArray(nan_kontu_sortu, id_txartel_random,String.valueOf(pass_segurtasunkode_kontu.getPassword()),cb_txartel_mota.getSelectedItem().toString(), erabiltzaileak);
 					txt_kontu_sortu_nan.setText("");
 					//Txartel id berri bat sortzen du
 					do {
-						id_txartel_random = Metodoak.sortuTxartelId();
-					}while(!metodoak.txartelIdBalidatu(id_txartel_random));	
+						id_txartel_random = metodoakString.sortuTxartelId();
+					}while(!metodoakSelect.txartelIdBalidatu(id_txartel_random));	
 					txartel_id = id_txartel_random.substring(0,4)+" "+id_txartel_random.substring(4,8)+" "+id_txartel_random.substring(8,12)+" "+id_txartel_random.substring(12,16);
 					lbl_txartelid.setText(txartel_id);
 					
@@ -2430,8 +2452,8 @@ public class App extends JFrame {
 		JButton btn_sortu_kontu_korronte = new JButton("Sortu Kontua");
 		btn_sortu_kontu_korronte.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				if(Metodoak.diruBalidatu(txt_saldo_sortu.getText()) && Metodoak.diruBalidatu(txt_limite_sortu.getText())) {
-					if(metodoak.kontuKorronteSortu(langile, iban_sortu, txt_saldo_sortu.getText(), txt_limite_sortu.getText(), cb_egoera_sortu.getSelectedItem().toString(), sukurtsal_izen, erabiltzaileak,nan_langile,pass_langile)) {
+				if(metodoakBoolean.diruBalidatu(txt_saldo_sortu.getText()) && metodoakBoolean.diruBalidatu(txt_limite_sortu.getText())) {
+					if(metodoakInsert.kontuKorronteSortu(langile, iban_sortu, txt_saldo_sortu.getText(), txt_limite_sortu.getText(), cb_egoera_sortu.getSelectedItem().toString(), sukurtsal_izen, erabiltzaileak,nan_langile,pass_langile)) {
 						JOptionPane.showMessageDialog(null,"Kontu korrontea sortu da!","Info!", JOptionPane.INFORMATION_MESSAGE);
 						erabiltzaileak = new String [0][4];
 						txt_saldo_sortu.setText("");
@@ -2449,7 +2471,7 @@ public class App extends JFrame {
 		JButton btn_hipo_eskatu = new JButton("Eskatutako Hipotekak");
 		btn_hipo_eskatu.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				String[][] eskatutako_hipotekak = metodoak.eskatutakoHipotekak(langile, sukurtsal_izen);
+				String[][] eskatutako_hipotekak = metodoakTaulak.eskatutakoHipotekak(langile, sukurtsal_izen);
 				
 				hipotekak_table = new JTable(eskatutako_hipotekak,hipoteka_eskatu_header){
 					private static final long serialVersionUID = 1L;
@@ -2474,7 +2496,7 @@ public class App extends JFrame {
 		JButton btn_hipo_onartuta = new JButton("Onartutako Hipotekak");
 		btn_hipo_onartuta.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				String[][] onartutako_hipotekak = metodoak.onartutakoHipotekak(langile, sukurtsal_izen);
+				String[][] onartutako_hipotekak = metodoakTaulak.onartutakoHipotekak(langile, sukurtsal_izen);
 				
 				hipotekak_table = new JTable(onartutako_hipotekak,hipoteka_onartu_header){
 					private static final long serialVersionUID = 1L;
@@ -2499,7 +2521,7 @@ public class App extends JFrame {
 		JButton btn_hipo_itxita = new JButton("Itxitako Hipotekak");
 		btn_hipo_itxita.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				String[][] itxitako_hipotekak = metodoak.itxitakoHipotekak(langile, sukurtsal_izen);
+				String[][] itxitako_hipotekak = metodoakTaulak.itxitakoHipotekak(langile, sukurtsal_izen);
 				
 				hipotekak_table = new JTable(itxitako_hipotekak,hipoteka_itxita_header){
 					private static final long serialVersionUID = 1L;
@@ -2524,7 +2546,7 @@ public class App extends JFrame {
 		JButton btn_hipo_errefusatu = new JButton("Errefusatutako Hipoteka");
 		btn_hipo_errefusatu.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				String[][] errefusatutako_hipotekak = metodoak.errefusatutakoHipotekak(langile, sukurtsal_izen);
+				String[][] errefusatutako_hipotekak = metodoakTaulak.errefusatutakoHipotekak(langile, sukurtsal_izen);
 				
 				hipotekak_table = new JTable(errefusatutako_hipotekak,hipoteka_eskatu_header){
 					private static final long serialVersionUID = 1L;
@@ -2580,7 +2602,7 @@ public class App extends JFrame {
 						}
 					}
 
-					String[][] eskatutako_hipotekak = metodoak.eskatutakoHipotekak(langile, sukurtsal_izen);
+					String[][] eskatutako_hipotekak = metodoakTaulak.eskatutakoHipotekak(langile, sukurtsal_izen);
 					
 					hipotekak_table = new JTable(eskatutako_hipotekak,hipoteka_eskatu_header){
 						private static final long serialVersionUID = 1L;
@@ -2616,7 +2638,7 @@ public class App extends JFrame {
 						}
 					}
 
-					String[][] eskatutako_hipotekak = metodoak.eskatutakoHipotekak(langile, sukurtsal_izen);
+					String[][] eskatutako_hipotekak = metodoakTaulak.eskatutakoHipotekak(langile, sukurtsal_izen);
 					
 					hipotekak_table = new JTable(eskatutako_hipotekak,hipoteka_eskatu_header){
 						private static final long serialVersionUID = 1L;
@@ -2645,10 +2667,10 @@ public class App extends JFrame {
 				if(row>=0) {
 					ixteko_kontu_iban=itxi_table.getModel().getValueAt(row, 0).toString();
 					ixteko_kontu_iban = ixteko_kontu_iban.replace(" ","");
-					langile = metodoak.kontuItxi(langile, ixteko_kontu_iban, sukurtsal_izen);
-					if(metodoak.kontuItxiDelete(ixteko_kontu_iban, nan_langile, pass_langile)) {
+					langile = metodoakObjetu.kontuItxi(langile, ixteko_kontu_iban, sukurtsal_izen);
+					if(metodoakDelete.kontuItxiDelete(ixteko_kontu_iban, nan_langile, pass_langile)) {
 						JOptionPane.showMessageDialog(null, "Kontu Korrontea ezabatu da.","Alerta", JOptionPane.INFORMATION_MESSAGE);
-						String[][] ixteko_array = metodoak.ixtekoKontuak(langile, sukurtsal_izen);
+						String[][] ixteko_array = metodoakTaulak.ixtekoKontuak(langile, sukurtsal_izen);
 						itxi_table = new JTable(ixteko_array,kontuak_lista) {
 							private static final long serialVersionUID = 1L;
 					        public boolean isCellEditable(int row, int column) {                
@@ -2691,7 +2713,7 @@ public class App extends JFrame {
 		btn_bezero_zerrenda = new JButton(" Bezero Zerrenda");
 		btn_bezero_zerrenda.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				bezeroZerrendaArray = metodoak.bezeroZerrendaKargatu();
+				bezeroZerrendaArray = metodoakSelect.bezeroZerrendaKargatu();
 				zerrenda_table = new JTable(bezeroZerrendaArray,zerrenda_header_bez);
 				pane_zerrenda.setViewportView(zerrenda_table);
 				zerrenda_table.getColumnModel().getColumn(0).setPreferredWidth(200);
@@ -2709,7 +2731,7 @@ public class App extends JFrame {
 		btn_langile_zerrenda = new JButton("Langile Zerrenda");
 		btn_langile_zerrenda.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				langileZerrendaArray = metodoak.langileZerrendaKargatu();
+				langileZerrendaArray = metodoakSelect.langileZerrendaKargatu();
 				zerrenda_table = new JTable(langileZerrendaArray,zerrenda_header_lang);
 				pane_zerrenda.setViewportView(zerrenda_table);
 				zerrenda_table.getTableHeader().setReorderingAllowed(false);
@@ -2733,7 +2755,7 @@ public class App extends JFrame {
 				cb_hila_lang = new JComboBox(hilak_array);
 				cb_hila_lang.addActionListener (new ActionListener () {
 					public void actionPerformed(ActionEvent e) {
-						egunak_array= metodoak.egunakBete(Integer.parseInt(cb_hila_lang.getSelectedItem().toString()));
+						egunak_array= metodoakArray.egunakBete(Integer.parseInt(cb_hila_lang.getSelectedItem().toString()));
 						cb_eguna_lang.removeAllItems();
 						DefaultComboBoxModel egunak_model = new DefaultComboBoxModel(egunak_array);
 						cb_eguna_lang.setModel(egunak_model);
@@ -2844,7 +2866,7 @@ public class App extends JFrame {
 		btn_gorde_editatu.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				if(txt_telefono_editatu.getText().length()==9) {
-					if(metodoak.bezeroAldaketakUpdate(lbl_nan_edizio.getText(), txt_izen_editatu.getText(), txt_abizen_editatu.getText(), cb_sexua_editatu.getSelectedItem().toString(), txt_telefono_editatu.getText(), String.valueOf(pass_bez_editatu.getPassword()), cb_egoera_bezero.getSelectedItem().toString())) {
+					if(metodoakUpdate.bezeroAldaketakUpdate(lbl_nan_edizio.getText(), txt_izen_editatu.getText(), txt_abizen_editatu.getText(), cb_sexua_editatu.getSelectedItem().toString(), txt_telefono_editatu.getText(), String.valueOf(pass_bez_editatu.getPassword()), cb_egoera_bezero.getSelectedItem().toString())) {
 						JOptionPane.showMessageDialog(null, "Bezeroaren datuak aldatu dirau.","Alerta", JOptionPane.INFORMATION_MESSAGE);
 						bezeroEditatu.setVisible(false);
 						zerrendak.setVisible(true);
@@ -2957,9 +2979,9 @@ public class App extends JFrame {
 		btn_gorde_editatu_1.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				if(!txt_izen_edizio_lang.getText().toString().equals("") && !txt_abizen_edizio_lang.getText().toString().equals("") && txt_tel_edizio_lang.getText().toString().length()==9 && String.valueOf(pass_edizio_lang.getPassword()).length()==4 && !txt_id_sukurtsal.getText().equals("")) {
-					if(metodoak.langileAldaketakUpdate(lbl_nan_edizio_lang.getText(), txt_izen_edizio_lang.getText(), txt_abizen_edizio_lang.getText(), cb_sexua_edizio_lang.getSelectedItem().toString(), txt_tel_edizio_lang.getText(), String.valueOf(pass_edizio_lang.getPassword()), cb_lanpostu.getSelectedItem().toString(),txt_id_sukurtsal.getText(),cb_egoera_langile.getSelectedItem().toString())) {
+					if(metodoakUpdate.langileAldaketakUpdate(lbl_nan_edizio_lang.getText(), txt_izen_edizio_lang.getText(), txt_abizen_edizio_lang.getText(), cb_sexua_edizio_lang.getSelectedItem().toString(), txt_tel_edizio_lang.getText(), String.valueOf(pass_edizio_lang.getPassword()), cb_lanpostu.getSelectedItem().toString(),txt_id_sukurtsal.getText(),cb_egoera_langile.getSelectedItem().toString())) {
 						JOptionPane.showMessageDialog(null, "Langilearen datuak aldatu dira.","Alerta", JOptionPane.INFORMATION_MESSAGE);
-						langileZerrendaArray = metodoak.langileZerrendaKargatu();
+						langileZerrendaArray = metodoakSelect.langileZerrendaKargatu();
 						zerrenda_table = new JTable(langileZerrendaArray,zerrenda_header_lang);
 						pane_zerrenda.setViewportView(zerrenda_table);
 						langileEditatu.setVisible(false);
@@ -3007,9 +3029,9 @@ public class App extends JFrame {
 		JButton btn_kaleratu = new JButton("Kaleratu");
 		btn_kaleratu.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {				
-				if(metodoak.langileKaleratu(lbl_nan_edizio_lang.getText())) {
+				if(metodoakDelete.langileKaleratu(lbl_nan_edizio_lang.getText())) {
 					JOptionPane.showMessageDialog(null, "Langilea kaleratu da.","Informazio", JOptionPane.INFORMATION_MESSAGE);
-					langileZerrendaArray = metodoak.langileZerrendaKargatu();
+					langileZerrendaArray = metodoakSelect.langileZerrendaKargatu();
 					zerrenda_table = new JTable(langileZerrendaArray,zerrenda_header_lang);
 					pane_zerrenda.setViewportView(zerrenda_table);
 					langileEditatu.setVisible(false);
@@ -3031,7 +3053,7 @@ public class App extends JFrame {
 				if(row>=0) {
 					if(bezeroZerrendaArray!= null && langileZerrendaArray==null) {
 						langile_aukeratu_nan=zerrenda_table.getModel().getValueAt(row, 0).toString();
-						bezeroInfo = metodoak.bezeroInfo(bezeroZerrendaArray, langile_aukeratu_nan);
+						bezeroInfo = metodoakArray.bezeroInfo(bezeroZerrendaArray, langile_aukeratu_nan);
 						lbl_nan_edizio.setText(bezeroInfo[0]);
 						txt_izen_editatu.setText(bezeroInfo[1]);
 						txt_abizen_editatu.setText(bezeroInfo[2]);
@@ -3043,7 +3065,7 @@ public class App extends JFrame {
 						bezeroEditatu.setVisible(true);
 					}else if(bezeroZerrendaArray==null && langileZerrendaArray!=null) {
 						langile_aukeratu_nan=zerrenda_table.getModel().getValueAt(row, 0).toString();
-						langileInfo = metodoak.langileInfo(langileZerrendaArray, langile_aukeratu_nan);	
+						langileInfo = metodoakArray.langileInfo(langileZerrendaArray, langile_aukeratu_nan);	
 						lbl_nan_edizio_lang.setText(langileInfo[0]);
 						txt_izen_edizio_lang.setText(langileInfo[1]);
 						txt_abizen_edizio_lang.setText(langileInfo[2]);
@@ -3156,8 +3178,8 @@ public class App extends JFrame {
 		btn_erregistratu_lang.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 
-				if(metodoak.nanBalidatu(txt_lang_nan.getText()) && !txt_lang_izen_registro.getText().equals("") && !txt_lang_abizen_registro.getText().equals("") && txt_tel_lang_registro.getText().length()==9 && !String.valueOf(pass_langile_registro.getPassword()).equals("") && !txt_sukurtsal_registro.getText().equals("")) {
-					if(metodoak.langileErregistratu(txt_lang_nan.getText(),txt_lang_izen_registro.getText(), txt_lang_abizen_registro.getText(),cb_urtea_lang.getSelectedItem().toString(),cb_hila_lang.getSelectedItem().toString(),cb_eguna_lang.getSelectedItem().toString(),cb_egoera_langile_registro.getSelectedItem().toString(),cb_sexua_registro_lang.getSelectedItem().toString(), txt_tel_lang_registro.getText(),String.valueOf(pass_langile_registro.getPassword()),cb_lanpostu_registro.getSelectedItem().toString(),txt_sukurtsal_registro.getText())){
+				if(metodoakBoolean.nanBalidatu(txt_lang_nan.getText()) && !txt_lang_izen_registro.getText().equals("") && !txt_lang_abizen_registro.getText().equals("") && txt_tel_lang_registro.getText().length()==9 && !String.valueOf(pass_langile_registro.getPassword()).equals("") && !txt_sukurtsal_registro.getText().equals("")) {
+					if(metodoakInsert.langileErregistratu(txt_lang_nan.getText(),txt_lang_izen_registro.getText(), txt_lang_abizen_registro.getText(),cb_urtea_lang.getSelectedItem().toString(),cb_hila_lang.getSelectedItem().toString(),cb_eguna_lang.getSelectedItem().toString(),cb_egoera_langile_registro.getSelectedItem().toString(),cb_sexua_registro_lang.getSelectedItem().toString(), txt_tel_lang_registro.getText(),String.valueOf(pass_langile_registro.getPassword()),cb_lanpostu_registro.getSelectedItem().toString(),txt_sukurtsal_registro.getText())){
 						JOptionPane.showMessageDialog(null,"Langilea erregistratu da!","Informazio", JOptionPane.INFORMATION_MESSAGE);
 						txt_lang_nan.setText("");
 						txt_lang_izen_registro.setText("");
