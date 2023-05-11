@@ -1,0 +1,14 @@
+Bezeroa-> Nan: 12345678Z - Data: 2023/05/10 21:33:40
+Bezeroa-> Nan: 12345678Z - Data: 2023/05/10 21:35:47
+Bezeroa-> Nan: 12345678Z - Data: 2023/05/10 21:40:11
+Bezeroa-> Nan: 12345678Z - Data: 2023/05/10 21:43:27
+Bezeroa-> Nan: 12345678Z - Data: 2023/05/10 21:45:52
+Bezeroa-> Nan: 12345678Z - Data: 2023/05/10 21:46:42
+Bezeroa-> Nan: 12345678Z - Data: 2023/05/10 22:27:04
+Bezeroa-> Nan: 78950146R - Data: 2023/05/10 22:36:31
+Bezeroa-> Nan: 78950146 - Data: 2023/05/10 22:45:44
+Bezeroa-> Nan: 78950146 - Data: 2023/05/10 22:46:13
+Bezeroa-> Nan: 78950146 - Data: 2023/05/10 22:49:59
+Bezeroa-> Nan: 78950146 - Data: 2023/05/10 23:02:42
+Bezeroa-> Nan: 78950146 - Data: 2023/05/11 08:28:24
+Bezeroa-> Nan: 78950146 - Data: 2023/05/11 08:36:17
