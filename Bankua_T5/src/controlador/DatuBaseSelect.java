@@ -212,24 +212,26 @@ public class DatuBaseSelect {
 		 */
 		public boolean transferentziaSaldoaBalidatu(String diru_kantitate, String kontua, String nan_bezero, String pass_bezero) {
 			boolean zuzena = false;
-			diru_kantitate = diru_kantitate.replace(',','.');
-			Connection conn;					
-			try {
-				conn = (Connection) DriverManager.getConnection (url,erabiltzaile,password);
-				Statement comand = (Statement) conn.createStatement();	
-				ResultSet req = comand.executeQuery("Select "+saldoa+" from kontubankario where "+iban+"='"+kontua+"';");
-				
-				if(req.next()) {
-					if(req.getDouble(saldoa) >= ((Double.parseDouble(diru_kantitate)*1.5)/100)+Double.parseDouble(diru_kantitate)) {
-						zuzena = true;
+			if(diru_kantitate.split(",").length<=2) {
+				diru_kantitate = diru_kantitate.replace(',','.');
+				Connection conn;					
+				try {
+					conn = (Connection) DriverManager.getConnection (url,erabiltzaile,password);
+					Statement comand = (Statement) conn.createStatement();	
+					ResultSet req = comand.executeQuery("Select "+saldoa+" from kontubankario where "+iban+"='"+kontua+"';");
+					
+					if(req.next()) {
+						if(req.getDouble(saldoa) >= ((Double.parseDouble(diru_kantitate)*1.5)/100)+Double.parseDouble(diru_kantitate)) {
+							zuzena = true;
+						}
 					}
+					conn.close();
+				}catch(SQLException ex) {
+					System.out.println("SQLException: "+ ex.getMessage());
+					System.out.println("SQLState: "+ ex.getSQLState());
+					System.out.println("ErrorCode: "+ ex.getErrorCode());
 				}
-				conn.close();
-			}catch(SQLException ex) {
-				System.out.println("SQLException: "+ ex.getMessage());
-				System.out.println("SQLState: "+ ex.getSQLState());
-				System.out.println("ErrorCode: "+ ex.getErrorCode());
-			}			
+			}
 			return zuzena;
 		}
 

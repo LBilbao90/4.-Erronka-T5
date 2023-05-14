@@ -111,11 +111,9 @@ public class DatuBaseUpdate {
 			while(req.next()) {
 				kant = req.getString(1);
 			}
-			System.out.println(kant);
 			
 			for(int i=0;i<bezero.getTxartelak().size();i++) {
 				if(bezero.getTxartelak().get(i).getKontuBankario().getIban().equals(iban_bez)) {
-					System.out.println(bezero.getTxartelak().get(i).getKontuBankario().getHipoteka().getOrdaindutakoa());
 					if(bezero.getTxartelak().get(i).getKontuBankario().getHipoteka().getOrdaindutakoa() == Integer.parseInt(kant)) {
 						comand.executeUpdate("Update "+hipoteka+" set "+ordaindutakoa+"= '"+bezero.getTxartelak().get(i).getKontuBankario().getHipoteka().getOrdaindutakoa()+"', "+amaieraData+"= '"+bezero.getTxartelak().get(i).getKontuBankario().getHipoteka().getAmaieraData()+"',"+egoera+"='"+bezero.getTxartelak().get(i).getKontuBankario().getHipoteka().getEgoera()+"' where "+iban+"='"+iban_bez+"';");
 					}else {

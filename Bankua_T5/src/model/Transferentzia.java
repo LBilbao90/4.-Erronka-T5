@@ -5,7 +5,7 @@ import java.util.Objects;
 public class Transferentzia implements Komisioa{
 	private double kantitatea;
 	private String transferentziaData;
-	private String kotzeptua;
+	private String kontzeptua;
 	private String jasotzailea;
 	private final String komisioa;
 	
@@ -13,7 +13,7 @@ public class Transferentzia implements Komisioa{
 	public Transferentzia(double kantitatea, String transferentziaData, String kotzeptua, String jasotzailea) {
 		this.kantitatea = kantitatea;
 		this.transferentziaData = transferentziaData;
-		this.kotzeptua = kotzeptua;
+		this.kontzeptua = kotzeptua;
 		this.jasotzailea = jasotzailea;
 		this.komisioa = "1.5";
 	}
@@ -30,7 +30,7 @@ public class Transferentzia implements Komisioa{
 		return transferentziaData;
 	}
 	public String getKotzeptua() {
-		return kotzeptua;
+		return kontzeptua;
 	}
 	public String getJasotzailea() {
 		return jasotzailea;
@@ -46,8 +46,8 @@ public class Transferentzia implements Komisioa{
 	public void setTransferentziaData(String transferentziaData) {
 		this.transferentziaData = transferentziaData;
 	}
-	public void setKotzeptua(String kotzeptua) {
-		this.kotzeptua = kotzeptua;
+	public void setKontzeptua(String kotzeptua) {
+		this.kontzeptua = kotzeptua;
 	}
 	public void setJasotzailea(String jasotzailea) {
 		this.jasotzailea = jasotzailea;
@@ -57,7 +57,7 @@ public class Transferentzia implements Komisioa{
 	@Override
 	public String toString() {
 		return "Transferentzia kantitatea=" + kantitatea
-				+ ", transferentziaData=" + transferentziaData + ", kotzeptua=" + kotzeptua + ", jasotzailea="
+				+ ", transferentziaData=" + transferentziaData + ", kotzeptua=" + kontzeptua + ", jasotzailea="
 				+ jasotzailea + ", komisioa=" + komisioa;
 	}
 	
@@ -70,7 +70,7 @@ public class Transferentzia implements Komisioa{
 		return Objects.equals(jasotzailea, other.jasotzailea)
 				&& Double.doubleToLongBits(kantitatea) == Double.doubleToLongBits(other.kantitatea)
 				&& komisioa.equals(other.komisioa)
-				&& Objects.equals(kotzeptua, other.kotzeptua)
+				&& Objects.equals(kontzeptua, other.kontzeptua)
 				&& Objects.equals(transferentziaData, other.transferentziaData);
 	}
 
