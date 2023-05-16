@@ -86,7 +86,4 @@ public abstract class Pertsona {
 		return Objects.equals(nan, other.nan);
 	}
 
-	// Methods
-	public void erakutsiMugimenduak() {	
-	}
 }

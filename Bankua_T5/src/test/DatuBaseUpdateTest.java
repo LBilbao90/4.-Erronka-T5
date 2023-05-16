@@ -47,7 +47,7 @@ public class DatuBaseUpdateTest {
 		
 		Connection conn;		
 		try {
-			conn = (Connection) DriverManager.getConnection ("jdbc:mysql://localhost:3306/bankua","root","");
+			conn = (Connection) DriverManager.getConnection ("jdbc:mysql://10.5.14.109:3306/bankua","root","Elorrieta00");
 			Statement comand = (Statement) conn.createStatement();
 			ResultSet req = comand.executeQuery("select kantitatea, ordaindutakoa, komisioa, hasieraData, egoera, iban, epeMuga from hipoteka where iban = 'ES7023450002734016972210'");
 
@@ -94,7 +94,7 @@ public class DatuBaseUpdateTest {
 		
 		Connection conn;					
 		try {
-			conn = (Connection) DriverManager.getConnection ("jdbc:mysql://localhost:3306/bankua","root","");
+			conn = (Connection) DriverManager.getConnection ("jdbc:mysql://10.5.14.109:3306/bankua","root","Elorrieta00");
 			Statement comand = (Statement) conn.createStatement();
 			ResultSet req = comand.executeQuery("select nan, izena, abizenak, sexua, telefonoa, pasahitza, egoera from bezeroa where nan = '67982379Z'");
 			
@@ -142,7 +142,7 @@ public class DatuBaseUpdateTest {
 		
 		Connection conn;					
 		try {
-			conn = (Connection) DriverManager.getConnection ("jdbc:mysql://localhost:3306/bankua","root","");
+			conn = (Connection) DriverManager.getConnection ("jdbc:mysql://10.5.14.109:3306/bankua","root","Elorrieta00");
 			Statement comand = (Statement) conn.createStatement();
 			ResultSet req = comand.executeQuery("select egoera from kontuBankario where iban = 'ES8867890003395016874189'");
 			
@@ -177,7 +177,7 @@ public class DatuBaseUpdateTest {
 		
 		Connection conn;					
 		try {
-			conn = (Connection) DriverManager.getConnection ("jdbc:mysql://localhost:3306/bankua","root","");
+			conn = (Connection) DriverManager.getConnection ("jdbc:mysql://10.5.14.109:3306/bankua","root","Elorrieta00");
 			Statement comand = (Statement) conn.createStatement();
 			ResultSet req = comand.executeQuery("select nan, izena, abizenak, sexua, telefonoa, pasahitza, lanpostua, id_sukurtsal from langile where nan = '90138299B'");
 			

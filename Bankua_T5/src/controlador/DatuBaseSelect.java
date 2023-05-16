@@ -5,21 +5,20 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
-import javax.swing.JOptionPane;
-
 import com.mysql.jdbc.Connection;
 import com.mysql.jdbc.Statement;
 
 import model.EntitateBankario;
+import model.SalbuespenaErregistro;
 import model.SalbuespenaLogin;
 import model.SalbuespenaLoginBlokeo;
 
 public class DatuBaseSelect {
-	final String url = "jdbc:mysql://localhost:3306/bankua";
+	final String url = "jdbc:mysql://10.5.14.109:3306/bankua";
 	final String urlServer = "jdbc:mysql://10.5.14.109:3306/bankua";
-	final String erabiltzaile = "root";
-	final String erabiltzaileServer= "root";
-	final String password="";
+	final String erabiltzaile = "L12345678Z";
+	final String erabiltzaileServer= "L12345678Z";
+	final String password="1234";
 	final String passwordServer= "1234"; 
 	
 	// EntitateBankario
@@ -136,6 +135,8 @@ public class DatuBaseSelect {
 		 * @param nan_lang Langilearen NAN
 		 * @param pas_lang Langilearen pasahitza
 		 * @return <b>god</b> langilea GOD erabiltzailea erabiltzean, <b>zuzendaria</b> langilea Zuzendaria erabiltzailea erabiltzean, <b>gerentea</b> langilea Gerentea erabiltzailea erabiltzean eta <b>null</b> logina okerra bada.
+		 * @throws SalbuespenaLogin Login okerra bada salbuespena botatzen du.
+		 * @throws SalbuespenaLoginBlokeo Erabiltzailea blokeatuta badako salbuespena botatzen du.
 		 */
 		public String langileLogin(String nan_lang, String pass_lang) throws SalbuespenaLogin,SalbuespenaLoginBlokeo {
 			String login= null;
@@ -328,8 +329,6 @@ public class DatuBaseSelect {
 				//Daturik aurkitzen badu
 				if(req.next()) {
 					existitu = true;	
-				}else {
-					JOptionPane.showMessageDialog(null,"Bezeroa ez da existitzen!","Error!", JOptionPane.ERROR_MESSAGE);					
 				}
 				conn.close();
 			}catch(SQLException ex) {
@@ -454,4 +453,35 @@ public class DatuBaseSelect {
 			}		
 			return entitateak;
 		}
+
+		/**
+		 * Langilearen nan existitzen baden datubasean begiratzen du
+		 * @param nan_lang Langilea erregistratu nahi den nan-a.
+		 * @return Nan horrekin dauden erregistro kantitatea.
+		 * @throws SalbuespenaErregistro Erregistro bat badago salbuespena botatzen du.
+		 */
+		public int langileNanKant(String nan_lang) throws SalbuespenaErregistro{
+			int kant=0;
+			
+			Connection conn;					
+			try {			
+				//Datu baseari konexioa eta langile kantitatea nan horrekin ateratzen du
+				conn = (Connection) DriverManager.getConnection (url,erabiltzaile,password);
+				Statement comand = (Statement) conn.createStatement();	
+				ResultSet req = comand.executeQuery("select count(*) as kantitate from "+langile+" where "+nan+"='"+nan_lang+"';");
+				if(req.next()) {
+					kant = req.getInt("kantitate");
+					if(kant!=0) {
+						throw new SalbuespenaErregistro("Errore erregistratzean.");
+					}
+				}
+				
+				conn.close();
+			}catch(SQLException ex) {
+				System.out.println("SQLException: "+ ex.getMessage());
+				System.out.println("SQLState: "+ ex.getSQLState());
+				System.out.println("ErrorCode: "+ ex.getErrorCode());
+			}			
+			return kant;
+		}		
 }

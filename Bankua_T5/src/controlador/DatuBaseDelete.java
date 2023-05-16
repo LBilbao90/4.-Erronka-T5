@@ -7,12 +7,12 @@ import com.mysql.jdbc.Connection;
 import com.mysql.jdbc.Statement;
 
 public class DatuBaseDelete {
-	final String url = "jdbc:mysql://localhost:3306/bankua";
+	final String url = "jdbc:mysql://10.5.14.109:3306/bankua";
 	final String urlServer = "jdbc:mysql://10.5.14.109:3306/bankua";
-	final String erabiltzaile = "root";
-	final String erabiltzaileServer= "root";
-	final String password="";
-	final String passwordServer= "1234"; 
+	final String erabiltzaile = "L12345678Z";
+	final String erabiltzaileServer= "L12345678Z";
+	final String password="1234";
+	final String passwordServer= "1234";  
 	
 	// EntitateBankario
 	final String entitatebankario = "entitatebankario";
@@ -119,22 +119,16 @@ public class DatuBaseDelete {
 	 * @param nan_bez Ezabatzeko erabiltzailearen NAN
 	 * @return erabiltzailea ezabatu bada <b>true</b>, bestela <b> false </b>
 	 */
-	public boolean erabiltzaileEzabatu(String nan_bez) {
+	public boolean erabiltzaileEzabatu(String nan_bez) throws SQLException{
 		boolean ezabatuta = false;
 		
-		Connection conn;					
-		try {
+		Connection conn;	
 			//Datu baseari konexioa eta Kontu Bankarioa ezabatzeko kontsulta
 			conn = (Connection) DriverManager.getConnection (url,erabiltzaile,password);
 			Statement comand = (Statement) conn.createStatement();	
 			comand.executeUpdate("Delete from "+bezeroa+" where "+nan+"='"+nan_bez+"';");
 			ezabatuta = true;
 			conn.close();
-		}catch(SQLException ex) {
-			System.out.println("SQLException: "+ ex.getMessage());
-			System.out.println("SQLState: "+ ex.getSQLState());
-			System.out.println("ErrorCode: "+ ex.getErrorCode());
-		}
 		
 		return ezabatuta;
 	}

@@ -10,12 +10,12 @@ import com.mysql.jdbc.Statement;
 import model.Bezeroa;
 
 public class DatuBaseUpdate {
-	final String url = "jdbc:mysql://localhost:3306/bankua";
+	final String url = "jdbc:mysql://10.5.14.109:3306/bankua";
 	final String urlServer = "jdbc:mysql://10.5.14.109:3306/bankua";
-	final String erabiltzaile = "root";
-	final String erabiltzaileServer= "root";
-	final String password="";
-	final String passwordServer= "1234"; 
+	final String erabiltzaile = "L12345678Z";
+	final String erabiltzaileServer= "L12345678Z";
+	final String password="1234";
+	final String passwordServer= "1234";  
 	
 	// EntitateBankario
 	final String entitatebankario = "entitatebankario";

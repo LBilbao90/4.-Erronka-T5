@@ -25,7 +25,7 @@ public class DatuBaseDeleteTest {
 		
 		Connection conn;					
 		try {
-			conn = (Connection) DriverManager.getConnection ("jdbc:mysql://localhost:3306/bankua","root","");
+			conn = (Connection) DriverManager.getConnection ("jdbc:mysql://10.5.14.109:3306/bankua","root","Elorrieta00");
 			Statement comand = (Statement) conn.createStatement();	
 			ResultSet req = comand.executeQuery("Select iban from kontuBankario where iban='ES8954320001660087768901';");
 			
@@ -44,7 +44,7 @@ public class DatuBaseDeleteTest {
 	}
 	
 	@Test
-	public void testErabiltzaileEzabatu() {
+	public void testErabiltzaileEzabatu() throws SQLException {
 		DatuBaseDelete datuBaseDelete = new DatuBaseDelete();
 		
 		assertTrue(datuBaseDelete.erabiltzaileEzabatu("84850597D"));
@@ -53,7 +53,7 @@ public class DatuBaseDeleteTest {
 		
 		Connection conn;					
 		try {
-			conn = (Connection) DriverManager.getConnection ("jdbc:mysql://localhost:3306/bankua","root","");
+			conn = (Connection) DriverManager.getConnection ("jdbc:mysql://10.5.14.109:3306/bankua","root","Elorrieta00");
 			Statement comand = (Statement) conn.createStatement();	
 			ResultSet req = comand.executeQuery("Select nan from bezeroa where nan='84850597D';");
 			
@@ -72,7 +72,7 @@ public class DatuBaseDeleteTest {
 	}
 	
 	@Test
-	public void testLangileKaleratu() {
+	public void testLangileKaleratu() throws SQLException {
 		DatuBaseDelete datuBaseDelete = new DatuBaseDelete();
 		
 		assertTrue(datuBaseDelete.erabiltzaileEzabatu("47757325X"));
@@ -81,7 +81,7 @@ public class DatuBaseDeleteTest {
 		
 		Connection conn;					
 		try {
-			conn = (Connection) DriverManager.getConnection ("jdbc:mysql://localhost:3306/bankua","root","");
+			conn = (Connection) DriverManager.getConnection ("jdbc:mysql://10.5.14.109:3306/bankua","root","Elorrieta00");
 			Statement comand = (Statement) conn.createStatement();	
 			ResultSet req = comand.executeQuery("Select nan from bezeroa where nan='47757325X';");
 			

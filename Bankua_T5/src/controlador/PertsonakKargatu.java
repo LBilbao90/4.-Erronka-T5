@@ -22,11 +22,11 @@ import model.Txartela;
 import model.Zuzendaria;
 
 public class PertsonakKargatu {
-	final String url = "jdbc:mysql://localhost:3306/bankua";
+	final String url = "jdbc:mysql://10.5.14.109:3306/bankua";
 	final String urlServer = "jdbc:mysql://10.5.14.109:3306/bankua";
-	final String erabiltzaile = "root";
-	final String erabiltzaileServer= "root";
-	final String password="";
+	final String erabiltzaile = "L12345678Z";
+	final String erabiltzaileServer= "L12345678Z";
+	final String password="1234";
 	final String passwordServer= "1234"; 
 	
 	// EntitateBankario
@@ -113,7 +113,7 @@ public class PertsonakKargatu {
 		try {
 			//Datu baseari konexioa eta Bezeroa kargatzeko kontsulta egiten dugu
 			//conn = (Connection) DriverManager.getConnection (urlServer,"B"+nan_bezero,"1234");
-			conn = (Connection) DriverManager.getConnection (url,"root","");
+			conn = (Connection) DriverManager.getConnection (url,erabiltzaile,password);
 			Statement comand1 = (Statement) conn.createStatement();	
 			ResultSet req1 = comand1.executeQuery("select "+nan+","+izena+","+abizenak+","+jaiotzeData+","+sexua+","+telefonoa+","+pasahitza+" from "+bezeroa+" WHERE "+nan+"='"+nan_bezero+"';");
 			//Emaitzik badago
@@ -261,7 +261,7 @@ public class PertsonakKargatu {
 		try {
 			//Datu baseari konexioa eta Langilea kargatzeko kontsulta egiten dugu
 //			conn = (Connection) DriverManager.getConnection (urlServer,"L"+nan_langile,pass_langile);
-			conn = (Connection) DriverManager.getConnection (url,"root","");
+			conn = (Connection) DriverManager.getConnection (url,erabiltzaile,password);
 			Statement comand1 = (Statement) conn.createStatement();	
 			ResultSet req1 = comand1.executeQuery("select l."+nan+",l."+izena+", l."+abizenak+", l."+jaiotzeData+", l."+sexua+", l."+telefonoa+", l."+pasahitza+", l."+lanpostua+" from "+langile+" l where l."+nan+"='"+nan_langile+"';");
 			

@@ -15,11 +15,11 @@ import model.SalbuespenaErregistro;
 import model.SalbuespenaTransferentzia;
 
 public class DatuBaseInsert {
-	final String url = "jdbc:mysql://localhost:3306/bankua";
+	final String url = "jdbc:mysql://10.5.14.109:3306/bankua";
 	final String urlServer = "jdbc:mysql://10.5.14.109:3306/bankua";
-	final String erabiltzaile = "root";
-	final String erabiltzaileServer= "root";
-	final String password="";
+	final String erabiltzaile = "L12345678Z";
+	final String erabiltzaileServer= "L12345678Z";
+	final String password="1234";
 	final String passwordServer= "1234"; 
 	
 	// EntitateBankario
@@ -110,22 +110,22 @@ public class DatuBaseInsert {
 	 * @return insert ondo egin bada true, errore ematen badu false
 	 * @throws SalbuespenaErregistro datu basea errorea ematen badu botako den salbuespena
 	 */
-	public boolean bezeroSortu(String izena, String abizena, String nan, String pass, String urte, String hil, String egun, String genero, String tel, String nan_langile, String pass_langile) throws SalbuespenaErregistro{
+	public boolean bezeroSortu(String izena, String abizena, String nan, String pass, String urte, String hil, String egun, String genero, String tel, String nan_langile, String pass_langile) throws SQLException{
 		boolean erregistratuta = false;
 		String data = urte+"-"+hil+"-"+egun;
 		izena = izena.substring(0,1).toUpperCase() + izena.substring(1);
 		abizena = abizena.substring(0,1).toUpperCase() + abizena.substring(1);
 		Connection conn;					
-		try {
+		
 			//Datu baseari konexioa eta Bezeroa logeatzeko kontsulta egiten dugu
 			conn = (Connection) DriverManager.getConnection (url,erabiltzaile,password);
 			Statement comand = (Statement) conn.createStatement();	
 			comand.executeUpdate("insert into "+bezeroa+" values ('"+nan.toUpperCase()+"','"+izena+"','"+abizena+"','"+data+"','"+genero+"','"+tel+"','"+pass+"','aktiboa');");			
 			erregistratuta=true;
 			conn.close();
-		}catch(SQLException ex) {
-			throw new SalbuespenaErregistro("Erabiltzailea ezin da erregistratu.");
-		}
+		
+			
+		
 		return erregistratuta;
 	}	
 
@@ -302,5 +302,60 @@ public class DatuBaseInsert {
 			System.out.println("ErrorCode: "+ ex.getErrorCode());
 		}			
 		return erregistratuta;
+	}
+	
+	/**
+	 * Bezero bat datu basean insertatzen du.
+	 * @param nan_bez datu basean sortuko den bezeroaren NAN-a
+	 * @param pass_bez datu basean sortuko den bezeroaren pasahitza
+	 * @return sorketa burutu bada <b>true</b>, bestela <b> false </b>
+	 */
+	public boolean bezeroErabiltzaieSortu(String nan_bez, String pass_bez) {
+		boolean sortuta = false;
+		Connection conn;					
+		try {
+			//Datu baseari konexioa eta Kontu Bankarioa ezabatzeko kontsulta
+			conn = (Connection) DriverManager.getConnection (url,"root","Elorrieta00");
+			Statement comand = (Statement) conn.createStatement();	
+			comand.executeUpdate("create user 'B"+nan_bez+"'@'%' identified by '"+pass_bez+"' default role RolBezeroa@'%'; ");
+			sortuta = true;
+			conn.close();
+		}catch(SQLException ex) {
+			System.out.println("SQLException: "+ ex.getMessage());
+			System.out.println("SQLState: "+ ex.getSQLState());
+			System.out.println("ErrorCode: "+ ex.getErrorCode());
+		}
+		return sortuta;
+	}
+	
+	/**
+	 * Langile bat datu basean insertatzen du.
+	 * @param nan_langile datu basean sortuko den langilearen NAN-a
+	 * @param pass_langile datu basean sortuko den langilearen pasahitza
+	 * @param rol datu basean sortuko den langilearen lanpostua
+	 * @return sorketa burutu bada <b>true</b>, bestela <b> false </b>
+	 */
+	public boolean langileErabiltzaieSortu(String nan_langile, String pass_langile, String rol) {
+		boolean sortuta = false;
+		Connection conn;					
+		try {
+			//Datu baseari konexioa eta Kontu Bankarioa ezabatzeko kontsulta
+			conn = (Connection) DriverManager.getConnection (url,"root","Elorrieta00");
+			Statement comand = (Statement) conn.createStatement();	
+			if(rol.equals("gerentea")) {
+				comand.executeUpdate("create user 'L"+nan_langile+"'@'%' identified by '"+pass_langile+"' default role RolGerente@'%'; ");
+			}else if(rol.equals("zuzendari")) {
+				comand.executeUpdate("create user L"+nan_langile+"@'%' identified by '"+pass_langile+"' default role RolZuzendari@'%'; ");
+			}else if(rol.equals("god")) {
+				comand.executeUpdate("create user L"+nan_langile+"@'%' identified by '"+pass_langile+"' default role RolGod@'%'; ");
+			}
+			sortuta = true;
+			conn.close();
+		}catch(SQLException ex) {
+			System.out.println("SQLException: "+ ex.getMessage());
+			System.out.println("SQLState: "+ ex.getSQLState());
+			System.out.println("ErrorCode: "+ ex.getErrorCode());
+		}
+		return sortuta;
 	}
 }

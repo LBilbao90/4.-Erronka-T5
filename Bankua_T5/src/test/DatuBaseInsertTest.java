@@ -24,7 +24,7 @@ import model.SalbuespenaTransferentzia;
 public class DatuBaseInsertTest {
 
 	@Test
-	public void testBezeroSortu() throws SalbuespenaErregistro {
+	public void testBezeroSortu() throws SalbuespenaErregistro, SQLException {
 		PertsonakKargatu pertsonakKargatu = new PertsonakKargatu();
 		DatuBaseInsert datuBaseInsert = new DatuBaseInsert();
 		
@@ -41,8 +41,8 @@ public class DatuBaseInsertTest {
 		
 		Connection conn;					
 		try {
-			String url = "jdbc:mysql://localhost:3306/bankua";
-			conn = (Connection) DriverManager.getConnection (url, "root","");
+			String url = "jdbc:mysql://10.5.14.109:3306/bankua";
+			conn = (Connection) DriverManager.getConnection (url, "root","Elorrieta00");
 			Statement comando = (Statement) conn.createStatement();	
 			ResultSet request = comando.executeQuery("Select nan, izena, abizenak, jaiotzeData, sexua, telefonoa, pasahitza from bezeroa where nan = '"+ b1.getNan() +"';");
 			
@@ -95,7 +95,7 @@ public class DatuBaseInsertTest {
 		
 		Connection conn;					
 		try {
-			conn = (Connection) DriverManager.getConnection ("jdbc:mysql://localhost:3306/bankua","root","");
+			conn = (Connection) DriverManager.getConnection ("jdbc:mysql://10.5.14.109:3306/bankua","root","Elorrieta00");
 			Statement comand = (Statement) conn.createStatement();
 			ResultSet req = comand.executeQuery("select kantitatea, komisioa, hasieraData, iban, epeMuga from hipoteka where iban = 'ES1998760011555340294968'");
 			
@@ -139,7 +139,7 @@ public class DatuBaseInsertTest {
 		
 		Connection conn;		
 		try {
-			conn = (Connection) DriverManager.getConnection ("jdbc:mysql://localhost:3306/bankua","root","");
+			conn = (Connection) DriverManager.getConnection ("jdbc:mysql://10.5.14.109:3306/bankua","root","Elorrieta00");
 			Statement comand = (Statement) conn.createStatement();
 			ResultSet req = comand.executeQuery("select kantitatea, jasotzailea, kontzeptua, komisioa, ibanigortzaile from transferentzia where ibanigortzaile = 'ES7023450002734016972210' and kontzeptua = 'Susana'");
 
@@ -185,7 +185,7 @@ public class DatuBaseInsertTest {
 		
 		Connection conn;		
 		try {
-			conn = (Connection) DriverManager.getConnection ("jdbc:mysql://localhost:3306/bankua","root","");
+			conn = (Connection) DriverManager.getConnection ("jdbc:mysql://10.5.14.109:3306/bankua","root","Elorrieta00");
 			Statement comand = (Statement) conn.createStatement();
 			ResultSet req = comand.executeQuery("select nan, izena, abizenak, jaiotzeData, sexua, telefonoa, pasahitza, lanpostua, id_sukurtsal, egoera from langile where nan = '61028521E'");
 
@@ -221,5 +221,63 @@ public class DatuBaseInsertTest {
 		}
 		
 	}
+	
+	@Test
+	public void testBezeroErabiltzaieSortu() {
+		DatuBaseInsert datuBaseInsert = new DatuBaseInsert();
+		
+		assertTrue(datuBaseInsert.bezeroErabiltzaieSortu("15160466Q", "1234"));
+		
+		String nan = "";
+		
+		Connection conn;		
+		try {
+			conn = (Connection) DriverManager.getConnection ("jdbc:mysql://10.5.14.109:3306/bankua","root","Elorrieta00");
+			Statement comand = (Statement) conn.createStatement();
+			ResultSet req = comand.executeQuery("select user from mysql.user where user = 'B15160466Q'");
 
+			while(req.next()) {
+				nan = req.getString(1);
+				
+				assertEquals("B15160466Q", nan);
+			}
+			
+			conn.close();
+		}catch(SQLException ex) {
+			System.out.println("SQLException: "+ ex.getMessage());
+			System.out.println("SQLState: "+ ex.getSQLState());
+			System.out.println("ErrorCode: "+ ex.getErrorCode());
+		}
+		
+	}
+	
+	@Test
+	public void testLangileErabiltzaieSortu() {
+		DatuBaseInsert datuBaseInsert = new DatuBaseInsert();
+		
+		assertTrue(datuBaseInsert.langileErabiltzaieSortu("15160466Q", "1234", "zuzendaria"));
+		
+		String nan = "";
+		
+		Connection conn;		
+		try {
+			conn = (Connection) DriverManager.getConnection ("jdbc:mysql://10.5.14.109:3306/bankua","root","Elorrieta00");
+			Statement comand = (Statement) conn.createStatement();
+			ResultSet req = comand.executeQuery("select user from mysql.user where user = 'L15160466Q'");
+
+			while(req.next()) {
+				nan = req.getString(1);
+				
+				assertEquals("L15160466Q", nan);
+			}
+			
+			conn.close();
+		}catch(SQLException ex) {
+			System.out.println("SQLException: "+ ex.getMessage());
+			System.out.println("SQLState: "+ ex.getSQLState());
+			System.out.println("ErrorCode: "+ ex.getErrorCode());
+		}
+		
+	}
+	
 }
