@@ -8,11 +8,6 @@ import com.mysql.jdbc.Statement;
 
 public class DatuBaseDelete {
 	final String url = "jdbc:mysql://10.5.14.109:3306/bankua";
-	final String urlServer = "jdbc:mysql://10.5.14.109:3306/bankua";
-	final String erabiltzaile = "L12345678Z";
-	final String erabiltzaileServer= "L12345678Z";
-	final String password="1234";
-	final String passwordServer= "1234";  
 	
 	// EntitateBankario
 	final String entitatebankario = "entitatebankario";
@@ -100,7 +95,7 @@ public class DatuBaseDelete {
 		Connection conn;					
 		try {
 			//Datu baseari konexioa eta Kontu Bankarioa ezabatzeko kontsulta
-			conn = (Connection) DriverManager.getConnection (url,erabiltzaile,password);
+			conn = (Connection) DriverManager.getConnection (url,"L"+nan_lang,pass_lang);
 			Statement comand = (Statement) conn.createStatement();	
 			comand.executeUpdate("Delete from "+kontuBankario+" where "+iban+"='"+iban_itxi+"';");
 			ezabatuta = true;
@@ -124,7 +119,7 @@ public class DatuBaseDelete {
 		
 		Connection conn;	
 			//Datu baseari konexioa eta Kontu Bankarioa ezabatzeko kontsulta
-			conn = (Connection) DriverManager.getConnection (url,erabiltzaile,password);
+			conn = (Connection) DriverManager.getConnection (url,"L12345678Z","1234");
 			Statement comand = (Statement) conn.createStatement();	
 			comand.executeUpdate("Delete from "+bezeroa+" where "+nan+"='"+nan_bez+"';");
 			ezabatuta = true;
@@ -144,7 +139,7 @@ public class DatuBaseDelete {
 		Connection conn;					
 		try {
 			//Datu baseari konexioa eta Kontu Bankarioa ezabatzeko kontsulta
-			conn = (Connection) DriverManager.getConnection (url,erabiltzaile,password);
+			conn = (Connection) DriverManager.getConnection (url,"L12345678Z","1234");
 			Statement comand = (Statement) conn.createStatement();	
 			comand.executeUpdate("Delete from "+langile+" where "+nan+"='"+nan_lang+"';");
 			kaleratuta = true;

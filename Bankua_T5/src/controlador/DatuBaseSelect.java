@@ -15,11 +15,6 @@ import model.SalbuespenaLoginBlokeo;
 
 public class DatuBaseSelect {
 	final String url = "jdbc:mysql://10.5.14.109:3306/bankua";
-	final String urlServer = "jdbc:mysql://10.5.14.109:3306/bankua";
-	final String erabiltzaile = "L12345678Z";
-	final String erabiltzaileServer= "L12345678Z";
-	final String password="1234";
-	final String passwordServer= "1234"; 
 	
 	// EntitateBankario
 	final String entitatebankario = "entitatebankario";
@@ -105,7 +100,7 @@ public class DatuBaseSelect {
 			Connection conn;					
 			try {
 				//Datu baseari konexioa eta Bezeroa logeatzeko kontsulta egiten dugu
-				conn = (Connection) DriverManager.getConnection (url,erabiltzaile,password);
+				conn = (Connection) DriverManager.getConnection (url,"L12345678Z","1234");
 				Statement comand = (Statement) conn.createStatement();	
 				ResultSet req = comand.executeQuery("select "+egoera+" from "+bezeroa+" where "+nan+"='"+nan_bez+"' and "+pasahitza+"='"+pass_bez+"';");
 				
@@ -144,7 +139,7 @@ public class DatuBaseSelect {
 			Connection conn;					
 			try {
 				//Datu baseari konexioa eta Langilea logeatzeko kontsulta egiten dugu
-				conn = (Connection) DriverManager.getConnection (url,erabiltzaile,password);
+				conn = (Connection) DriverManager.getConnection (url,"L12345678Z","1234");
 				Statement comand = (Statement) conn.createStatement();	
 				ResultSet req = comand.executeQuery("select "+lanpostua+","+egoera+" from "+langile+" where "+nan+"='"+nan_lang+"' and "+pasahitza+"='"+pass_lang+"';");
 				//Daturik aurkitzen badu
@@ -184,7 +179,7 @@ public class DatuBaseSelect {
 			
 			Connection conn;					
 			try {
-				conn = (Connection) DriverManager.getConnection (url,erabiltzaile,password);
+				conn = (Connection) DriverManager.getConnection (url,"L12345678Z","1234");
 				Statement comand = (Statement) conn.createStatement();	
 				ResultSet req = comand.executeQuery("Select COUNT(*) as kant from kontubankario where "+iban+"= '"+ibanJasotzaile+"';");
 				
@@ -217,7 +212,7 @@ public class DatuBaseSelect {
 				diru_kantitate = diru_kantitate.replace(',','.');
 				Connection conn;					
 				try {
-					conn = (Connection) DriverManager.getConnection (url,erabiltzaile,password);
+					conn = (Connection) DriverManager.getConnection (url,"B"+nan_bezero,pass_bezero);
 					Statement comand = (Statement) conn.createStatement();	
 					ResultSet req = comand.executeQuery("Select "+saldoa+" from kontubankario where "+iban+"='"+kontua+"';");
 					
@@ -248,7 +243,7 @@ public class DatuBaseSelect {
 			boolean zuzena = false;
 			Connection conn;					
 			try {
-				conn = (Connection) DriverManager.getConnection (url,erabiltzaile,password);
+				conn = (Connection) DriverManager.getConnection (url,"B"+nan_bezero,pass_bezero);
 				Statement comand = (Statement) conn.createStatement();	
 				ResultSet req = comand.executeQuery("Select COUNT(*) as kant from kontubankario kon join kudeatu ku on kon."+ iban +"= ku."+ iban +" join txartela t on ku."+ id_txartela+"= t."+ id_txartela +" where ku."+iban+"='"+kontua+"' and "+ segurtasunKodea +"='"+ kodea +"';");
 				
@@ -266,12 +261,17 @@ public class DatuBaseSelect {
 			return zuzena;
 		}
 
+		/**
+		 * Sartutako IBANa existitzen dela ala ez balidatzen du.
+		 * @param iban_sortu Sartutako iban kontua.
+		 * @return <b>True</b> ez bada existitzen eta <b>False</b> existitzen bada.
+		 */
 		public boolean ibanBalidatu(String iban_sortu) {
 			boolean libre = false;
 			
 			Connection conn;
 			try {
-				conn = (Connection) DriverManager.getConnection (url,erabiltzaile,password);
+				conn = (Connection) DriverManager.getConnection (url,"L12345678Z","1234");
 				Statement comand = (Statement) conn.createStatement();
 				ResultSet req = comand.executeQuery("select "+iban+" from "+kontuBankario+" where "+iban+"='"+iban_sortu+"';");
 				if(!req.next()) {
@@ -297,7 +297,7 @@ public class DatuBaseSelect {
 			Connection conn;					
 			try {
 				//Datu baseari konexioa eta Langilea logeatzeko kontsulta egiten dugu
-				conn = (Connection) DriverManager.getConnection (url,erabiltzaile,password);
+				conn = (Connection) DriverManager.getConnection (url,"L12345678Z","1234");
 				Statement comand = (Statement) conn.createStatement();	
 				ResultSet req = comand.executeQuery("select "+id_txartela+" from "+txartela+" where "+id_txartela+"='"+txartelId+"';");
 				//Daturik aurkitzen badu
@@ -323,7 +323,7 @@ public class DatuBaseSelect {
 			Connection conn;					
 			try {
 				//Datu baseari konexioa eta Bezeroa nan kontsulta egiten da
-				conn = (Connection) DriverManager.getConnection (url,erabiltzaile,password);
+				conn = (Connection) DriverManager.getConnection (url,"L12345678Z","1234");
 				Statement comand = (Statement) conn.createStatement();	
 				ResultSet req = comand.executeQuery("select "+nan+" from "+bezeroa+" where "+nan+"='"+nan_bez+"';");
 				//Daturik aurkitzen badu
@@ -349,7 +349,7 @@ public class DatuBaseSelect {
 			Connection conn;					
 			try {
 				//Datu baseari konexioa eta Bezeroa logeatzeko kontsulta egiten dugu
-				conn = (Connection) DriverManager.getConnection (url,erabiltzaile,password);
+				conn = (Connection) DriverManager.getConnection (url,"L12345678Z","1234");
 				Statement comand = (Statement) conn.createStatement();	
 				ResultSet req = comand.executeQuery("select "+nan+","+izena+","+abizenak+","+jaiotzeData+","+sexua+","+telefonoa+","+pasahitza+","+egoera+" from "+bezeroa);
 				
@@ -389,7 +389,7 @@ public class DatuBaseSelect {
 			Connection conn;					
 			try {
 				//Datu baseari konexioa eta Bezeroa logeatzeko kontsulta egiten dugu
-				conn = (Connection) DriverManager.getConnection (url,erabiltzaile,password);
+				conn = (Connection) DriverManager.getConnection (url,"L12345678Z","1234");
 				Statement comand = (Statement) conn.createStatement();	
 				ResultSet req = comand.executeQuery("select "+nan+","+izena+","+abizenak+","+jaiotzeData+","+sexua+","+telefonoa+","+pasahitza+","+lanpostua+","+id_sukurtsal+","+egoera+" from "+langile);
 				
@@ -431,7 +431,7 @@ public class DatuBaseSelect {
 			Connection conn;					
 			try {			
 				//Datu baseari konexioa eta Entitateak kargatzeko kontsulta egiten dugu
-				conn = (Connection) DriverManager.getConnection (url,erabiltzaile,password);
+				conn = (Connection) DriverManager.getConnection (url,"L12345678Z","1234");
 				Statement comand = (Statement) conn.createStatement();	
 				ResultSet req = comand.executeQuery("select "+id_entitate+","+izena+","+entitateZenbaki+","+urlImg+","+bounds+" from "+entitatebankario+";");
 				//Emaitzik badaude
@@ -466,7 +466,7 @@ public class DatuBaseSelect {
 			Connection conn;					
 			try {			
 				//Datu baseari konexioa eta langile kantitatea nan horrekin ateratzen du
-				conn = (Connection) DriverManager.getConnection (url,erabiltzaile,password);
+				conn = (Connection) DriverManager.getConnection (url,"L12345678Z","1234");
 				Statement comand = (Statement) conn.createStatement();	
 				ResultSet req = comand.executeQuery("select count(*) as kantitate from "+langile+" where "+nan+"='"+nan_lang+"';");
 				if(req.next()) {

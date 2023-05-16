@@ -11,11 +11,6 @@ import model.Bezeroa;
 
 public class DatuBaseUpdate {
 	final String url = "jdbc:mysql://10.5.14.109:3306/bankua";
-	final String urlServer = "jdbc:mysql://10.5.14.109:3306/bankua";
-	final String erabiltzaile = "L12345678Z";
-	final String erabiltzaileServer= "L12345678Z";
-	final String password="1234";
-	final String passwordServer= "1234";  
 	
 	// EntitateBankario
 	final String entitatebankario = "entitatebankario";
@@ -104,7 +99,7 @@ public class DatuBaseUpdate {
 		Connection conn;					
 		try {
 			//Datu baseari konexioa eta Bezeroa logeatzeko kontsulta egiten dugu
-			conn = (Connection) DriverManager.getConnection (url,erabiltzaile,password);
+			conn = (Connection) DriverManager.getConnection (url,"L12345678Z","1234");
 			Statement comand = (Statement) conn.createStatement();
 			ResultSet req = comand.executeQuery("Select "+kantitatea+" from "+hipoteka+" where iban = '"+iban_bez+"';");
 			
@@ -149,7 +144,7 @@ public class DatuBaseUpdate {
 		Connection conn;					
 		try {
 			//Datu baseari konexioa eta Bezeroa logeatzeko kontsulta egiten dugu
-			conn = (Connection) DriverManager.getConnection (url,erabiltzaile,password);
+			conn = (Connection) DriverManager.getConnection (url,"L12345678Z","1234");
 			Statement comand = (Statement) conn.createStatement();	
 			comand.executeUpdate("Update "+bezeroa+" set "+izena+"= '"+izen_bez+"', "+abizenak+"= '"+abizen_bez+"',"+sexua+"='"+sexu_bez+"',"+telefonoa+"='"+tel_bez+"',"+pasahitza+"='"+pass_bez+"',"+egoera+"='"+egoera_bez+"' where "+nan+"='"+nan_bez+"';");
 			aldatuta = true;
@@ -177,7 +172,7 @@ public class DatuBaseUpdate {
 		Connection conn;					
 		try {
 			//Datu baseari konexioa eta Kontu Bankarioa eguneratzen du
-			conn = (Connection) DriverManager.getConnection (url,erabiltzaile,password);
+			conn = (Connection) DriverManager.getConnection (url,"L"+nan_langile,pass_langile);
 			Statement comand = (Statement) conn.createStatement();	
 			comand.executeUpdate("Update "+kontuBankario+" set "+egoera+"= '"+kontuEgoera+"', "+hilekoLimitea+"= '"+limite+"' where "+iban+"= '"+kontu_iban+"';");
 			aldatuta = true;
@@ -201,7 +196,7 @@ public class DatuBaseUpdate {
 		Connection conn;					
 		try {
 			//Datu baseari konexioa eta Bezeroa logeatzeko kontsulta egiten dugu
-			conn = (Connection) DriverManager.getConnection (url,erabiltzaile,password);
+			conn = (Connection) DriverManager.getConnection (url,"L12345678Z","1234");
 			Statement comand = (Statement) conn.createStatement();	
 			comand.executeUpdate("Update "+kontuBankario+" set "+egoera+"='"+"ixteko"+"' where "+iban+"='"+iban_bez+"';");
 			aldatuta = true;
@@ -232,7 +227,7 @@ public class DatuBaseUpdate {
 		Connection conn;					
 		try {
 			//Datu baseari konexioa eta Bezeroa logeatzeko kontsulta egiten dugu
-			conn = (Connection) DriverManager.getConnection (url,erabiltzaile,password);
+			conn = (Connection) DriverManager.getConnection (url,"L12345678Z","1234");
 			Statement comand = (Statement) conn.createStatement();	
 			comand.executeUpdate("Update "+langile+" set "+izena+"= '"+izen_lang+"', "+abizenak+"= '"+abizen_lang+"',"+sexua+"='"+sexu_lang+"',"+telefonoa+"='"+tel_lang+"',"+pasahitza+"='"+pass_lang+"',"+lanpostua+"='"+lanpostu_lang+"',"+id_sukurtsal+"='"+id_sukurtsal_lang+"',"+egoera+"='"+egoera_lang+"' where "+nan+"='"+nan_lang+"';");
 			aldatuta = true;

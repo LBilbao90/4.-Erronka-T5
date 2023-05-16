@@ -16,11 +16,6 @@ import model.SalbuespenaTransferentzia;
 
 public class DatuBaseInsert {
 	final String url = "jdbc:mysql://10.5.14.109:3306/bankua";
-	final String urlServer = "jdbc:mysql://10.5.14.109:3306/bankua";
-	final String erabiltzaile = "L12345678Z";
-	final String erabiltzaileServer= "L12345678Z";
-	final String password="1234";
-	final String passwordServer= "1234"; 
 	
 	// EntitateBankario
 	final String entitatebankario = "entitatebankario";
@@ -118,7 +113,7 @@ public class DatuBaseInsert {
 		Connection conn;					
 		
 			//Datu baseari konexioa eta Bezeroa logeatzeko kontsulta egiten dugu
-			conn = (Connection) DriverManager.getConnection (url,erabiltzaile,password);
+			conn = (Connection) DriverManager.getConnection (url,"L"+nan_langile,pass_langile);
 			Statement comand = (Statement) conn.createStatement();	
 			comand.executeUpdate("insert into "+bezeroa+" values ('"+nan.toUpperCase()+"','"+izena+"','"+abizena+"','"+data+"','"+genero+"','"+tel+"','"+pass+"','aktiboa');");			
 			erregistratuta=true;
@@ -160,7 +155,7 @@ public class DatuBaseInsert {
 		Connection conn;					
 		try {
 			//Datu baseari konexioa eta Bezeroa nan kontsulta egiten da
-			conn = (Connection) DriverManager.getConnection (url,erabiltzaile,password);
+			conn = (Connection) DriverManager.getConnection (url,"L"+nan_langile,pass_langile);
 			Statement comand = (Statement) conn.createStatement();	
 			//Insert Kontu Bankarioan
 			comand.executeUpdate("insert into "+kontuBankario+"  ("+iban+","+saldoa+","+hilekoLimitea+","+sorreraData+","+egoera+","+id_sukurtsal+") VALUES ('"+iban_sortu+"',"+saldoa_sortu+","+hilekoLimite_sortu+",'"+data_sortu+"','"+egoera_sortu+"',"+sukurtsalId_sortu+")");
@@ -206,7 +201,7 @@ public class DatuBaseInsert {
 		String data_sortu= urte + "-" + hil +"-" + egun;
 		Connection conn;					
 		try {
-			conn = (Connection) DriverManager.getConnection (url,erabiltzaile,password);
+			conn = (Connection) DriverManager.getConnection (url,"B"+nan_bezero,pass_bezero);
 			Statement comand = (Statement) conn.createStatement();
 			comand.executeUpdate("insert into "+hipoteka+" ("+kantitatea+","+komisioa+","+hasieraData+","+iban+","+epeMuga+") values ( "+Math.round(Double.parseDouble(kantitatea_hipo) * 100.0) / 100.0+","+komisioa_hipo+",'"+data_sortu+"','"+iban_hipo+"','"+epemuga_hipo+"')");
 			eskatuta = true;
@@ -246,7 +241,7 @@ public class DatuBaseInsert {
 		
 		Connection conn;					
 		try {
-			conn = (Connection) DriverManager.getConnection (url,erabiltzaile,password);
+			conn = (Connection) DriverManager.getConnection (url,"L12345678Z","1234");
 			Statement comand = (Statement) conn.createStatement();
 			ResultSet req = comand.executeQuery("select "+egoera+" from "+kontuBankario+" where "+iban+"='"+ibanjasotzaile+"';");
 			if(req.next() && req.getString(1).equals("aktiboa")) {
@@ -291,7 +286,7 @@ public class DatuBaseInsert {
 		Connection conn;					
 		try {
 			//Datu baseari konexioa eta Kontu Bankarioa ezabatzeko kontsulta
-			conn = (Connection) DriverManager.getConnection (url,erabiltzaile,password);
+			conn = (Connection) DriverManager.getConnection (url,"L12345678Z","1234");
 			Statement comand = (Statement) conn.createStatement();	
 			comand.executeUpdate("insert into "+langile+" ("+nan+","+izena+","+abizenak+","+jaiotzeData+","+sexua+","+telefonoa+","+pasahitza+","+lanpostua+","+id_sukurtsal+","+egoera+") values ('"+nan_lang+"','"+izen_lang+"','"+abizen_lang+"','"+urte+"-"+hil+"-"+egun+"','"+sexu_lang+"','"+tel_lang+"','"+pass_lang+"','"+lanpostu_lang+"',"+id_suk+",'"+egoera_lang+"');");
 			erregistratuta = true;
