@@ -30,10 +30,11 @@ import model.Transferentzia;
 
 import javax.swing.*;
 import java.awt.event.*;
-
+import java.sql.SQLException;
 import java.awt.CardLayout;
 import java.awt.Color;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.awt.Font;
 
 public class App extends JFrame {
@@ -64,6 +65,14 @@ public class App extends JFrame {
 	final ImageIcon fondo_argazki = new ImageIcon(new ImageIcon("src/res/logo2.2.png").getImage().getScaledInstance(932,130,Image.SCALE_DEFAULT));
 	ArrayList<EntitateBankario> entitateak = new ArrayList<>();
 	Transferentzia trans = new Transferentzia();
+	
+	//Calendar
+	Calendar c = Calendar.getInstance();
+	String egun = Integer.toString(c.get(Calendar.DATE));
+	String hil = Integer.toString(c.get(Calendar.MONTH)+1);
+	String urte = Integer.toString(c.get(Calendar.YEAR));
+	String data_sortu = urte+"-"+hil+"-"+egun;
+	
 	Langilea langile = null;
 	Bezeroa bezero = null;
 	String nan_bezero = "";
@@ -127,7 +136,7 @@ public class App extends JFrame {
 	String[] lanpostu_array = {"gerentea","zuzendaria","god"};
 	
 	//Kontu sortzeko array
-	String[][] erabiltzaileak =new String[0][3];
+	String[][] erabiltzaileak =new String[0][4];
 	
 	private JTable table_entitateKont;
 	private JTable transfer_ikusi_table;
@@ -155,18 +164,20 @@ public class App extends JFrame {
 	private JTextField txt_limite_sortu;
 	private JTable hipotekak_table;
 	private JTable itxi_table;
-	JComboBox cb_sukurtsala = null;
-	JComboBox cb_hila = null;
-	JComboBox cb_eguna = null;
-	JComboBox cb_egoera_kontua = null;
-	JComboBox cb_egoera_langile;
-	JComboBox cb_txartel_mota =null;
-	JComboBox cb_urtea;
-	JComboBox cb_sexua;
-	JComboBox cb_urtea_lang;
-	JComboBox cb_eguna_lang;
-	JComboBox cb_hila_lang;
-	JComboBox cb_egoera_langile_registro;
+	JComboBox<String> cb_sukurtsala = null;
+	JComboBox<String> cb_hila = null;
+	JComboBox<String> cb_eguna = null;
+	JComboBox<String> cb_egoera_kontua = null;
+	JComboBox<String> cb_egoera_langile;
+	JComboBox<String> cb_txartel_mota =null;
+	JComboBox<String> cb_urtea;
+	JComboBox<String> cb_sexua;
+	JComboBox<String> cb_urtea_lang;
+	JComboBox<String> cb_eguna_lang;
+	JComboBox<String> cb_hila_lang;
+	JComboBox<String> cb_egoera_langile_registro;
+	JComboBox<String> cb_sexua_registro_lang;
+	JComboBox<String> cb_lanpostu_registro;
 	JButton btn_kontu_itzi;
 	JButton btn_hipoteka;
 	JButton btn_kontuItxi;
@@ -192,8 +203,8 @@ public class App extends JFrame {
 	JScrollPane scrollPane_entitateKont;
 	JScrollPane pane_hipotekak;
 	JScrollPane sarrera_pane;
-	JComboBox cb_egoera_sortu;
-	JComboBox hipoteka_combo;
+	JComboBox<String> cb_egoera_sortu;
+	JComboBox<String> hipoteka_combo;
 	private JTable zerrenda_table;
 	private JTextField txt_abizen_editatu;
 	private JTextField txt_izen_editatu;
@@ -245,9 +256,9 @@ public class App extends JFrame {
 		// 			Datuak Kargatu	    //
 		//////////////////////////////////		
 
-		urteak_array = metodoakArray.urteakBete();
-		hilak_array = metodoakArray.hilakBete();
-		egunak_array = metodoakArray.egunakBete(1);
+		urteak_array = ArrayMetodoak.urteakBete();
+		hilak_array = ArrayMetodoak.hilakBete();
+		egunak_array = ArrayMetodoak.egunakBete(1);
 		
 		//////////////////////////////////
 		// 			 Panelak 		    //
@@ -383,6 +394,8 @@ public class App extends JFrame {
 		JButton btn_bezero = new JButton("Bezero Login");
 		btn_bezero.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				txt_langile_erabiltzaile.setText("");
+				passLangile.setText("");
 				loginLangile.setVisible(false);
 				loginBezero.setVisible(true);
 			}
@@ -394,6 +407,8 @@ public class App extends JFrame {
 		JButton btn_langile = new JButton("Langile Login");
 		btn_langile.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				txt_bezero_erabiltzaile.setText("");
+				passBezero.setText("");
 				loginBezero.setVisible(false);
 				loginLangile.setVisible(true);
 			}
@@ -405,9 +420,10 @@ public class App extends JFrame {
 		JButton btn_bezero_sartu = new JButton("Sartu");
 		btn_bezero_sartu.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				
+
 				try {
 					if(metodoakSelect.bezeroLogin(txt_bezero_erabiltzaile.getText(),String.valueOf(passBezero.getPassword()))) {
+
 						nan_bezero= txt_bezero_erabiltzaile.getText();
 						pass_bezero = String.valueOf(passBezero.getPassword());
 						//Langilearen logina erregistratu
@@ -415,6 +431,9 @@ public class App extends JFrame {
 						
 						bezero = metodoakKargatu.bezeroaKargatu(nan_bezero);
 						bezero_entitate = metodoakArray.bezeroarenEntitateak(bezero);
+
+						txt_bezero_erabiltzaile.setText("");
+						passBezero.setText("");
 						
 						entitateak = metodoakSelect.botoiakSortu();
 
@@ -498,22 +517,24 @@ public class App extends JFrame {
 						entitate_izen = metodoakArray.langilearenEntitateak(langile);		
 						sukurtsal_kok = metodoakArray.langilearenSukurtsalak(langile, langile.getSukurtsalak().get(0).getEntitateBankario().getIzena());
 						
-						cb_sukurtsala = new JComboBox(sukurtsal_kok);
+						cb_sukurtsala = new JComboBox<String>(sukurtsal_kok);
 						cb_sukurtsala.setBounds(412, 317, 230, 30);
 						sukurtsalak.add(cb_sukurtsala);
 						
-						JComboBox cb_entitate = new JComboBox(entitate_izen);
+						JComboBox<String> cb_entitate = new JComboBox<String>(entitate_izen);
 						cb_entitate.addActionListener (new ActionListener () {
 							public void actionPerformed(ActionEvent e) {
 								sukurtsal_kok = metodoakArray.langilearenSukurtsalak(langile, cb_entitate.getSelectedItem().toString());
 								cb_sukurtsala.removeAllItems();
-								DefaultComboBoxModel sukurtsal_kokapena = new DefaultComboBoxModel(sukurtsal_kok);
+								DefaultComboBoxModel<String> sukurtsal_kokapena = new DefaultComboBoxModel<String>(sukurtsal_kok);
 								cb_sukurtsala.setModel(sukurtsal_kokapena);
 							}
 						});
 						cb_entitate.setBounds(460, 278, 131, 30);
 						sukurtsalak.add(cb_entitate);					
-						
+
+						txt_langile_erabiltzaile.setText("");
+						passLangile.setText("");
 						loginLangile.setVisible(false);
 						sukurtsalak.setVisible(true);
 					}
@@ -535,6 +556,7 @@ public class App extends JFrame {
 		JButton btn_logout_1 = new JButton(logouticon);
 		btn_logout_1.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				bezero=null;
 				loginBezero.setVisible(true);
 				entitateKontuak.setVisible(false);
 			}
@@ -545,15 +567,12 @@ public class App extends JFrame {
 		btn_logout_1.setBorderPainted(false);
 		bezeroEntitate.add(btn_logout_1);
 		entitateKontuak.setLayout(null);
-		
-		JButton btn_etxea_2 = new JButton(homeicon);
-		btn_etxea_2.setBounds(29, 151, 44, 34);
-		btn_etxea_2.setOpaque(false);
-		btn_etxea_2.setContentAreaFilled(false);
-		btn_etxea_2.setBorderPainted(false);
-		entitateKontuak.add(btn_etxea_2);		
 
 		JButton btn_etxea_3 = new JButton(homeicon);
+		btn_etxea_3.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+			}
+		});
 		btn_etxea_3.setOpaque(false);
 		btn_etxea_3.setContentAreaFilled(false);
 		btn_etxea_3.setBorderPainted(false);
@@ -589,6 +608,16 @@ public class App extends JFrame {
 		sarrerak.add(btn_etxea_7);
 
 		JButton btn_etxea_8 = new JButton(homeicon);
+		btn_etxea_8.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				txt_kantitate_hipoteka.setText("");
+				hipoteka_combo.setSelectedIndex(0);
+				txt_hipoteka_komisio.setText("3%");
+				hipoteka_segurtasun.setText("");
+				hipotekaEskatu.setVisible(false);
+				bezeroEntitate.setVisible(true);
+			}
+		});
 		btn_etxea_8.setOpaque(false);
 		btn_etxea_8.setContentAreaFilled(false);
 		btn_etxea_8.setBorderPainted(false);
@@ -596,6 +625,12 @@ public class App extends JFrame {
 		hipotekaEskatu.add(btn_etxea_8);
 
 		JButton btn_etxea_9 = new JButton(homeicon);
+		btn_etxea_9.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				hipotekaEstatus.setVisible(false);
+				bezeroEntitate.setVisible(true);
+			}
+		});
 		btn_etxea_9.setOpaque(false);
 		btn_etxea_9.setContentAreaFilled(false);
 		btn_etxea_9.setBorderPainted(false);
@@ -603,6 +638,15 @@ public class App extends JFrame {
 		hipotekaEstatus.add(btn_etxea_9);
 		
 		JButton btn_etxea_10 = new JButton(homeicon);
+		btn_etxea_10.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				txt_kant_ordaindu.setText("");
+				segurtasun_ordaindu.setText("");
+				hipotekaOrdaindu.setVisible(false);
+				bezeroEntitate.setVisible(true);
+				
+			}
+		});
 		btn_etxea_10.setOpaque(false);
 		btn_etxea_10.setContentAreaFilled(false);
 		btn_etxea_10.setBorderPainted(false);
@@ -610,20 +654,25 @@ public class App extends JFrame {
 		hipotekaOrdaindu.add(btn_etxea_10);
 
 		JButton btn_etxea_11 = new JButton(homeicon);
+		btn_etxea_11.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				mugimenduak.setVisible(false);
+				bezeroEntitate.setVisible(true);
+			}
+		});
 		btn_etxea_11.setOpaque(false);
 		btn_etxea_11.setContentAreaFilled(false);
 		btn_etxea_11.setBorderPainted(false);
 		btn_etxea_11.setBounds(29, 151, 44, 34);
 		mugimenduak.add(btn_etxea_11);
 
-		JButton btn_etxea_12 = new JButton(homeicon);
-		btn_etxea_12.setOpaque(false);
-		btn_etxea_12.setContentAreaFilled(false);
-		btn_etxea_12.setBorderPainted(false);
-		btn_etxea_12.setBounds(29, 151, 44, 34);
-		langileMenu.add(btn_etxea_12);
-
 		JButton btn_etxea_13 = new JButton(homeicon);
+		btn_etxea_13.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				kontuakLista.setVisible(false);
+				sukurtsalak.setVisible(true);
+			}
+		});
 		btn_etxea_13.setOpaque(false);
 		btn_etxea_13.setContentAreaFilled(false);
 		btn_etxea_13.setBorderPainted(false);
@@ -631,6 +680,14 @@ public class App extends JFrame {
 		kontuakLista.add(btn_etxea_13);
 
 		JButton btn_etxea_14 = new JButton(homeicon);
+		btn_etxea_14.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				txt_limite_kontua.setText("");	
+				cb_egoera_kontua.setSelectedIndex(0);
+				infoKontua.setVisible(true);
+				sukurtsalak.setVisible(true);
+			}
+		});
 		btn_etxea_14.setOpaque(false);
 		btn_etxea_14.setContentAreaFilled(false);
 		btn_etxea_14.setBorderPainted(false);
@@ -638,6 +695,21 @@ public class App extends JFrame {
 		infoKontua.add(btn_etxea_14);
 
 		JButton btn_etxea_15 = new JButton(homeicon);
+		btn_etxea_15.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				txt_izen_erabiltzaile.setText("");
+				txt_abizen_erabiltzaile.setText("");
+				txt_nan_sortu.setText("");
+				pass_bezero_sortu.setText("");
+				cb_urtea.setSelectedIndex(0);
+				cb_hila.setSelectedIndex(0);
+				cb_eguna.setSelectedIndex(0);
+				cb_sexua.setSelectedIndex(0);
+				txt_tel_sortu.setText("");
+				erabiltzaileSortu.setVisible(false);
+				sukurtsalak.setVisible(true);
+			}
+		});
 		btn_etxea_15.setOpaque(false);
 		btn_etxea_15.setContentAreaFilled(false);
 		btn_etxea_15.setBorderPainted(false);
@@ -645,6 +717,16 @@ public class App extends JFrame {
 		erabiltzaileSortu.add(btn_etxea_15);
 
 		JButton btn_etxea_16 = new JButton(homeicon);
+		btn_etxea_16.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				txt_kontu_sortu_nan.setText("");
+				pass_segurtasunkode_kontu.setText("");
+				cb_txartel_mota.setSelectedIndex(0);
+				erabiltzaileak= new String[0][4];
+				kontuSortu.setVisible(false);
+				sukurtsalak.setVisible(true);
+			}
+		});
 		btn_etxea_16.setOpaque(false);
 		btn_etxea_16.setContentAreaFilled(false);
 		btn_etxea_16.setBorderPainted(false);
@@ -652,6 +734,16 @@ public class App extends JFrame {
 		kontuSortu.add(btn_etxea_16);
 
 		JButton btn_etxea_17 = new JButton(homeicon);
+		btn_etxea_17.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				erabiltzaileak = new String [0][4];
+				txt_saldo_sortu.setText("");
+				txt_limite_sortu.setText("");
+				cb_egoera_sortu.setSelectedIndex(0);
+				kontuBankarioaSortu.setVisible(false);
+				sukurtsalak.setVisible(true);
+			}
+		});
 		btn_etxea_17.setOpaque(false);
 		btn_etxea_17.setContentAreaFilled(false);
 		btn_etxea_17.setBorderPainted(false);
@@ -659,6 +751,12 @@ public class App extends JFrame {
 		kontuBankarioaSortu.add(btn_etxea_17);
 		
 		JButton btn_etxea_18 = new JButton(homeicon);
+		btn_etxea_18.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				hipotekak.setVisible(false);
+				sukurtsalak.setVisible(true);
+			}
+		});
 		btn_etxea_18.setOpaque(false);
 		btn_etxea_18.setContentAreaFilled(false);
 		btn_etxea_18.setBorderPainted(false);
@@ -666,6 +764,12 @@ public class App extends JFrame {
 		hipotekak.add(btn_etxea_18);
 
 		JButton btn_etxea_19 = new JButton(homeicon);
+		btn_etxea_19.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				hipotekaTaulak.setVisible(false);
+				sukurtsalak.setVisible(true);
+			}
+		});
 		btn_etxea_19.setOpaque(false);
 		btn_etxea_19.setContentAreaFilled(false);
 		btn_etxea_19.setBorderPainted(false);
@@ -673,6 +777,12 @@ public class App extends JFrame {
 		hipotekaTaulak.add(btn_etxea_19);
 
 		JButton btn_etxea_20 = new JButton(homeicon);
+		btn_etxea_20.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				ixtekoKontuak.setVisible(false);
+				sukurtsalak.setVisible(true);
+			}
+		});
 		btn_etxea_20.setOpaque(false);
 		btn_etxea_20.setContentAreaFilled(false);
 		btn_etxea_20.setBorderPainted(false);
@@ -682,6 +792,7 @@ public class App extends JFrame {
 		JButton btn_logout_2 = new JButton(logouticon);
 		btn_logout_2.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				langile=null;
 				sukurtsalak.setVisible(false);
 				loginLangile.setVisible(true);
 			}
@@ -690,17 +801,15 @@ public class App extends JFrame {
 		btn_logout_2.setContentAreaFilled(false);
 		btn_logout_2.setBorderPainted(false);
 		btn_logout_2.setBounds(874, 151, 44, 34);
-		sukurtsalak.add(btn_logout_2);		
-
-
-		JButton btn_etxea_21 = new JButton(homeicon);
-		btn_etxea_21.setOpaque(false);
-		btn_etxea_21.setContentAreaFilled(false);
-		btn_etxea_21.setBorderPainted(false);
-		btn_etxea_21.setBounds(29, 151, 44, 34);
-		zerrendak.add(btn_etxea_21);
+		sukurtsalak.add(btn_logout_2);
 		
 		JButton btn_etxea_22 = new JButton(homeicon);
+		btn_etxea_22.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				langileEditatu.setVisible(false);
+				sukurtsalak.setVisible(true);
+			}
+		});
 		btn_etxea_22.setOpaque(false);
 		btn_etxea_22.setContentAreaFilled(false);
 		btn_etxea_22.setBorderPainted(false);
@@ -708,18 +817,17 @@ public class App extends JFrame {
 		bezeroEditatu.add(btn_etxea_22);
 		
 		JButton btn_etxea_23 = new JButton(homeicon);
+		btn_etxea_23.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				langileEditatu.setVisible(false);
+				sukurtsalak.setVisible(true);
+			}
+		});
 		btn_etxea_23.setOpaque(false);
 		btn_etxea_23.setContentAreaFilled(false);
 		btn_etxea_23.setBorderPainted(false);
 		btn_etxea_23.setBounds(29, 151, 44, 34);
 		langileEditatu.add(btn_etxea_23);
-		
-		JButton btn_etxea_24 = new JButton(homeicon);
-		btn_etxea_24.setOpaque(false);
-		btn_etxea_24.setContentAreaFilled(false);
-		btn_etxea_24.setBorderPainted(false);
-		btn_etxea_24.setBounds(29, 151, 44, 34);
-		langileRegistro.add(btn_etxea_24);
 		//////////////////////////////////
 		// 			Aurrera Atzera 		//
 		//////////////////////////////////
@@ -815,6 +923,10 @@ public class App extends JFrame {
 		JButton btn_atzera_5 = new JButton(logo_atzera);
 		btn_atzera_5.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				txt_jasotzaile.setText("");
+				txt_kantitate.setText("");
+				txt_kontzeptu.setText("");
+				transferentzia_segurtasun.setText("");
 				transferentzia.setVisible(true);
 				transferentziaEgin.setVisible(false);
 			}
@@ -828,10 +940,10 @@ public class App extends JFrame {
 		JButton btn_atzera_6 = new JButton(logo_atzera);
 		btn_atzera_6.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				if(lanpostua == null) {
+				if(langile == null) {
 					bezeroKontua.setVisible(true);
 					sarrerak.setVisible(false);
-				}else {
+				}else if(bezero==null){
 					infoKontua.setVisible(true);
 					sarrerak.setVisible(false);
 				}
@@ -926,7 +1038,7 @@ public class App extends JFrame {
 					lbl_jabeak_kontua.setText(langile_kontu_info[1]);
 					lbl_saldo_kontua.setText(langile_kontu_info[2]);
 
-					cb_egoera_kontua = new JComboBox(kontu_egoera);
+					cb_egoera_kontua = new JComboBox<String>(kontu_egoera);
 					cb_egoera_kontua.setBounds(415, 362, 126, 30);
 					infoKontua.add(cb_egoera_kontua);
 					cb_egoera_kontua.setSelectedItem(langile_kontu_info[3]);
@@ -961,6 +1073,10 @@ public class App extends JFrame {
 		JButton btn_atzera_13 = new JButton(logo_atzera);
 		btn_atzera_13.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				txt_limite_kontua.setText("");
+				cb_egoera_kontua.setSelectedIndex(0);
+				infoKontua.setVisible(false);
+				kontuakLista.setVisible(true);
 			}
 		});
 		btn_atzera_13.setOpaque(false);
@@ -997,7 +1113,7 @@ public class App extends JFrame {
 				txt_kontu_sortu_nan.setText("");
 				pass_segurtasunkode_kontu.setText("");
 				cb_txartel_mota.setSelectedIndex(0);
-				erabiltzaileak= new String[0][3];
+				erabiltzaileak= new String[0][4];
 				kontuSortu.setVisible(false);
 				langileMenu.setVisible(true);
 			}
@@ -1100,6 +1216,12 @@ public class App extends JFrame {
 		zerrendak.add(btn_atzera_20);
 		
 		JButton btn_atzera_21 = new JButton(logo_atzera);
+		btn_atzera_21.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				bezeroEditatu.setVisible(false);
+				zerrendak.setVisible(true);
+			}
+		});
 		btn_atzera_21.setOpaque(false);
 		btn_atzera_21.setContentAreaFilled(false);
 		btn_atzera_21.setBorderPainted(false);
@@ -1120,6 +1242,24 @@ public class App extends JFrame {
 		langileEditatu.add(btn_atzera_22);
 		
 		JButton btn_atzera_23 = new JButton(logo_atzera);
+		btn_atzera_23.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				txt_lang_nan.setText("");
+				txt_lang_izen_registro.setText("");
+				txt_lang_abizen_registro.setText("");
+				cb_urtea_lang.setSelectedIndex(0);
+				cb_hila_lang.setSelectedIndex(0);
+				cb_eguna_lang.setSelectedIndex(0);
+				cb_egoera_langile_registro.setSelectedIndex(0);
+				cb_sexua_registro_lang.setSelectedIndex(0);
+				txt_tel_lang_registro.setText("");
+				pass_langile_registro.setText("");
+				cb_lanpostu_registro.setSelectedIndex(0);
+				txt_sukurtsal_registro.setText("");
+				sukurtsalak.setVisible(true);
+				langileRegistro.setVisible(false);
+			}
+		});
 		btn_atzera_23.setOpaque(false);
 		btn_atzera_23.setContentAreaFilled(false);
 		btn_atzera_23.setBorderPainted(false);
@@ -1141,9 +1281,7 @@ public class App extends JFrame {
 		txt_bezero_erabiltzaile = new JTextField();
 		txt_bezero_erabiltzaile.addKeyListener(new KeyAdapter() {
 			@Override
-			public void keyTyped(KeyEvent e) {
-				char c = e.getKeyChar();
-				
+			public void keyTyped(KeyEvent e) {				
 				if(txt_bezero_erabiltzaile.getText().length() >= 9 ){
 					e.consume();
 				}
@@ -1188,10 +1326,15 @@ public class App extends JFrame {
 			public void actionPerformed(ActionEvent e) {				
 				int erantzuna = JOptionPane.showOptionDialog(null, "Ziur zaude erabiltzailea EZABATU nahi duzula?","Berrespena", JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE, null, aukerak,aukerak[1]);
 				if(erantzuna == JOptionPane.YES_OPTION) {
-					metodoakDelete.erabiltzaileEzabatu(nan_bezero);
-					JOptionPane.showMessageDialog(null, "Erabiltzailea ezabatu da, eskerrik asko gure zerbitzuak erabiltzeagaitik!","Informazio", JOptionPane.INFORMATION_MESSAGE);
-					bezeroEntitate.setVisible(false);
-					loginBezero.setVisible(true);
+					try {
+							metodoakDelete.erabiltzaileEzabatu(nan_bezero);
+							JOptionPane.showMessageDialog(null, "Erabiltzailea ezabatu da, eskerrik asko gure zerbitzuak erabiltzeagaitik!","Informazio", JOptionPane.INFORMATION_MESSAGE);
+							bezeroEntitate.setVisible(false);
+							loginBezero.setVisible(true);	
+					}catch (SQLException e1) {
+							e1.printStackTrace();
+							JOptionPane.showMessageDialog(null, "Erabiltzailea ezin izan da ezabatu!","Informazio", JOptionPane.INFORMATION_MESSAGE);
+					}
 				}
 			}
 		});
@@ -1460,14 +1603,25 @@ public class App extends JFrame {
 											bezero = metodoakObjetu.diruaKendu(bezero, bezero_iban_kontua, txt_kantitate.getText().toString(), txt_komisio_transfer.getText().toString(), txt_jasotzaile.getText().toString());
 											for(int i = 0; i < bezero.getTxartelak().size(); i ++) {
 												if(bezero.getTxartelak().get(i).getKontuBankario().getIban().equals(bezero_iban_kontua)) {
+													trans.setJasotzailea(txt_jasotzaile.getText());
+													String kant_tans = txt_kantitate.getText().replace(",", ".");
+													trans.setKantitatea(Double.parseDouble(kant_tans));
+													trans.setTransferentziaData(data_sortu);
+													trans.setKontzeptua(txt_kontzeptu.getText());
 													bezero.getTxartelak().get(i).getKontuBankario().getTransferentziak().add(trans);
+													
+													saldo_bezero = bezero.getTxartelak().get(i).getKontuBankario().getSaldoa();
+													lbl_saldo_bez_erakutsi.setText(saldo_bezero+" €");
 												}
 											}
+											txt_jasotzaile.setText("");
+											txt_kantitate.setText("");
+											txt_kontzeptu.setText("");
+											transferentzia_segurtasun.setText("");
 											JOptionPane.showMessageDialog(null,"Transferentzia zuzen burutu da!","Informazio", JOptionPane.INFORMATION_MESSAGE);
 											transferentziaEgin.setVisible(false);
 											transferentzia.setVisible(true);
-										}										
-										
+										}									
 									} catch (SalbuespenaTransferentzia e1) {
 										e1.printStackTrace();
 										JOptionPane.showMessageDialog(null,"Jasotzailearen kontua ezin ditu transferentziak jaso!","Error", JOptionPane.ERROR_MESSAGE);
@@ -1609,11 +1763,13 @@ public class App extends JFrame {
 					lbl_hipoteka_total.setText(hipoteka_info[0] + " €");
 					lbl_hipoteka_hasiera.setText(hipoteka_info[1]);
 					lbl_hipoteka_amaiera.setText(hipoteka_info[2]);
-					lbl_hipoteka_komisio_ikusi.setText(hipoteka_info[3]);
+					lbl_hipoteka_komisio_ikusi.setText(hipoteka_info[3]+" %");
 					lbl_hipoteka_ordainduta.setText(hipoteka_info[4] + " €");
 					lbl_hipo_egoera.setText(hipoteka_info[5]);
 					if(!metodoakString.hipotekaDut(bezero, bezero_iban_kontua).equals("onartuta")){
 						btn_ordaindu.setVisible(false);
+					}else {
+						btn_ordaindu.setVisible(true);
 					}
 					bezeroKontua.setVisible(false);
 					hipotekaEstatus.setVisible(true);
@@ -1726,9 +1882,7 @@ public class App extends JFrame {
 		txt_langile_erabiltzaile = new JTextField();
 		txt_langile_erabiltzaile.addKeyListener(new KeyAdapter() {
 			@Override
-			public void keyTyped(KeyEvent e) {
-				char c = e.getKeyChar();
-				
+			public void keyTyped(KeyEvent e) {				
 				if(txt_langile_erabiltzaile.getText().length() >= 9){ 
 					e.consume();
 				}
@@ -1753,7 +1907,7 @@ public class App extends JFrame {
 		txt_hipoteka_komisio.setBounds(442, 335, 57, 34);
 		hipotekaEskatu.add(txt_hipoteka_komisio);
 		
-		hipoteka_combo = new JComboBox(epemugak_array);
+		hipoteka_combo = new JComboBox<String>(epemugak_array);
 		hipoteka_combo.setSelectedIndex(0);
 		txt_hipoteka_komisio.setText("3 %");
 		hipoteka_combo.addActionListener(new ActionListener() {
@@ -1777,25 +1931,27 @@ public class App extends JFrame {
 			public void actionPerformed(ActionEvent e) {
 				if(!txt_kantitate_hipoteka.getText().equals("") && String.valueOf(hipoteka_segurtasun.getPassword()).length()==4) {
 					if(metodoakSelect.segurtasunKodeaBalidatu(String.valueOf(hipoteka_segurtasun.getPassword()), bezero_iban_kontua,nan_bezero,pass_bezero)) {
-												
-						int erantzuna = JOptionPane.showOptionDialog(null, "Ziur zaude "+txt_kantitate_hipoteka.getText()+" € ko hipoteka eskatu nahi duzula "+txt_hipoteka_komisio.getText()+" ko komisioarekin?","Berrespena", JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE, null, aukerak,aukerak[1]);
-						if(erantzuna == JOptionPane.YES_OPTION) {
-							bezero = metodoakObjetu.hipotekaSortu(bezero, bezero_iban_kontua, txt_kantitate_hipoteka.getText(), txt_hipoteka_komisio.getText(), String.valueOf(hipoteka_combo.getSelectedItem()));
-							metodoakInsert.hipotekaEskatu(txt_kantitate_hipoteka.getText(), txt_hipoteka_komisio.getText(), bezero_iban_kontua, String.valueOf(hipoteka_combo.getSelectedItem()),nan_bezero,pass_bezero);
-							JOptionPane.showMessageDialog(null, "Hipoteka eskatu da!.","Informazio", JOptionPane.INFORMATION_MESSAGE);
-						}else if(erantzuna==JOptionPane.NO_OPTION) {
-							txt_kantitate_hipoteka.setText("");
-							txt_hipoteka_komisio.setText("");
-							hipoteka_combo.setSelectedIndex(0);
-							hipoteka_combo.setSelectedIndex(0);							
-						}						
-						bezeroKontua.setVisible(true);
-						hipotekaEskatu.setVisible(false);
+						if(txt_kantitate_hipoteka.getText().split(",").length<=2) {
+							int erantzuna = JOptionPane.showOptionDialog(null, "Ziur zaude "+txt_kantitate_hipoteka.getText()+" € ko hipoteka eskatu nahi duzula "+txt_hipoteka_komisio.getText()+" ko komisioarekin?","Berrespena", JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE, null, aukerak,aukerak[1]);
+							if(erantzuna == JOptionPane.YES_OPTION) {
+								bezero = metodoakObjetu.hipotekaSortu(bezero, bezero_iban_kontua, txt_kantitate_hipoteka.getText(), txt_hipoteka_komisio.getText(), String.valueOf(hipoteka_combo.getSelectedItem()));
+								metodoakInsert.hipotekaEskatu(txt_kantitate_hipoteka.getText(), txt_hipoteka_komisio.getText(), bezero_iban_kontua, String.valueOf(hipoteka_combo.getSelectedItem()),nan_bezero,pass_bezero);
+								JOptionPane.showMessageDialog(null, "Hipoteka eskatu da!.","Informazio", JOptionPane.INFORMATION_MESSAGE);
+								txt_kantitate_hipoteka.setText("");
+								hipoteka_combo.setSelectedIndex(0);
+								txt_hipoteka_komisio.setText("3%");
+								hipoteka_segurtasun.setText("");
+								bezeroKontua.setVisible(true);
+								hipotekaEskatu.setVisible(false);
+							}
+						}else {
+							JOptionPane.showMessageDialog(null, "Sartutako kantitatea ez da zuzena.","Error!", JOptionPane.ERROR_MESSAGE);							
+						}
 					}else {
-						JOptionPane.showMessageDialog(null, "Sartutako segurtasun kodea ez da zuzena.","Error!", JOptionPane.INFORMATION_MESSAGE);
+						JOptionPane.showMessageDialog(null, "Sartutako segurtasun kodea ez da zuzena.","Error!", JOptionPane.ERROR_MESSAGE);
 					}
 				}else {
-					JOptionPane.showMessageDialog(null, "Datuak ez dira zuzenak.","Error!", JOptionPane.INFORMATION_MESSAGE);
+					JOptionPane.showMessageDialog(null, "Datuak ez dira zuzenak.","Error!", JOptionPane.ERROR_MESSAGE);
 				}
 			}
 		});
@@ -1877,30 +2033,34 @@ public class App extends JFrame {
 		JButton btn_ordaindu_hipo = new JButton("Ordaindu");
 		btn_ordaindu_hipo.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				try {
-					bezero = metodoakObjetu.hipotekaOrdaindu(bezero, bezero_iban_kontua, txt_kant_ordaindu.getText());
-					metodoakUpdate.hipotekaUpdate(bezero, bezero_iban_kontua,pass_bezero);
-					hipoteka_info = metodoakArray.hipotekaEstatus(bezero,bezero_iban_kontua);
-					lbl_hipoteka_total.setText(hipoteka_info[0] + " €");
-					lbl_hipoteka_hasiera.setText(hipoteka_info[1]);
-					lbl_hipoteka_amaiera.setText(hipoteka_info[2]);
-					lbl_hipoteka_komisio_ikusi.setText(hipoteka_info[3]);
-					lbl_hipoteka_ordainduta.setText(hipoteka_info[4] + " €");
-					lbl_hipo_egoera.setText(hipoteka_info[5]);
-					for(int i=0;i<bezero.getTxartelak().size();i++) {
-						if(bezero.getTxartelak().get(i).getKontuBankario().getIban().equals(bezero_iban_kontua)) {
-							saldo_bezero = bezero.getTxartelak().get(i).getKontuBankario().getSaldoa();
+				if(txt_kant_ordaindu.getText().split(",").length<=2) {
+					try {
+						bezero = metodoakObjetu.hipotekaOrdaindu(bezero, bezero_iban_kontua, txt_kant_ordaindu.getText());
+						metodoakUpdate.hipotekaUpdate(bezero, bezero_iban_kontua,pass_bezero);
+						hipoteka_info = metodoakArray.hipotekaEstatus(bezero,bezero_iban_kontua);
+						lbl_hipoteka_total.setText(hipoteka_info[0] + " €");
+						lbl_hipoteka_hasiera.setText(hipoteka_info[1]);
+						lbl_hipoteka_amaiera.setText(hipoteka_info[2]);
+						lbl_hipoteka_komisio_ikusi.setText(hipoteka_info[3]+" %");
+						lbl_hipoteka_ordainduta.setText(hipoteka_info[4] + " €");
+						lbl_hipo_egoera.setText(hipoteka_info[5]);
+						for(int i=0;i<bezero.getTxartelak().size();i++){
+							if(bezero.getTxartelak().get(i).getKontuBankario().getIban().equals(bezero_iban_kontua)){
+								saldo_bezero = bezero.getTxartelak().get(i).getKontuBankario().getSaldoa();
+							}
 						}
+						lbl_saldo_bez_erakutsi.setText(saldo_bezero+" €");
+						txt_kant_ordaindu.setText("");
+						segurtasun_ordaindu.setText("");
+						hipotekaOrdaindu.setVisible(false);
+						hipotekaEstatus.setVisible(true);
+					} catch (SalbuespenaOrdainketa s) {
+						JOptionPane.showMessageDialog(null,"Ordainketa okerra!","Error", JOptionPane.ERROR_MESSAGE);
+						s.printStackTrace();
 					}
-					lbl_saldo_bez_erakutsi.setText(saldo_bezero+" €");
-					txt_kant_ordaindu.setText("");
-					segurtasun_ordaindu.setText("");
-				} catch (SalbuespenaOrdainketa s) {
-					JOptionPane.showMessageDialog(null,"Ordainketa okerra!","Error", JOptionPane.ERROR_MESSAGE);
-					s.printStackTrace();
-				}
-				hipotekaOrdaindu.setVisible(false);
-				hipotekaEstatus.setVisible(true);				
+				}else {
+					JOptionPane.showMessageDialog(null,"Diru kantitatea okerra da!","Error", JOptionPane.ERROR_MESSAGE);					
+				}				
 			}
 		});
 		btn_ordaindu_hipo.setBounds(392, 427, 153, 34);
@@ -1967,7 +2127,7 @@ public class App extends JFrame {
 		btn_kontu_sortu.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				do {
-					id_txartel_random = metodoakString.sortuTxartelId();
+					id_txartel_random = StringMetodoak.sortuTxartelId();
 					txartel_id = id_txartel_random.substring(0,4)+" "+id_txartel_random.substring(4,8)+" "+id_txartel_random.substring(8,12)+" "+id_txartel_random.substring(12,16);
 					lbl_txartelid.setText(txartel_id);
 				}while(!metodoakSelect.txartelIdBalidatu(id_txartel_random));
@@ -1992,16 +2152,16 @@ public class App extends JFrame {
 		btn_erabiltzaile_sortu.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 
-				cb_eguna = new JComboBox(egunak_array);
+				cb_eguna = new JComboBox<String>(egunak_array);
 				cb_eguna.setBounds(645, 362, 82, 30);
 				erabiltzaileSortu.add(cb_eguna);
 
-				cb_hila = new JComboBox(hilak_array);
+				cb_hila = new JComboBox<String>(hilak_array);
 				cb_hila.addActionListener (new ActionListener () {
 					public void actionPerformed(ActionEvent e) {
-						egunak_array= metodoakArray.egunakBete(Integer.parseInt(cb_hila.getSelectedItem().toString()));
+						egunak_array= ArrayMetodoak.egunakBete(Integer.parseInt(cb_hila.getSelectedItem().toString()));
 						cb_eguna.removeAllItems();
-						DefaultComboBoxModel egunak_model = new DefaultComboBoxModel(egunak_array);
+						DefaultComboBoxModel<String> egunak_model = new DefaultComboBoxModel<String>(egunak_array);
 						cb_eguna.setModel(egunak_model);
 					}
 				});
@@ -2184,7 +2344,7 @@ public class App extends JFrame {
 		lbl_sexua.setBounds(333, 403, 82, 30);
 		erabiltzaileSortu.add(lbl_sexua);
 		
-		cb_sexua = new JComboBox(sexu_array);
+		cb_sexua = new JComboBox<String>(sexu_array);
 		cb_sexua.setBounds(425, 403, 129, 30);
 		erabiltzaileSortu.add(cb_sexua);
 		
@@ -2230,7 +2390,7 @@ public class App extends JFrame {
 		lbl_jaiotze.setBounds(333, 362, 82, 30);
 		erabiltzaileSortu.add(lbl_jaiotze);
 		
-		cb_urtea = new JComboBox(urteak_array);
+		cb_urtea = new JComboBox<String>(urteak_array);
 		cb_urtea.setBounds(425, 362, 82, 30);
 		erabiltzaileSortu.add(cb_urtea);
 				
@@ -2249,21 +2409,27 @@ public class App extends JFrame {
 		btn_sortu_kontu.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				try {
-					if(metodoakInsert.bezeroSortu(txt_izen_erabiltzaile.getText(),txt_abizen_erabiltzaile	.getText(),txt_nan_sortu.getText(),String.valueOf(pass_bezero_sortu.getPassword()),cb_urtea.getSelectedItem().toString(),cb_hila.getSelectedItem().toString(),cb_eguna.getSelectedItem().toString(),cb_sexua.getSelectedItem().toString(),txt_tel_sortu.getText(),nan_langile,pass_langile)) {
-						JOptionPane.showMessageDialog(null, "Erabiltzailea sortu da.","Informazio", JOptionPane.INFORMATION_MESSAGE);
-						txt_izen_erabiltzaile.setText("");
-						txt_abizen_erabiltzaile.setText("");
-						txt_nan_sortu.setText("");
-						pass_bezero_sortu.setText("");
-						cb_urtea.setSelectedIndex(0);
-						cb_hila.setSelectedIndex(0);
-						cb_eguna.setSelectedIndex(0);
-						cb_sexua.setSelectedIndex(0);
-						txt_tel_sortu.setText("");
-						erabiltzaileSortu.setVisible(false);
-						langileMenu.setVisible(true);
+					if(!txt_izen_erabiltzaile.getText().equals("") && !txt_abizen_erabiltzaile.getText().equals("") && txt_nan_sortu.getText().length()==9 && !String.valueOf(pass_bezero_sortu.getPassword()).equals("") && txt_tel_sortu.getText().length()==9) {
+						if(metodoakBoolean.nanBalidatu(txt_nan_sortu.getText())  && !metodoakSelect.bezeroExistitu(txt_nan_sortu.getText()) && metodoakInsert.bezeroSortu(txt_izen_erabiltzaile.getText(),txt_abizen_erabiltzaile.getText(),txt_nan_sortu.getText(),String.valueOf(pass_bezero_sortu.getPassword()),cb_urtea.getSelectedItem().toString(),cb_hila.getSelectedItem().toString(),cb_eguna.getSelectedItem().toString(),cb_sexua.getSelectedItem().toString(),txt_tel_sortu.getText(),nan_langile,pass_langile)) {
+							if(metodoakInsert.bezeroErabiltzaieSortu(txt_nan_sortu.getText(), String.valueOf(pass_bezero_sortu.getPassword()))) {
+								JOptionPane.showMessageDialog(null, "Erabiltzailea sortu da.","Informazio", JOptionPane.INFORMATION_MESSAGE);
+								txt_izen_erabiltzaile.setText("");
+								txt_abizen_erabiltzaile.setText("");
+								txt_nan_sortu.setText("");
+								pass_bezero_sortu.setText("");
+								cb_urtea.setSelectedIndex(0);
+								cb_hila.setSelectedIndex(0);
+								cb_eguna.setSelectedIndex(0);
+								cb_sexua.setSelectedIndex(0);
+								txt_tel_sortu.setText("");
+								erabiltzaileSortu.setVisible(false);
+								langileMenu.setVisible(true);
+							}
+						}
+					}else {
+						JOptionPane.showMessageDialog(null, "Datuak okerrak dira.","Error", JOptionPane.ERROR_MESSAGE);						
 					}
-				} catch (SalbuespenaErregistro s) {
+				} catch (SQLException s) {
 					JOptionPane.showMessageDialog(null, "Erabiltzailea ezin izan da sortu.","Error", JOptionPane.ERROR_MESSAGE);
 				}				
 			}
@@ -2327,7 +2493,7 @@ public class App extends JFrame {
 		lbl_txartel_mota.setBounds(337, 370, 124, 30);
 		kontuSortu.add(lbl_txartel_mota);
 		
-		cb_txartel_mota = new JComboBox(txartel_mota_array);
+		cb_txartel_mota = new JComboBox<String>(txartel_mota_array);
 		cb_txartel_mota.setBounds(456, 370, 129, 30);
 		kontuSortu.add(cb_txartel_mota);
 		
@@ -2345,19 +2511,33 @@ public class App extends JFrame {
 		btn_jarraitu.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				String nan_kontu_sortu =  txt_kontu_sortu_nan.getText();
-				if(metodoakBoolean.nanBalidatu(nan_kontu_sortu) && metodoakSelect.bezeroExistitu(nan_kontu_sortu) && String.valueOf(pass_segurtasunkode_kontu.getPassword()).length()==4) {	
-					erabiltzaileak = metodoakTaulak.bezeroGordeArray(nan_kontu_sortu, id_txartel_random, String.valueOf(pass_segurtasunkode_kontu.getPassword()),cb_txartel_mota.getSelectedItem().toString() ,erabiltzaileak);
-					do {					
-						iban_sortu= metodoakString.ibanKalkulatu(langile, sukurtsal_izen);
-					}while(!metodoakSelect.ibanBalidatu(iban_sortu));
-					lbl_kontusortu_iban.setText(iban_sortu.substring(0,4)+" "+iban_sortu.substring(4,8)+" "+iban_sortu.substring(8,12)+" "+iban_sortu.substring(12,14)+" "+iban_sortu.substring(14));				
-					txt_kontu_sortu_nan.setText("");
-					pass_segurtasunkode_kontu.setText("");
-					cb_txartel_mota.setSelectedIndex(0);
-					kontuSortu.setVisible(false);
-					kontuBankarioaSortu.setVisible(true);
-				}else {		
-					JOptionPane.showMessageDialog(null,"Segurtasun kodea 4 digitu izan behar ditu!","Error!", JOptionPane.ERROR_MESSAGE);			
+				if(metodoakBoolean.nanBalidatu(nan_kontu_sortu) && String.valueOf(pass_segurtasunkode_kontu.getPassword()).length()==4){
+					if(metodoakSelect.bezeroExistitu(nan_kontu_sortu)) {	
+						boolean errepikatuta = false;
+						for(int i=0;i<erabiltzaileak.length && !errepikatuta;i++) {
+							if(erabiltzaileak[i][0].equalsIgnoreCase(nan_kontu_sortu)) {
+								errepikatuta=true;
+							}
+						}
+						if(!errepikatuta) {
+							erabiltzaileak = TaulaMetodoak.bezeroGordeArray(nan_kontu_sortu, id_txartel_random, String.valueOf(pass_segurtasunkode_kontu.getPassword()),cb_txartel_mota.getSelectedItem().toString() ,erabiltzaileak);
+							do {					
+								iban_sortu= StringMetodoak.ibanKalkulatu(langile, sukurtsal_izen);
+							}while(!metodoakSelect.ibanBalidatu(iban_sortu));
+							lbl_kontusortu_iban.setText(iban_sortu.substring(0,4)+" "+iban_sortu.substring(4,8)+" "+iban_sortu.substring(8,12)+" "+iban_sortu.substring(12,14)+" "+iban_sortu.substring(14));				
+							txt_kontu_sortu_nan.setText("");
+							pass_segurtasunkode_kontu.setText("");
+							cb_txartel_mota.setSelectedIndex(0);
+							kontuSortu.setVisible(false);
+							kontuBankarioaSortu.setVisible(true);
+						}else if(errepikatuta) {
+							JOptionPane.showMessageDialog(null,"Ezin duzu bezero berdina sartu!","Error!", JOptionPane.ERROR_MESSAGE);						
+						}
+					}else {
+						JOptionPane.showMessageDialog(null,"Bezeroa ez da existitzen!","Error!", JOptionPane.ERROR_MESSAGE);					
+					}
+				}else {			
+					JOptionPane.showMessageDialog(null,"Sartutako datuak ez dira balidoak!","Error!", JOptionPane.ERROR_MESSAGE);		
 				}
 			}
 		});
@@ -2368,19 +2548,23 @@ public class App extends JFrame {
 		btn_gehitu_erabiltzaile.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				String nan_kontu_sortu =  txt_kontu_sortu_nan.getText();
-				if(metodoakBoolean.nanBalidatu(nan_kontu_sortu)  && metodoakSelect.bezeroExistitu(nan_kontu_sortu) && String.valueOf(pass_segurtasunkode_kontu.getPassword()).length()==4) {
-					erabiltzaileak = metodoakTaulak.bezeroGordeArray(nan_kontu_sortu, id_txartel_random,String.valueOf(pass_segurtasunkode_kontu.getPassword()),cb_txartel_mota.getSelectedItem().toString(), erabiltzaileak);
-					txt_kontu_sortu_nan.setText("");
-					//Txartel id berri bat sortzen du
-					do {
-						id_txartel_random = metodoakString.sortuTxartelId();
-					}while(!metodoakSelect.txartelIdBalidatu(id_txartel_random));	
-					txartel_id = id_txartel_random.substring(0,4)+" "+id_txartel_random.substring(4,8)+" "+id_txartel_random.substring(8,12)+" "+id_txartel_random.substring(12,16);
-					lbl_txartelid.setText(txartel_id);
-					
-					pass_segurtasunkode_kontu.setText("");
+				if(metodoakBoolean.nanBalidatu(nan_kontu_sortu) && String.valueOf(pass_segurtasunkode_kontu.getPassword()).length()==4) { 
+					if(metodoakSelect.bezeroExistitu(nan_kontu_sortu)) {
+						erabiltzaileak = TaulaMetodoak.bezeroGordeArray(nan_kontu_sortu, id_txartel_random,String.valueOf(pass_segurtasunkode_kontu.getPassword()),cb_txartel_mota.getSelectedItem().toString(), erabiltzaileak);
+						txt_kontu_sortu_nan.setText("");
+						//Txartel id berri bat sortzen du
+						do {
+							id_txartel_random = StringMetodoak.sortuTxartelId();
+						}while(!metodoakSelect.txartelIdBalidatu(id_txartel_random));	
+						txartel_id = id_txartel_random.substring(0,4)+" "+id_txartel_random.substring(4,8)+" "+id_txartel_random.substring(8,12)+" "+id_txartel_random.substring(12,16);
+						lbl_txartelid.setText(txartel_id);
+						
+						pass_segurtasunkode_kontu.setText("");
+					}else {
+						JOptionPane.showMessageDialog(null,"Bezeroa ez da existitzen!","Error!", JOptionPane.ERROR_MESSAGE);					
+					}
 				}else {		
-					JOptionPane.showMessageDialog(null,"Segurtasun kodea 4 digitu izan behar ditu!","Error!", JOptionPane.ERROR_MESSAGE);			
+					JOptionPane.showMessageDialog(null,"Sartutako datuak ez dira balidoak!","Error!", JOptionPane.ERROR_MESSAGE);			
 				}
 			}
 		});
@@ -2445,14 +2629,14 @@ public class App extends JFrame {
 		lbl_egoera_sortu.setBounds(335, 365, 72, 30);
 		kontuBankarioaSortu.add(lbl_egoera_sortu);
 		
-		cb_egoera_sortu = new JComboBox(kontu_egoera);
+		cb_egoera_sortu = new JComboBox<String>(kontu_egoera);
 		cb_egoera_sortu.setBounds(407, 365, 131, 30);
 		kontuBankarioaSortu.add(cb_egoera_sortu);
 		
 		JButton btn_sortu_kontu_korronte = new JButton("Sortu Kontua");
 		btn_sortu_kontu_korronte.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				if(metodoakBoolean.diruBalidatu(txt_saldo_sortu.getText()) && metodoakBoolean.diruBalidatu(txt_limite_sortu.getText())) {
+				if(BooleanMetodoak.diruBalidatu(txt_saldo_sortu.getText()) && BooleanMetodoak.diruBalidatu(txt_limite_sortu.getText())) {
 					if(metodoakInsert.kontuKorronteSortu(langile, iban_sortu, txt_saldo_sortu.getText(), txt_limite_sortu.getText(), cb_egoera_sortu.getSelectedItem().toString(), sukurtsal_izen, erabiltzaileak,nan_langile,pass_langile)) {
 						JOptionPane.showMessageDialog(null,"Kontu korrontea sortu da!","Info!", JOptionPane.INFORMATION_MESSAGE);
 						erabiltzaileak = new String [0][4];
@@ -2716,7 +2900,6 @@ public class App extends JFrame {
 				bezeroZerrendaArray = metodoakSelect.bezeroZerrendaKargatu();
 				zerrenda_table = new JTable(bezeroZerrendaArray,zerrenda_header_bez);
 				pane_zerrenda.setViewportView(zerrenda_table);
-				zerrenda_table.getColumnModel().getColumn(0).setPreferredWidth(200);
 				zerrenda_table.getTableHeader().setReorderingAllowed(false);
 				lbl_zerrendak.setText("BEZERO ZERRENDA");
 				langileZerrendaArray = null;
@@ -2748,16 +2931,16 @@ public class App extends JFrame {
 		btn_langile_erregistratu = new JButton("Langile Erregistratu");
 		btn_langile_erregistratu.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				cb_eguna_lang = new JComboBox(egunak_array);
+				cb_eguna_lang = new JComboBox<String>(egunak_array);
 				cb_eguna_lang.setBounds(413, 385, 82, 30);
 				langileRegistro.add(cb_eguna_lang);
 
-				cb_hila_lang = new JComboBox(hilak_array);
+				cb_hila_lang = new JComboBox<String>(hilak_array);
 				cb_hila_lang.addActionListener (new ActionListener () {
 					public void actionPerformed(ActionEvent e) {
-						egunak_array= metodoakArray.egunakBete(Integer.parseInt(cb_hila_lang.getSelectedItem().toString()));
+						egunak_array= ArrayMetodoak.egunakBete(Integer.parseInt(cb_hila_lang.getSelectedItem().toString()));
 						cb_eguna_lang.removeAllItems();
-						DefaultComboBoxModel egunak_model = new DefaultComboBoxModel(egunak_array);
+						DefaultComboBoxModel<String> egunak_model = new DefaultComboBoxModel<String>(egunak_array);
 						cb_eguna_lang.setModel(egunak_model);
 					}
 				});
@@ -2850,7 +3033,7 @@ public class App extends JFrame {
 		lbl_jaiotze_data_editatu.setBounds(190, 396, 161, 30);
 		bezeroEditatu.add(lbl_jaiotze_data_editatu);
 		
-		JComboBox cb_sexua_editatu = new JComboBox(sexu_array);
+		JComboBox<String> cb_sexua_editatu = new JComboBox<String>(sexu_array);
 		cb_sexua_editatu.setBounds(588, 274, 129, 30);
 		bezeroEditatu.add(cb_sexua_editatu);
 		
@@ -2858,16 +3041,20 @@ public class App extends JFrame {
 		pass_bez_editatu.setBounds(589, 354, 112, 34);
 		bezeroEditatu.add(pass_bez_editatu);
 		
-		JComboBox cb_egoera_bezero = new JComboBox(pertsona_egoera);
+		JComboBox<String> cb_egoera_bezero = new JComboBox<String>(pertsona_egoera);
 		cb_egoera_bezero.setBounds(589, 402, 129, 30);
 		bezeroEditatu.add(cb_egoera_bezero);		
 		
 		JButton btn_gorde_editatu = new JButton("Aldaketak Gorde");
 		btn_gorde_editatu.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				if(txt_telefono_editatu.getText().length()==9) {
+				if(txt_telefono_editatu.getText().length()==9 &&  !txt_izen_editatu.getText().equals("") && !txt_abizen_editatu.getText().equals("") && !String.valueOf(pass_bez_editatu.getPassword()).equals("")) {
 					if(metodoakUpdate.bezeroAldaketakUpdate(lbl_nan_edizio.getText(), txt_izen_editatu.getText(), txt_abizen_editatu.getText(), cb_sexua_editatu.getSelectedItem().toString(), txt_telefono_editatu.getText(), String.valueOf(pass_bez_editatu.getPassword()), cb_egoera_bezero.getSelectedItem().toString())) {
-						JOptionPane.showMessageDialog(null, "Bezeroaren datuak aldatu dirau.","Alerta", JOptionPane.INFORMATION_MESSAGE);
+						JOptionPane.showMessageDialog(null, "Bezeroaren datuak aldatu dira.","Alerta", JOptionPane.INFORMATION_MESSAGE);
+						bezeroZerrendaArray = metodoakSelect.bezeroZerrendaKargatu();
+						zerrenda_table = new JTable(bezeroZerrendaArray,zerrenda_header_bez);
+						pane_zerrenda.setViewportView(zerrenda_table);
+						zerrenda_table.getTableHeader().setReorderingAllowed(false);
 						bezeroEditatu.setVisible(false);
 						zerrendak.setVisible(true);
 					}else {
@@ -2963,7 +3150,7 @@ public class App extends JFrame {
 		lbl_jaiotze_data_edizio_lang.setBounds(216, 398, 161, 30);
 		langileEditatu.add(lbl_jaiotze_data_edizio_lang);
 		
-		JComboBox cb_sexua_edizio_lang = new JComboBox(sexu_array);
+		JComboBox<String> cb_sexua_edizio_lang = new JComboBox<String>(sexu_array);
 		cb_sexua_edizio_lang.setBounds(614, 276, 129, 30);
 		langileEditatu.add(cb_sexua_edizio_lang);
 		
@@ -2971,7 +3158,7 @@ public class App extends JFrame {
 		pass_edizio_lang.setBounds(615, 356, 112, 34);
 		langileEditatu.add(pass_edizio_lang);
 		
-		JComboBox cb_lanpostu = new JComboBox(lanpostu_array);
+		JComboBox<String> cb_lanpostu = new JComboBox<String>(lanpostu_array);
 		cb_lanpostu.setBounds(615, 404, 129, 30);
 		langileEditatu.add(cb_lanpostu);
 		
@@ -2984,6 +3171,7 @@ public class App extends JFrame {
 						langileZerrendaArray = metodoakSelect.langileZerrendaKargatu();
 						zerrenda_table = new JTable(langileZerrendaArray,zerrenda_header_lang);
 						pane_zerrenda.setViewportView(zerrenda_table);
+						zerrenda_table.getTableHeader().setReorderingAllowed(false);
 						langileEditatu.setVisible(false);
 						zerrendak.setVisible(true);
 					}else {
@@ -3022,7 +3210,7 @@ public class App extends JFrame {
 		lbl_egoera_lang.setBounds(116, 441, 76, 30);
 		langileEditatu.add(lbl_egoera_lang);
 		
-		cb_egoera_langile = new JComboBox(pertsona_egoera);
+		cb_egoera_langile = new JComboBox<String>(pertsona_egoera);
 		cb_egoera_langile.setBounds(216, 440, 129, 30);
 		langileEditatu.add(cb_egoera_langile);
 		
@@ -3034,6 +3222,7 @@ public class App extends JFrame {
 					langileZerrendaArray = metodoakSelect.langileZerrendaKargatu();
 					zerrenda_table = new JTable(langileZerrendaArray,zerrenda_header_lang);
 					pane_zerrenda.setViewportView(zerrenda_table);
+					zerrenda_table.getTableHeader().setReorderingAllowed(false);
 					langileEditatu.setVisible(false);
 					zerrendak.setVisible(true);
 				}else {
@@ -3162,7 +3351,7 @@ public class App extends JFrame {
 		lbl_lanpostu_lan_1.setBounds(541, 387, 112, 30);
 		langileRegistro.add(lbl_lanpostu_lan_1);
 		
-		JComboBox cb_sexua_registro_lang = new JComboBox(sexu_array);
+		cb_sexua_registro_lang = new JComboBox<String>(sexu_array);
 		cb_sexua_registro_lang.setBounds(640, 262, 129, 30);
 		langileRegistro.add(cb_sexua_registro_lang);
 		
@@ -3170,34 +3359,43 @@ public class App extends JFrame {
 		pass_langile_registro.setBounds(641, 342, 112, 34);
 		langileRegistro.add(pass_langile_registro);
 		
-		JComboBox cb_lanpostu_registro = new JComboBox(lanpostu_array);
+		cb_lanpostu_registro = new JComboBox<String>(lanpostu_array);
 		cb_lanpostu_registro.setBounds(641, 390, 129, 30);
 		langileRegistro.add(cb_lanpostu_registro);
 		
 		JButton btn_erregistratu_lang = new JButton("Erregistratu Langile");
 		btn_erregistratu_lang.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-
-				if(metodoakBoolean.nanBalidatu(txt_lang_nan.getText()) && !txt_lang_izen_registro.getText().equals("") && !txt_lang_abizen_registro.getText().equals("") && txt_tel_lang_registro.getText().length()==9 && !String.valueOf(pass_langile_registro.getPassword()).equals("") && !txt_sukurtsal_registro.getText().equals("")) {
-					if(metodoakInsert.langileErregistratu(txt_lang_nan.getText(),txt_lang_izen_registro.getText(), txt_lang_abizen_registro.getText(),cb_urtea_lang.getSelectedItem().toString(),cb_hila_lang.getSelectedItem().toString(),cb_eguna_lang.getSelectedItem().toString(),cb_egoera_langile_registro.getSelectedItem().toString(),cb_sexua_registro_lang.getSelectedItem().toString(), txt_tel_lang_registro.getText(),String.valueOf(pass_langile_registro.getPassword()),cb_lanpostu_registro.getSelectedItem().toString(),txt_sukurtsal_registro.getText())){
-						JOptionPane.showMessageDialog(null,"Langilea erregistratu da!","Informazio", JOptionPane.INFORMATION_MESSAGE);
-						txt_lang_nan.setText("");
-						txt_lang_izen_registro.setText("");
-						txt_lang_abizen_registro.setText("");
-						cb_urtea_lang.setSelectedIndex(0);
-						cb_hila_lang.setSelectedIndex(0);
-						cb_eguna_lang.setSelectedIndex(0);
-						cb_egoera_langile_registro.setSelectedIndex(0);
-						cb_sexua_registro_lang.setSelectedIndex(0);
-						txt_tel_lang_registro.setText("");
-						pass_langile_registro.setText("");
-						cb_lanpostu_registro.setSelectedIndex(0);
-						txt_sukurtsal_registro.setText("");
-						sukurtsalak.setVisible(true);
-						langileRegistro.setVisible(false);
-					}else {
-						JOptionPane.showMessageDialog(null,"Error erregistratzean!","Errore", JOptionPane.ERROR_MESSAGE);					
-					}
+				try {
+					if(metodoakSelect.langileNanKant(txt_lang_nan.getText())==0) {
+						if(metodoakBoolean.nanBalidatu(txt_lang_nan.getText()) && !txt_lang_izen_registro.getText().equals("") && !txt_lang_abizen_registro.getText().equals("") && txt_tel_lang_registro.getText().length()==9 && !String.valueOf(pass_langile_registro.getPassword()).equals("") && !txt_sukurtsal_registro.getText().equals("")) {
+							if(metodoakInsert.langileErregistratu(txt_lang_nan.getText(),txt_lang_izen_registro.getText(), txt_lang_abizen_registro.getText(),cb_urtea_lang.getSelectedItem().toString(),cb_hila_lang.getSelectedItem().toString(),cb_eguna_lang.getSelectedItem().toString(),cb_egoera_langile_registro.getSelectedItem().toString(),cb_sexua_registro_lang.getSelectedItem().toString(), txt_tel_lang_registro.getText(),String.valueOf(pass_langile_registro.getPassword()),cb_lanpostu_registro.getSelectedItem().toString(),txt_sukurtsal_registro.getText())){
+								if(metodoakInsert.langileErabiltzaieSortu(txt_lang_nan.getText(), String.valueOf(pass_langile_registro.getPassword()),cb_lanpostu_registro.getSelectedItem().toString())) {
+									JOptionPane.showMessageDialog(null,"Langilea erregistratu da!","Informazio", JOptionPane.INFORMATION_MESSAGE);
+									txt_lang_nan.setText("");
+									txt_lang_izen_registro.setText("");
+									txt_lang_abizen_registro.setText("");
+									cb_urtea_lang.setSelectedIndex(0);
+									cb_hila_lang.setSelectedIndex(0);
+									cb_eguna_lang.setSelectedIndex(0);
+									cb_egoera_langile_registro.setSelectedIndex(0);
+									cb_sexua_registro_lang.setSelectedIndex(0);
+									txt_tel_lang_registro.setText("");
+									pass_langile_registro.setText("");
+									cb_lanpostu_registro.setSelectedIndex(0);
+									txt_sukurtsal_registro.setText("");
+									sukurtsalak.setVisible(true);
+									langileRegistro.setVisible(false);									
+								}
+							}else {
+								JOptionPane.showMessageDialog(null,"Error erregistratzean!","Errore", JOptionPane.ERROR_MESSAGE);					
+							}
+						}else {
+							JOptionPane.showMessageDialog(null,"Datu okerrak!","Errore", JOptionPane.ERROR_MESSAGE);					
+						}
+					}				
+				} catch (SalbuespenaErregistro e1) {
+					JOptionPane.showMessageDialog(null,"Langile hau badago erregistratuta!","Errore", JOptionPane.ERROR_MESSAGE);
 				}
 				
 			}
@@ -3230,7 +3428,7 @@ public class App extends JFrame {
 		lbl_egoera_lang_1.setBounds(101, 428, 76, 30);
 		langileRegistro.add(lbl_egoera_lang_1);
 		
-		cb_egoera_langile_registro = new JComboBox(pertsona_egoera);
+		cb_egoera_langile_registro = new JComboBox<String>(pertsona_egoera);
 		cb_egoera_langile_registro.setBounds(201, 427, 129, 30);
 		langileRegistro.add(cb_egoera_langile_registro);
 		
@@ -3247,7 +3445,7 @@ public class App extends JFrame {
 		txt_lang_nan.setBounds(201, 258, 202, 34);
 		langileRegistro.add(txt_lang_nan);
 		
-		cb_urtea_lang = new JComboBox(urteak_array);
+		cb_urtea_lang = new JComboBox<String>(urteak_array);
 		cb_urtea_lang.setBounds(201, 385, 82, 30);
 		langileRegistro.add(cb_urtea_lang);
 		

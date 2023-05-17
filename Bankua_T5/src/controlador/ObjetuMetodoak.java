@@ -50,7 +50,7 @@ public class ObjetuMetodoak {
 
 		t1.setJasotzailea(iban_jasotzaile);
 		t1.setKantitatea(Integer.parseInt(kantitate_kendu));
-		t1.setKotzeptua(komisio_kendu);
+		t1.setKontzeptua(komisio_kendu);
 		t1.setTransferentziaData(data_sortu);
 		
 		for(int i=0;i<bezero.getTxartelak().size();i++) {
@@ -98,7 +98,7 @@ public class ObjetuMetodoak {
 	 * @throws SalbuespenaOrdainketa
 	 */
 	public Bezeroa hipotekaOrdaindu(Bezeroa bezero, String iban_bez, String kantitatea) throws SalbuespenaOrdainketa {
-		
+		kantitatea = kantitatea.replace(",",".");
 		for(int i=0;i<bezero.getTxartelak().size();i++) {
 			if(bezero.getTxartelak().get(i).getKontuBankario().getIban().equals(iban_bez)) {
 				if(bezero.getTxartelak().get(i).getKontuBankario().getSaldoa()>=Double.parseDouble(kantitatea) && bezero.getTxartelak().get(i).getKontuBankario().getHipoteka().getKantitatea()-bezero.getTxartelak().get(i).getKontuBankario().getHipoteka().getOrdaindutakoa()>= Double.parseDouble(kantitatea)) {

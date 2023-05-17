@@ -4,7 +4,7 @@ import java.util.ArrayList;
 
 public abstract class Langilea extends Pertsona{
 	protected String lanpostu;
-	private ArrayList<Sukurtsala> sukurtsalak;
+	protected ArrayList<Sukurtsala> sukurtsalak;
 	
 	// Constructors
 	public Langilea(String nan, String izena, String abizena, String jaiotzeData, String sexua, String telefonoa, String pasahitza, String lanpostu, ArrayList<Sukurtsala> sukurtsalak) {
@@ -38,6 +38,4 @@ public abstract class Langilea extends Pertsona{
 		return super.toString() + ", Lanpostu=" + lanpostu + ", Sukurtsalak=" + sukurtsalak;
 	}
 	
-	// Methods
-	public void ikusiEntitateKontua() {}
 }

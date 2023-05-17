@@ -5,22 +5,16 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
-import javax.swing.JOptionPane;
-
 import com.mysql.jdbc.Connection;
 import com.mysql.jdbc.Statement;
 
 import model.EntitateBankario;
+import model.SalbuespenaErregistro;
 import model.SalbuespenaLogin;
 import model.SalbuespenaLoginBlokeo;
 
 public class DatuBaseSelect {
-	final String url = "jdbc:mysql://localhost:3306/bankua";
-	final String urlServer = "jdbc:mysql://10.5.14.109:3306/bankua";
-	final String erabiltzaile = "root";
-	final String erabiltzaileServer= "root";
-	final String password="";
-	final String passwordServer= "1234"; 
+	final String url = "jdbc:mysql://10.5.14.109:3306/bankua";
 	
 	// EntitateBankario
 	final String entitatebankario = "entitatebankario";
@@ -106,7 +100,7 @@ public class DatuBaseSelect {
 			Connection conn;					
 			try {
 				//Datu baseari konexioa eta Bezeroa logeatzeko kontsulta egiten dugu
-				conn = (Connection) DriverManager.getConnection (url,erabiltzaile,password);
+				conn = (Connection) DriverManager.getConnection (url,"L12345678Z","1234");
 				Statement comand = (Statement) conn.createStatement();	
 				ResultSet req = comand.executeQuery("select "+egoera+" from "+bezeroa+" where "+nan+"='"+nan_bez+"' and "+pasahitza+"='"+pass_bez+"';");
 				
@@ -136,6 +130,8 @@ public class DatuBaseSelect {
 		 * @param nan_lang Langilearen NAN
 		 * @param pas_lang Langilearen pasahitza
 		 * @return <b>god</b> langilea GOD erabiltzailea erabiltzean, <b>zuzendaria</b> langilea Zuzendaria erabiltzailea erabiltzean, <b>gerentea</b> langilea Gerentea erabiltzailea erabiltzean eta <b>null</b> logina okerra bada.
+		 * @throws SalbuespenaLogin Login okerra bada salbuespena botatzen du.
+		 * @throws SalbuespenaLoginBlokeo Erabiltzailea blokeatuta badako salbuespena botatzen du.
 		 */
 		public String langileLogin(String nan_lang, String pass_lang) throws SalbuespenaLogin,SalbuespenaLoginBlokeo {
 			String login= null;
@@ -143,7 +139,7 @@ public class DatuBaseSelect {
 			Connection conn;					
 			try {
 				//Datu baseari konexioa eta Langilea logeatzeko kontsulta egiten dugu
-				conn = (Connection) DriverManager.getConnection (url,erabiltzaile,password);
+				conn = (Connection) DriverManager.getConnection (url,"L12345678Z","1234");
 				Statement comand = (Statement) conn.createStatement();	
 				ResultSet req = comand.executeQuery("select "+lanpostua+","+egoera+" from "+langile+" where "+nan+"='"+nan_lang+"' and "+pasahitza+"='"+pass_lang+"';");
 				//Daturik aurkitzen badu
@@ -183,7 +179,7 @@ public class DatuBaseSelect {
 			
 			Connection conn;					
 			try {
-				conn = (Connection) DriverManager.getConnection (url,erabiltzaile,password);
+				conn = (Connection) DriverManager.getConnection (url,"L12345678Z","1234");
 				Statement comand = (Statement) conn.createStatement();	
 				ResultSet req = comand.executeQuery("Select COUNT(*) as kant from kontubankario where "+iban+"= '"+ibanJasotzaile+"';");
 				
@@ -212,24 +208,26 @@ public class DatuBaseSelect {
 		 */
 		public boolean transferentziaSaldoaBalidatu(String diru_kantitate, String kontua, String nan_bezero, String pass_bezero) {
 			boolean zuzena = false;
-			diru_kantitate = diru_kantitate.replace(',','.');
-			Connection conn;					
-			try {
-				conn = (Connection) DriverManager.getConnection (url,erabiltzaile,password);
-				Statement comand = (Statement) conn.createStatement();	
-				ResultSet req = comand.executeQuery("Select "+saldoa+" from kontubankario where "+iban+"='"+kontua+"';");
-				
-				if(req.next()) {
-					if(req.getDouble(saldoa) >= ((Double.parseDouble(diru_kantitate)*1.5)/100)+Double.parseDouble(diru_kantitate)) {
-						zuzena = true;
+			if(diru_kantitate.split(",").length<=2) {
+				diru_kantitate = diru_kantitate.replace(',','.');
+				Connection conn;					
+				try {
+					conn = (Connection) DriverManager.getConnection (url,"B"+nan_bezero,pass_bezero);
+					Statement comand = (Statement) conn.createStatement();	
+					ResultSet req = comand.executeQuery("Select "+saldoa+" from kontubankario where "+iban+"='"+kontua+"';");
+					
+					if(req.next()) {
+						if(req.getDouble(saldoa) >= ((Double.parseDouble(diru_kantitate)*1.5)/100)+Double.parseDouble(diru_kantitate)) {
+							zuzena = true;
+						}
 					}
+					conn.close();
+				}catch(SQLException ex) {
+					System.out.println("SQLException: "+ ex.getMessage());
+					System.out.println("SQLState: "+ ex.getSQLState());
+					System.out.println("ErrorCode: "+ ex.getErrorCode());
 				}
-				conn.close();
-			}catch(SQLException ex) {
-				System.out.println("SQLException: "+ ex.getMessage());
-				System.out.println("SQLState: "+ ex.getSQLState());
-				System.out.println("ErrorCode: "+ ex.getErrorCode());
-			}			
+			}
 			return zuzena;
 		}
 
@@ -245,7 +243,7 @@ public class DatuBaseSelect {
 			boolean zuzena = false;
 			Connection conn;					
 			try {
-				conn = (Connection) DriverManager.getConnection (url,erabiltzaile,password);
+				conn = (Connection) DriverManager.getConnection (url,"B"+nan_bezero,pass_bezero);
 				Statement comand = (Statement) conn.createStatement();	
 				ResultSet req = comand.executeQuery("Select COUNT(*) as kant from kontubankario kon join kudeatu ku on kon."+ iban +"= ku."+ iban +" join txartela t on ku."+ id_txartela+"= t."+ id_txartela +" where ku."+iban+"='"+kontua+"' and "+ segurtasunKodea +"='"+ kodea +"';");
 				
@@ -263,12 +261,17 @@ public class DatuBaseSelect {
 			return zuzena;
 		}
 
+		/**
+		 * Sartutako IBANa existitzen dela ala ez balidatzen du.
+		 * @param iban_sortu Sartutako iban kontua.
+		 * @return <b>True</b> ez bada existitzen eta <b>False</b> existitzen bada.
+		 */
 		public boolean ibanBalidatu(String iban_sortu) {
 			boolean libre = false;
 			
 			Connection conn;
 			try {
-				conn = (Connection) DriverManager.getConnection (url,erabiltzaile,password);
+				conn = (Connection) DriverManager.getConnection (url,"L12345678Z","1234");
 				Statement comand = (Statement) conn.createStatement();
 				ResultSet req = comand.executeQuery("select "+iban+" from "+kontuBankario+" where "+iban+"='"+iban_sortu+"';");
 				if(!req.next()) {
@@ -294,7 +297,7 @@ public class DatuBaseSelect {
 			Connection conn;					
 			try {
 				//Datu baseari konexioa eta Langilea logeatzeko kontsulta egiten dugu
-				conn = (Connection) DriverManager.getConnection (url,erabiltzaile,password);
+				conn = (Connection) DriverManager.getConnection (url,"L12345678Z","1234");
 				Statement comand = (Statement) conn.createStatement();	
 				ResultSet req = comand.executeQuery("select "+id_txartela+" from "+txartela+" where "+id_txartela+"='"+txartelId+"';");
 				//Daturik aurkitzen badu
@@ -320,14 +323,12 @@ public class DatuBaseSelect {
 			Connection conn;					
 			try {
 				//Datu baseari konexioa eta Bezeroa nan kontsulta egiten da
-				conn = (Connection) DriverManager.getConnection (url,erabiltzaile,password);
+				conn = (Connection) DriverManager.getConnection (url,"L12345678Z","1234");
 				Statement comand = (Statement) conn.createStatement();	
 				ResultSet req = comand.executeQuery("select "+nan+" from "+bezeroa+" where "+nan+"='"+nan_bez+"';");
 				//Daturik aurkitzen badu
 				if(req.next()) {
 					existitu = true;	
-				}else {
-					JOptionPane.showMessageDialog(null,"Bezeroa ez da existitzen!","Error!", JOptionPane.ERROR_MESSAGE);					
 				}
 				conn.close();
 			}catch(SQLException ex) {
@@ -348,7 +349,7 @@ public class DatuBaseSelect {
 			Connection conn;					
 			try {
 				//Datu baseari konexioa eta Bezeroa logeatzeko kontsulta egiten dugu
-				conn = (Connection) DriverManager.getConnection (url,erabiltzaile,password);
+				conn = (Connection) DriverManager.getConnection (url,"L12345678Z","1234");
 				Statement comand = (Statement) conn.createStatement();	
 				ResultSet req = comand.executeQuery("select "+nan+","+izena+","+abizenak+","+jaiotzeData+","+sexua+","+telefonoa+","+pasahitza+","+egoera+" from "+bezeroa);
 				
@@ -388,7 +389,7 @@ public class DatuBaseSelect {
 			Connection conn;					
 			try {
 				//Datu baseari konexioa eta Bezeroa logeatzeko kontsulta egiten dugu
-				conn = (Connection) DriverManager.getConnection (url,erabiltzaile,password);
+				conn = (Connection) DriverManager.getConnection (url,"L12345678Z","1234");
 				Statement comand = (Statement) conn.createStatement();	
 				ResultSet req = comand.executeQuery("select "+nan+","+izena+","+abizenak+","+jaiotzeData+","+sexua+","+telefonoa+","+pasahitza+","+lanpostua+","+id_sukurtsal+","+egoera+" from "+langile);
 				
@@ -430,7 +431,7 @@ public class DatuBaseSelect {
 			Connection conn;					
 			try {			
 				//Datu baseari konexioa eta Entitateak kargatzeko kontsulta egiten dugu
-				conn = (Connection) DriverManager.getConnection (url,erabiltzaile,password);
+				conn = (Connection) DriverManager.getConnection (url,"L12345678Z","1234");
 				Statement comand = (Statement) conn.createStatement();	
 				ResultSet req = comand.executeQuery("select "+id_entitate+","+izena+","+entitateZenbaki+","+urlImg+","+bounds+" from "+entitatebankario+";");
 				//Emaitzik badaude
@@ -452,4 +453,35 @@ public class DatuBaseSelect {
 			}		
 			return entitateak;
 		}
+
+		/**
+		 * Langilearen nan existitzen baden datubasean begiratzen du
+		 * @param nan_lang Langilea erregistratu nahi den nan-a.
+		 * @return Nan horrekin dauden erregistro kantitatea.
+		 * @throws SalbuespenaErregistro Erregistro bat badago salbuespena botatzen du.
+		 */
+		public int langileNanKant(String nan_lang) throws SalbuespenaErregistro{
+			int kant=0;
+			
+			Connection conn;					
+			try {			
+				//Datu baseari konexioa eta langile kantitatea nan horrekin ateratzen du
+				conn = (Connection) DriverManager.getConnection (url,"L12345678Z","1234");
+				Statement comand = (Statement) conn.createStatement();	
+				ResultSet req = comand.executeQuery("select count(*) as kantitate from "+langile+" where "+nan+"='"+nan_lang+"';");
+				if(req.next()) {
+					kant = req.getInt("kantitate");
+					if(kant!=0) {
+						throw new SalbuespenaErregistro("Errore erregistratzean.");
+					}
+				}
+				
+				conn.close();
+			}catch(SQLException ex) {
+				System.out.println("SQLException: "+ ex.getMessage());
+				System.out.println("SQLState: "+ ex.getSQLState());
+				System.out.println("ErrorCode: "+ ex.getErrorCode());
+			}			
+			return kant;
+		}		
 }

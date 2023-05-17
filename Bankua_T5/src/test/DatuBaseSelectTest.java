@@ -8,6 +8,7 @@ import org.junit.Test;
 
 import controlador.DatuBaseSelect;
 import model.EntitateBankario;
+import model.SalbuespenaErregistro;
 import model.SalbuespenaLogin;
 import model.SalbuespenaLoginBlokeo;
 
@@ -159,14 +160,14 @@ public class DatuBaseSelectTest {
 		
 		String[][] bezero_zerrenda = datuBaseSelect.bezeroZerrendaKargatu();
 		
-		assertEquals("54821599H", bezero_zerrenda[0][0]);
-		assertEquals("Iker", bezero_zerrenda[0][1]);
-		assertEquals("Zuluaga", bezero_zerrenda[0][2]);
-		assertEquals("1994-08-04", bezero_zerrenda[0][3]);
+		assertEquals("25097616Q", bezero_zerrenda[0][0]);
+		assertEquals("Iban", bezero_zerrenda[0][1]);
+		assertEquals("Lopez", bezero_zerrenda[0][2]);
+		assertEquals("1988-01-01", bezero_zerrenda[0][3]);
 		assertEquals("gizona", bezero_zerrenda[0][4]);
 		assertEquals("111222333", bezero_zerrenda[0][5]);
 		assertEquals("1234", bezero_zerrenda[0][6]);
-		assertEquals("blokeatuta", bezero_zerrenda[0][7]);
+		assertEquals("aktiboa", bezero_zerrenda[0][7]);
 	}
 	
 	@Test
@@ -175,14 +176,14 @@ public class DatuBaseSelectTest {
 		
 		String[][] langile_zerrenda = datuBaseSelect.langileZerrendaKargatu();
 		
-		assertEquals("79003399D", langile_zerrenda[0][0]);
-		assertEquals("Ibai", langile_zerrenda[0][1]);
-		assertEquals("Alvarez", langile_zerrenda[0][2]);
+		assertEquals("12345678Z", langile_zerrenda[0][0]);
+		assertEquals("God", langile_zerrenda[0][1]);
+		assertEquals("God", langile_zerrenda[0][2]);
 		assertEquals("2000-10-21", langile_zerrenda[0][3]);
 		assertEquals("gizona", langile_zerrenda[0][4]);
-		assertEquals("111222333", langile_zerrenda[0][5]);
+		assertEquals("000000000", langile_zerrenda[0][5]);
 		assertEquals("1234", langile_zerrenda[0][6]);
-		assertEquals("zuzendaria", langile_zerrenda[0][7]);
+		assertEquals("god", langile_zerrenda[0][7]);
 	}
 	
 	@Test
@@ -196,6 +197,17 @@ public class DatuBaseSelectTest {
 		assertEquals("2345", botoiakEntitate.get(0).getEntitateZbk());
 		assertEquals("218/253/128/45", botoiakEntitate.get(0).getBounds());
 		assertEquals("src/res/bbk_logo.png", botoiakEntitate.get(0).getUrl());
+	}
+	
+	@Test
+	public void testLangileNanKant() throws SalbuespenaErregistro {
+		DatuBaseSelect datuBaseSelect = new DatuBaseSelect();
+		
+		try {
+			assertEquals(0, datuBaseSelect.langileNanKant("12345678Z"));
+		} catch (Exception e) {
+			System.out.println(e);
+		}
 	}
 
 }
